@@ -155,7 +155,7 @@ DLBT专业上传服务器，可以支持单个种子几十G的上传，支持单
 如果您需要一个服务器，提供上万文件的上传，那么DLBT专业上传服务器是您的最佳选择。
 
 DLBT专业上传服务器版本的信息，请及时关注点量官方网站，关于点量专业上传服务器版本：http://blog.dolit.cn/dlbtserver-introduction-html  
-## DLBT内核和专业上传服务器内核有什么区别？
+## DLBT内核和DLBT专业上传服务器内核有什么区别？
 **DLBT专业上传服务器内核**主要用于几百、几千、上万文件的供种上传，是**专门用于提供BT文件上传的服务器程序**。可以单服务器支持**几十万用户**的并发下载，并支持**几十G的超大文件的上传**，和**大数量文件的上传**。
 
 **独创了休眠模式，上传休眠模式是指的：**
@@ -282,3 +282,433 @@ DLBT_API void WINAPI DLBT_SetLsdSetting (int interval_seconds, bool bUseBroadcas
 
 interval_seconds：组播周期秒数：建议不要低于10s。内部默认是5分钟一次。
 bUseBroadcast：是否使用广播模式，默认内部使用组播，如果使用广播，可能局域网有无用流量太多，一般不建议。
+
+ ***DLBT_SetP2SPExtName***
+
+**功能:** 设置P2SP时需要的扩展名、是否随机一个参数，以及服务器对中文文件名路径的编码
+
+~~~
+DLBT_API void WINAPI DLBT_SetP2SPExtName (LPCSTR extName, bool bUseRandParam, bool bUtf8);
+~~~
+
+
+**extName：** 用于防止一些运营商对http有他们网内缓存，所以导致下载的是缓存的老版本的文件。可以考虑使用一个.php这种扩展名，防止他们用缓存。但需要服务器配置将.php后缀忽略，返回真正的文件，可以通过nginx的rewrite等规则实现。
+
+**bUseRandParam：** 是否随机一个?a=b这种参数，也是防止缓存的，但不是对所有运营商都有效
+
+**bUtf8：** 是否使用utf8的路径编码，默认是true。可以设置false（如果有些中文路径获取不到）
+
+**说明：**
+该函数为全局的，不是针对某个任务设置，设置后对所有任务均生效。
+
+***DLBT_GetListenPort***
+
+**功能：** 获得当前内核监听的端口。
+
+~~~
+DLBT_API USHORT WINAPI DLBT_GetListenPort ();   
+~~~
+***DLBT_Shutdown***
+
+**功能：** 关闭DLBT内核，释放所有内核资源，返回值为void型。该函数必须作为最后一个调用的BT内核函数，调用该函数前请调用下载任务的接口将所有的下载任务先停止。
+
+**说明：**
+DLBT_Shutdown会等待所有资源都正确释放并报告Tracker后退出,所以可能比较慢。建议调用DLBT_Shutdown之前调用一次DLBT_PreShutdown, DLBT_PreShutdown将提前启动对Tracker的报告和部分资源的释放,这样保证了下线的速度. 一般的调用时机可以是,用户点击程序的关闭时,立即先调用一次DLBT_PreShutdown,然后继续执行应用程序的其它释放工作,程序退出前最后执行DLBT_Shutdown函数。
+***DLBT_PreShutdown***
+
+**功能：** 提前执行一些关闭操作，由于报告Tracker下线需要一个网络通讯的过程，因此提前执行有助于提高下线的速度。
+
+***DLBT_SetUploadSpeedLimit 和 DLBT_SetDownloadSpeedLimit***
+
+**功能：** 设置整个BT内核的总体上传 / 下载的最大速度限制。
+
+~~~
+DLBT_API void WINAPI DLBT_SetUploadSpeedLimit (int limit);   	// 上传限制
+
+DLBT_API void WINAPI DLBT_SetDownloadSpeedLimit (int limit);		// 下载限制
+~~~
+**参数：**
+
+**limit：** 最大的上传 / 下载速度，系统内部默认是最大值（即不做任何限制），如果limit小于等于0，则同样表示不做任何限制，所以，如果要限速，请将limit设置为某个正数。单位是Byte，比如如果要设置限制为1MB，则需要传入1024*1024。
+
+***DLBT_SetMaxUploadConnection 和 DLBT_SetMaxTotalConnection***
+
+**功能：** 设置整个BT内核的总体上传 / 总的最大连接数限制
+~~~
+DLBT_API void WINAPI DLBT_SetMaxUploadConnection (int limit);   	// 上传连接数限制
+
+DLBT_API void WINAPI DLBT_SetMaxTotalConnection (int limit);		// 总连接数限制
+~~~
+**参数：**
+
+**limit：** 最大的上传 / 总连接限制，系统内部默认是-1，-1表示不做任何限制。连接数限制绝大多数情况下等同于人数，一般情况下，最大上传/下载连接数限制，也就是最多同时和多少人进行上传/下载。
+
+***DLBT_SetMaxHalfOpenConnection***
+
+**功能：** 设置最多发起的连接数（很多连接可能是发起了，但还没连上）。
+~~~
+DLBT_API void WINAPI DLBT_SetMaxHalfOpenConnection (int limit);   	// 半开连接数限制
+~~~
+
+
+**参数：**
+
+
+**limit：**  最大半开连接数限制，系统内部默认是没有限制。Xp操作系统默认限制是10个，所以，即使这里设置的很高，但如果系统本身的限制没有使用其它工具修改，也没有使用DLBT_ChangeXPConnectionLimit修改过的话，那么这里的这个limit也不会有效。
+
+
+***DLBT_SetLocalNetworkLimit***
+
+**功能：** 用于设置是否对跟自己在同一个局域网的用户进行限速，limit参数如果为true，则使用后面参数中的限速数值进行限速，否则不限。系统默认是不对同一个局域网下的用户应用限速的。因为局域网不占用用户的对外带宽，也可以设置为限制局域网上传。
+~~~
+
+DLBT_API void WINAPI DLBT_SetLocalNetworkLimit (
+    bool    limit,              // 是否启用局域网限速
+    int     downSpeedLimit,     // 如果启用局域网限速，下载限速的大小，单位字节/秒
+    int     uploadSpeedLimit    // 如果启用局域网限速，限制上传速度大小，单位字节/秒
+    );
+~~~
+
+
+**参数：**
+
+**limit：** 是否对和自己在同一个局域网的用户也限速。
+
+**downSpeedLimit：** 如果启用局域网限速，下载限速的大小，单位字节/秒。
+
+**uploadSpeedLimit：** 如果启用局域网限速，下载限速的大小，单位字节/秒。
+
+***DLBT_SetFileScanDelay***
+
+**功能：** 设置文件扫描校验时的休息参数，防止特大文件扫描时磁盘占用太严重，影响客户机器正常使用。
+~~~
+DLBT_API void WINAPI DLBT_SetFileScanDelay (DWORD circleCount, DWORD sleepMs);
+~~~
+**参数：**
+
+**circleCount：** 代表循环多少次休息一次，0代表不休息。
+**sleepMs：** 代表每次休息的时间，单位是毫秒(ms)。
+
+***DLBT_UseServerModifyTime***
+
+**功能：** 设置文件下载完成后，是否修改为原始修改时间（制作种子时每个文件的修改时间状态）。
+~~~
+DLBT_API void WINAPI DLBT_UseServerModifyTime(BOOL bUseServerTime);
+~~~
+**参数：**
+
+**bUseServerTime：** 是否启用，TRUE（1）代表启用，FALSE（0）代表不启用。
+**说明：**
+
+调用该函数后，以后制作的torrent中会包含有每个文件此时的修改时间信息。
+用户在下载时，发现种子中有这个信息，并且启用了修改后（本函数设置了TRUE），则会在每个文件完成时，自动将文件的修改时间设置为torrent种子中记录的时间。
+如果只是下载的机器上启用了该函数，但制作种子的机器上在制作种子时没有使用该函数（种子中没有每个文件的时间信息），则也无法进行时间修改；同样的，如果种子中有了文件的时间信息，但如果下载的用户机器上没启用该函数，同样无法进行文件的时间修改。
+
+***DLBT_EnableUDPTransfer***
+~~~
+DLBT_API void WINAPI DLBT_EnableUDPTransfer(BOOL bEnabled);
+~~~
+
+**功能：** 用于设置是否启用UDP传输和UDP穿透传输功能，默认是自动适应，如果对方支持，在tcp无法到达时，自动切换为udp通讯。可以通过这个函数，设置永不使用UDP传输。
+
+**参数：**
+**bEnabled：** 是否启用UDP传输。
+
+***DLBT_SetP2PTransferAsHttp***
+~~~
+DLBT_API void WINAPI DLBT_SetP2PTransferAsHttp (bool bHttpOut, bool bAllowedIn = true);
+~~~
+
+**功能：** 是否启用伪装Http传输，某些地区（比如马来西亚、巴西的一些网络）对Http不限速，但对P2P限速在20K左右，这种网络环境下，可以启用Http传输，默认是允许伪装Http的传输进入（可以接受他们的通讯），但自己发起的连接不主动伪装。如果网络中明确侦测出对Http不限速，可以考虑都设置：主动Http伪装。 但这种伪装也有副作用，国内有些地区机房（一般是网通）设置了Http必须使用域名，而不能使用IP，而BT传输中，对方没有合法域名，反而会被这种限制截杀，如果有这种限制，反而主动伪装后会没有速度。所以请根据实际使用选择。
+
+**参数：**
+
+**bHttpOut：** 是否对发出的请求伪装Http，默认不主动发出伪装，除非有明确设置。
+**bAllowedIn：** 是否接受别人发来的伪装过的Http数据请求，默认是兼容别人的Http伪装。
+
+***DLBT_AddHoleServer***
+
+~~~
+DLBT_API BOOL WINAPI DLBT_AddHoleServer(LPCSTR ip, short port);
+~~~
+
+**功能：** 是否使用单独的穿透服务器，如果不使用单独服务器，穿透的协助将由某个双方都能连上的第三方p2p节点辅助完成。穿透服务器程序需要联系点量软件申请获取。
+
+**参数：**
+**ip：** UDP穿透服务器的IP地址。
+**port:** UDP穿透服务器的监听端口。
+
+***DLBT_AddServerIP***
+
+**功能：** 
+设置服务器的IP，可以多次调用设置多个，用于标记哪些IP是服务器，以便统计从服务器下载到的数据等信息，甚至速度到了一定程度可以断开服务器连接，节省服务器带宽。2022版本后的P2SP服务器，自动会被标记为服务器，不需要再单独设置
+~~~
+DLBT_API void WINAPI DLBT_AddServerIP (LPCSTR ip);
+~~~
+**参数：**
+**ip：** 服务器的IP地址，如果有多个服务器IP，请多次调用本函数。
+
+***DLBT_AddBanServerUrl***
+~~~
+DLBT_API void WINAPI DLBT_AddBanServerUrl (LPCSTR url); 
+~~~
+
+
+**功能：** 不去连接这个p2sp的url，可以重复调用. 目的是，如果是服务器上，这个p2sp的url就在本机，就没必要去连接这个url了。
+
+**参数：**
+**url：** 希望不去连接的p2sp地址。关于p2sp的更多信息可以参考: DLBT_Downloader_AddHttpDownload 函数。
+
+***DLBT_SetStatusFileSavePeriod***
+
+**功能：** 保存一次状态文件的条件，内部默认全部下载完成后保存一次。可以调整为自己需要的时间或者上限数目，比如每5分钟保存一次，或者下载100块数据后保存一次。
+~~~
+DLBT_API BOOL WINAPI DLBT_SetStatusFileSavePeriod (
+    int             iPeriod,          //保存间隔，单位是秒。默认是，代表除非下载完成，否则永不保存
+    int             iPieceCount       //分块数目，默认，代表除非下载完成，否则永不保存
+    );
+~~~
+
+**参数：**
+
+**iPeriod：** 保存间隔，单位是秒，表示每多少秒保存一次，默认是0，代表除非下载完成，否则永不保存。
+**port: ** 分块数目，表示下载多少个分块数据(Piece)保存一次，默认0，代表除非下载完成，否则永不保存。
+
+***DLBT_SetReportIP和DLBT_GetReportIP***
+
+**功能：** 设置和获取报告Tracker时的IP地址。
+
+~~~
+DLBT_API void WINAPI DLBT_SetReportIP (LPCSTR ip); // 设置IP 
+DLBT_API LPCSTR WINAPI DLBT_GetReportIP ();        // 获取当前设置，返回当前的IP，如果未设则为NULL
+~~~
+
+**参数：**
+
+**ip：** 需要报告给Tracker的IP地址。
+
+**说明：**
+
+如果是要专门对外部提供上传，并且该机器（可以称作上传的服务器）同Tracker服务器在同一个局域网，那么建议设置报告Tracker的IP为外网地址，否则，Tracker通知别人的上传服务器的IP可能是一个局域网地址，外人无法同服务器通讯。一般地，如果是客户机器，同Tracker一般都不会在同一个网段，这时候需要看Tracker的配置，如果Tracker自动将每个客户的外网地址记录（这是目前大多数Tracker在做的），那么就无需设置这个IP地址，使用Tracker自动获得到的即可。如果为了防止Tracker使用每个用户的内网地址（这个比较少见），那么也可以使用该设置将IP设为外网地址。
+
+还有一种情况下可能会使用该函数：如果某个下载都集中在局域网内，这种情况下，防止Tracker记录自己的外部IP，可以设置每个人的内网IP，可以实现很好的互连。
+
+注意：不是所有的Tracker都支持这个扩展协议，需要使用支持报告IP协议的tracker服务器。
+
+***DLBT_SetUserAgent***
+
+**功能：** 设置报告Tracker时的客户端标记。
+~~~
+DLBT_API void WINAPI DLBT_SetUserAgent (LPCSTR agent);   	
+~~~
+
+
+**参数：**
+
+**agent：** 客户端的标记字符串。
+
+**说明：**
+
+报告Http Tracker是标准的HTTP协议通讯，agent标记串就放到了HTTP协议Header中的user-agent域中。可以使用自定义的agent串，结合对Tracker的少量修改，实现一个简单的下载限制，限制非自己的客户端不能下载自己Tracker中提供的文件 ―― 这种限制只能是限制特定的客户端可以使用自己的Tracker，但无法突破某些运营商对BT协议的限制。
+
+***DLBT_SetMaxCacheSize***
+
+**功能：** 设置DLBT下载和上传文件最大可用的缓存。
+~~~
+DLBT_API void WINAPI DLBT_SetMaxCacheSize (DWORD size);   	
+~~~
+
+**参数：**
+**size：**缓存的最大值，以KB为单位。比如需要设置1M缓存，则传入1024。
+
+
+**说明：**
+
+缓存的最大值不能超过2.5G或者机器的物理内存。这个限制是由于目前DLBT仅测试过32位操作系统，（32位操作系统下，每个程序的地址空间最大为4G，但默认操作系统需要占用2G的空间，这样每个程序自己可用的内存地址空间就是2G。通过修改操作系统的配置，可以使得每个程序可以使用3G的地址空间，考虑到程序本身运行所需的地址空间等，安全起见，缓存最大可以设置到2.5G。  如果设置的最大值大于机器的物理内存，则默认使用90％的物理内存。
+
+不过一般地，需要设置大量缓存的情况是在专业提供大量下载或者上传的服务器上才会可能用到，比如有些服务器为了提升IO的效率，可以设置大量的缓存，将经常用到的文件块进行缓存，减少对磁盘的访问压力。
+
+DLBT内核3.4版本后内部默认设置了8M的缓存，普通用户的机器基本不需要修改和设置这个缓存，除非下载和上传的数据量很多，建议可以在 8 – 128M之间。
+
+***DLBT_SetPerformanceFactor***
+
+**功能：** 一些性能参数设置，默认情况下，DLBT是为了普通网络环境下的下载所用，如果是在千M局域网下并且磁盘性能良好，想获得50M/s甚至100M/s的文件传输速度，则需要设置这些参数，具体参数的设置建议，请咨询点量软件获取。
+~~~
+DLBT_API void WINAPI DLBT_SetPerformanceFactor(
+    int             socketRecvBufferSize,      // 网络的接收缓冲区，默认是用操作系统默认的缓冲大小
+
+    int             socketSendBufferSize,      // 网络的发送缓冲区，默认用操作系统的默认大小
+
+    int             maxRecvDiskQueueSize,      // 磁盘如果还未写完，超过这个参数后，将暂停接收，等磁盘数据队列小于该参数
+
+    int             maxSendDiskQueueSize       // 如果小于该参数，磁盘线程将为发送的连接塞入数据，超过后，将暂停磁盘读取
+    
+    );
+~~~
+
+**参数：**
+
+参数的具体含义以及合适的设置，请联系点量软件咨询。
+
+***DLBT_AddIpBlackList***
+
+**功能：** 添加ip黑名单(可批量添加一个范围内的ip,如果只有一个ip第二个参数允许为NULL),成功返回0，失败返回 小于0
+~~~
+DLBT_API int WINAPI DLBT_AddIpBlackList(const char*ipRangeStart,const char*ipRangeEnd);
+~~~
+
+**参数：**
+IP传入190.120.1.1这类字符串，会将起始到结束的全部给禁用。ipRangeEnd可传入NULL，代表只禁用单个的IP，用ipRangeStart标记。
+
+***DLBT_RemoveAllBlackList***
+
+**功能：** 清空当前ip黑名单列表
+~~~
+DLBT_API void WINAPI DLBT_RemoveAllBlackList();
+~~~
+
+***DLBT_DHT_Start***
+
+**功能：** 启动DHT网络功能，DHT网络在DLBT内核中默认不启动，需要调用该函数启动。
+~~~
+DLBT_API void WINAPI DLBT_DHT_Start (USHORT port = 0);   	
+~~~
+**参数：**
+**port：** DHT网络监听的端口。
+**说明：**
+建议不设置参数，将端口设为0，在端口为0时，系统将自动使用内核监听成功的TCP端口号用于DHT网络监听，由于DHT网络是基于UDP方式，因此可以共同使用同一个端口不冲突。DHT启动后，内核会自动试着进行UPnP映射，不需要应用程序再次调用UPnP接口设置DHT的映射。
+
+DHT网络的功能主要是：可以通过用户之间信息的交流，获得更多的下载者的信息，在连接不上Tracker时比较有效，同时一定程度上可以起到突破运营商封锁的效果。
+
+***DLBT_DHT_Stop***
+
+**功能：** 停止DHT网络功能。
+~~~
+DLBT_API void WINAPI DLBT_DHT_Stop ();   	
+~~~
+
+***DLBT_DHT_IsStarted***
+
+**功能：** 判断DHT网络是否已启动，TRUE为已经启动，FALSE为尚未启动。
+
+~~~
+DLBT_API BOOL WINAPI DLBT_DHT_IsStarted ();   	
+~~~
+
+***DLBT_PROXY_SETTING***
+
+**功能：** 当用户的机器需要使用代理才能上网时，使用该结构体来指定代理的设置。
+~~~
+struct DLBT_PROXY_SETTING
+{
+    char    proxyHost [256];    // 代理服务器地址 
+
+    int     nPort;              // 代理服务器的端口
+
+    char    proxyUser [256];    // 如果是需要验证的代理,输入用户名
+
+    char    proxyPass [256];    // 如果是需要验证的代理,输入密码
+
+
+    enum DLBT_PROXY_TYPE
+    {
+
+        DLBT_PROXY_NONE,            // 不使用代理
+
+        DLBT_PROXY_SOCKS4,          // 使用SOCKS4代理，需要用户名
+
+        DLBT_PROXY_SOCKS5,          // 使用SOCKS5代理，无需用户名和密码
+
+        DLBT_PROXY_SOCKS5A,         // 使用需要密码验证的SOCKS5代理，需要用户名和密码
+
+        DLBT_PROXY_HTTP,            // 使用HTTP代理，匿名访问，仅适用于标准的HTTP访问，Tracker和Http跨协议传输，下载则不可以
+
+        DLBT_PROXY_HTTPA            // 使用需要密码验证的HTTP代理
+
+    };
+~~~
+
+***标记代理的应用范围***
+
+**功能：** 当用户的机器需要使用代理才能上网时，使用该结构体来指定代理的设置。
+~~~
+//=======================================================================================
+
+//  标识代理将应用于哪些连接（Tracker、下载、DHT和http跨协议下载等）
+
+//=======================================================================================
+
+#define DLBT_PROXY_TO_TRACKER       1  // 仅对连接Tracker使用代理
+
+#define DLBT_PROXY_TO_DOWNLOAD      2  // 仅对下载时同用户（Peer）交流使用代理
+
+#define DLBT_PROXY_TO_DHT           4  // 仅对DHT通讯使用代理，DHT使用udp通讯，需要代理是支持udp的
+
+#define DLBT_PROXY_TO_HTTP_DOWNLOAD 8  // 仅对HTTP下载使用代理，当任务有http跨协议下载时有效（不包括Tracker）
+
+// 对所有均使用代理
+
+#define DLBT_PROXY_TO_ALL   (DLBT_PROXY_TO_TRACKER | DLBT_PROXY_TO_DOWNLOAD | DLBT_PROXY_TO_DHT | DLBT_PROXY_TO_HTTP_DOWNLOAD)
+~~~
+
+***DLBT_SetProxy和DLBT_GetProxySetting***
+
+**功能：** DLBT_SetProxy用于设置代理参数，DLBT_GetProxySetting用于获取当前的代理设置。
+~~~
+DLBT_API void WINAPI DLBT_SetProxy (
+
+    DLBT_PROXY_SETTING  proxySetting,   // 代理设置，包括IP端口等 
+
+    int                 proxyTo         // 代理应用于哪些连接，就是上面宏定义的几种类型，比如DLBT_PROXY_TO_ALL
+
+    ); 
+
+//=======================================================================================
+
+//  获取代理的设置，proxyTo标识想获得哪一类连接的代理信息，但proxyTo只能单个获取某类连接
+
+//  的代理设置，不能使用DLBT_PROXY_TO_ALL这种多个混合选择
+
+//=======================================================================================
+
+DLBT_API void WINAPI DLBT_GetProxySetting (DLBT_PROXY_SETTING * proxySetting, int proxyTo);
+
+~~~
+
+***DLBT_SetEncryptSetting加密协议和加密数据***
+
+**说明：** DLBT除了可以使用私有协议来突破运营商的限制，同时可以使用协议加密来突破。私有协议的优点是简单有效,但缺点是私有协议后，就形成了自己的私有P2P网络，而不是BT网络。意味着同其它BT客户端无法兼容（当然，如果您想自己的文件只有自己的客户端能够下载，那么DLBT的私有协议是一个不错的选择）。而加密协议不会破坏同Bitcomet等支持加密协议的BT客户端的兼容性。 同样的，如果为了传输高安全的数据，也可以选择加密数据。不同的网络下，可能需要不同设置。配合伪装Http使用，在某些网络下效果更佳。具体的设置建议，商业用户建议直接咨询点量软件售后服务人员。
+
+如果不需要和其他客户端兼容，并且为了最为可靠的突破封锁，可以使用DLBT 3.3以后的版本，在私有协议下实现脱离BT的痕迹，经严格测试可突破国内大部分运营商的协议封锁，也无需担心运营商的协议限制。
+~~~
+
+enum DLBT_ENCRYPT_OPTION
+{
+    DLBT_ENCRYPT_NONE,                // 不支持任何加密的数据，遇到加密的通讯则断开
+    DLBT_ENCRYPT_COMPATIBLE,         // 兼容模式：自己发起的连接不使用加密，但允许别人的加密连接进入，遇到加密的则同对方用加密模式会话；
+    DLBT_ENCRYPT_FULL,               // 完整加密：自己发起的连接默认使用加密，同时允许普通和加密的连接连入。遇到加密则用加密模式会话；遇到非加密则用明文模式会话。 默认是完整加密
+    DLBT_ENCRYPT_FORCED,            // 强制加密，仅支持加密通讯，不接受普通连接，遇到不加密的则断开
+};
+
+// 加密层级高，理论上会浪费一点CPU，但数据传输安全和突破封锁的能力会有提升
+
+enum DLBT_ENCRYPT_LEVEL
+
+{
+    DLBT_ENCRYPT_PROTOCOL,          // 仅加密BT的通讯握手协议 －－一般用于防止运营商的阻止
+    DLBT_ENCRYPT_DATA,              // 仅加密数据流（数据内容）－－用于保密性强的文件传输
+    DLBT_ENCRYPT_PROTOCOL_MIX,      // 主动发起的连接使用加密协议模式，但如果对方使用了数据加密，也支持同他使用数据加密模式通讯
+    DLBT_ENCRYPT_ALL                // 协议和数据均主动加密
+};
+DLBT_API void WINAPI DLBT_SetEncryptSetting (
+    DLBT_ENCRYPT_OPTION     encryptOption,      // 加密选项，加密哪种类型或者不加密
+    DLBT_ENCRYPT_LEVEL      encryptLevel        // 加密的程度，对数据还是协议加密？
+    );
+~~~
+
+
+
+
+
+
+
