@@ -1,5 +1,5 @@
 ---
-typora-root-url: ..
+
 ---
 
 如果您想初步了解点量 BT，可以从网上找一些 torrent(种子文件)来进行下载获职初步印象;网上的种子由于大部分是迅雷等的用户在下载，有些软件只对自己的用户大量上传对其他软件的用户上传速度做了限制，因此，可能您看到的速度比不上迅雷等软件的下载速度快。但一般对于一些热门的种子，点量 BT 都可以下载到您网络速度的极限。
@@ -22,7 +22,13 @@ tracker开源服务器。也可以联系点量BT技术支持人员http:/www.doli
 
 Tracker 的设置比较简单，以 Bitcomet Tracker0.5为例:
 
-![image-20240607090408567](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20240607090408567.png)
+
+
+
+
+![image-20240607090408567](../Picture/image-20240607090408567.png)
+
+
 
 第一步点击 Config 设置 tracker 的端口，比如 8080;设置完成后，点 Run 即可。
 
@@ -39,7 +45,7 @@ Tracker 的设置比较简单，以 Bitcomet Tracker0.5为例:
 
 如果是局域网测试，制作种子时那个 tacker 地址可以填写对方局域网IP(注意 tracker服务器所在机器要开放防火墙端口例外，或者添加端口映射，确保tracker 的端口是可以telnet 通的)。制作种子界面如图所示:
 
-![image-20240607090633631](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20240607090633631.png)
+![image-20240607090633631](../Picture/image-20240607090633631.png)
 
 如果是单个文件，可以选中单个文件。这里我们用的一个文件夹做示例。按照上面的
 设置，就可以对 D:\Test供种测试文件夹制作一个种子。
@@ -49,7 +55,7 @@ Tracker 的设置比较简单，以 Bitcomet Tracker0.5为例:
 
 2)等制作完成后，可以看到任务会自动进行上传，开始时会对文件进行一次校验(因为第一次启动还没有状态文件)，需要校验确认文件是 100%和 torrent对应的。状态里面**必须是“供种中”，文件进度是 100%才正常。**
 
-![image-20240607090724782](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20240607090724782.png)
+![image-20240607090724782](../Picture/image-20240607090724782.png)
 
 
 
@@ -58,11 +64,11 @@ Tracker 的设置比较简单，以 Bitcomet Tracker0.5为例:
 找一台机器(甚至可以和上传同台机器)，选择那个种子文件进行下载，下载到任意一个空
 的目录。可以看到他在下载，上传机器在上传。
 
-![image-20240607090803293](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20240607090803293.png)
+![image-20240607090803293](../Picture/image-20240607090803293.png)
 
 这个下载时一定要找一个新文件夹(也就是下面没有“供种测试”文件夹的)
 
-​                                                                  ![image-20240607090832302](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20240607090832302.png)
+​                                                                  ![image-20240607090832302](../Picture/image-20240607090832302.png)
 
 状态应该是下载中，后面有速度。
 
