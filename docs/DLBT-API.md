@@ -1,6 +1,6 @@
 ### *DLBT_Startup*
 
-**功能：**启动DLBT内核，初始化BT的运行环境,返回值表示是否成功
+**功能：** 启动DLBT内核，初始化BT的运行环境,返回值表示是否成功
 
 ~~~c++
 //=======================================================================================
@@ -58,13 +58,13 @@ DLBT_API BOOL WINAPI DLBT_Startup (
 
 **param**：内核启动设置的参数指针，参考DLBT_KERNEL_START_PARAM结构体中各项注释的含义。如果传入NULL，则使用内置的默认参数（启动DHT、UPnP以及内网自动发现，并使用随机端口），随机端口可以在监听成功后通过 DLBT_GetListenPort 来获得。如果使用固定端口，则可以将param里面的startPort和endPort设置完全相同，比如都是9010，内部则会使用9010作为启动端口，一旦9010被其他程序使用，则会返回失败。
 
-**privateProtocolIDs：**自定义的私有协议串，可以突破运营商对标准BT协议的限制，或者用于构建自己专属的保密数据传输。如果为NULL（默认），则作为标准的BT客户端启动。DLBT的私有协议在3.3版本中进行了全新改进，私有模式下去除了BT的痕迹，可以穿透运营商对协议的封锁。建议字符串的长度为6到16个字符，比如“DLBT Protocol”
+**privateProtocolIDs：** 自定义的私有协议串，可以突破运营商对标准BT协议的限制，或者用于构建自己专属的保密数据传输。如果为NULL（默认），则作为标准的BT客户端启动。DLBT的私有协议在3.3版本中进行了全新改进，私有模式下去除了BT的痕迹，可以穿透运营商对协议的封锁。建议字符串的长度为6到16个字符，比如“DLBT Protocol”
 
 如果使用标准协议，则是完全兼容uTorrent、Bitcomet、迅雷等BT软件的；如果使用私有协议，则是完全私有化的网络，下载的用户只能是相同私有协议串的DLBT内核，好处是可以穿透任意的协议封锁。当然，标准协议下，如果使用了BT扩展协议中的加密传输（详见DLBT_SetEncryptSetting的说明）方式，也可以穿透大部分运营商的封锁，同时可以和uTorrent、Bitcomet、比特精灵等兼容。
 
-**seedServerMode：**是否以上传为主，适合上传要求大于下载要求时使用。--- DLBT内核3.1版本以后，已经正式推出了独立的专业上传服务器，因此如果需要几万文件的使用，可以参考了解DLBT专业上传服务器的介绍。 该参数为保留参数，暂时不对外开放，商业用户请在点量官方客服的指导下使用该参数。
+**seedServerMode：** 是否以上传为主，适合上传要求大于下载要求时使用。--- DLBT内核3.1版本以后，已经正式推出了独立的专业上传服务器，因此如果需要几万文件的使用，可以参考了解DLBT专业上传服务器的介绍。 该参数为保留参数，暂时不对外开放，商业用户请在点量官方客服的指导下使用该参数。
 
-**productNum：**商业版用户的数字ID，在购买后作者会提供一个产品密钥，激活商业版功能，试用版用户请使用NULL。
+**productNum：** 商业版用户的数字ID，在购买后作者会提供一个产品密钥，激活商业版功能，试用版用户请使用NULL。
 
 **说明：**
 
@@ -72,29 +72,29 @@ DLBT_Startup 函数必须作为第一个被调用的BT函数，如果传入了Po
 
 ### *DLBT_SetLsdSetting*
 
-**功能：**设置局域网自动发现的一些设置
+**功能：** 设置局域网自动发现的一些设置
 
 ```c++
 DLBT_API void WINAPI DLBT_SetLsdSetting (int interval_seconds, bool bUseBroadcast);	
 ```
 
-**interval_seconds:**组播周期秒数：建议不要低于10s。内部默认是5分钟一次。
+**interval_seconds:** 组播周期秒数：建议不要低于10s。内部默认是5分钟一次。
 
-**bUseBroadcast：**是否使用广播模式，默认内部使用组播，如果使用广播，可能局域网有无用流量太多，一般不建议。
+**bUseBroadcast：** 是否使用广播模式，默认内部使用组播，如果使用广播，可能局域网有无用流量太多，一般不建议。
 
 ### *DLBT_SetP2SPExtName*
 
-**功能：**设置P2SP时需要的扩展名、是否随机一个参数，以及服务器对中文文件名路径的编码
+**功能：** 设置P2SP时需要的扩展名、是否随机一个参数，以及服务器对中文文件名路径的编码
 
 ```c++
 DLBT_API void WINAPI DLBT_SetP2SPExtName (LPCSTR extName, bool bUseRandParam, bool bUtf8);
 ```
 
-**extName：**用于防止一些运营商对http有他们网内缓存，所以导致下载的是缓存的老版本的文件。可以考虑使用一个.php这种扩展名，防止他们用缓存。但需要服务器配置将.php后缀忽略，返回真正的文件，可以通过nginx的rewrite等规则实现。
+**extName：** 用于防止一些运营商对http有他们网内缓存，所以导致下载的是缓存的老版本的文件。可以考虑使用一个.php这种扩展名，防止他们用缓存。但需要服务器配置将.php后缀忽略，返回真正的文件，可以通过nginx的rewrite等规则实现。
 
-**bUseRandParam：**是否随机一个?a=b这种参数，也是防止缓存的，但不是对所有运营商都有效
+**bUseRandParam：** 是否随机一个?a=b这种参数，也是防止缓存的，但不是对所有运营商都有效
 
-**bUtf8：**是否使用utf8的路径编码，默认是true。可以设置false（如果有些中文路径获取不到）
+**bUtf8：** 是否使用utf8的路径编码，默认是true。可以设置false（如果有些中文路径获取不到）
 
 **说明：**
 
@@ -102,7 +102,7 @@ DLBT_API void WINAPI DLBT_SetP2SPExtName (LPCSTR extName, bool bUseRandParam, bo
 
 ### *DLBT_GetListenPort*
 
-**功能：**获得当前内核监听的端口。
+**功能：** 获得当前内核监听的端口。
 
 ```c++
 DLBT_API USHORT WINAPI DLBT_GetListenPort ();
@@ -110,7 +110,7 @@ DLBT_API USHORT WINAPI DLBT_GetListenPort ();
 
 ### *DLBT_Shutdown*
 
-**功能：**关闭点量BT内核，释放所有内核资源，返回值为void型。该函数必须作为最后一个调用的BT内核函数，调用该函数前请调用下载任务的接口将所有的下载任务先停止。
+**功能：** 关闭点量BT内核，释放所有内核资源，返回值为void型。该函数必须作为最后一个调用的BT内核函数，调用该函数前请调用下载任务的接口将所有的下载任务先停止。
 
 **说明：**
 
@@ -118,7 +118,7 @@ DLBT_Shutdown会等待所有资源都正确释放并报告Tracker后退出,所�
 
 ### *DLBT_PreShutdown*
 
-**功能：**提前执行一些关闭操作，由于报告Tracker下线需要一个网络通讯的过程，因此提前执行有助于提高下线的速度。
+**功能：** 提前执行一些关闭操作，由于报告Tracker下线需要一个网络通讯的过程，因此提前执行有助于提高下线的速度。
 
 ```c++
 // 由于关闭的速度可能会比较慢(需要通知Tracker Stop), 所以可以调用该函数提前通知,提高下线速度
@@ -128,7 +128,7 @@ DLBT_API void WINAPI DLBT_PreShutdown ();
 
 ### *DLBT_SetUploadSpeedLimit*和*DLBT_SetDownloadSpeedLimit*
 
-**功能：**设置整个BT内核的总体上传 / 下载的最大速度限制。
+**功能：** 设置整个BT内核的总体上传 / 下载的最大速度限制。
 
 ```c++
 // 速度限制，单位是字节(BYTE)，如果需要限速1M，请输入 1024*1024
@@ -138,11 +138,11 @@ DLBT_API void WINAPI DLBT_SetDownloadSpeedLimit (int limit);
 
 **参数：**
 
-**limit：**最大的上传 / 下载速度，系统内部默认是最大值（即不做任何限制），如果limit小于等于0，则同样表示不做任何限制，所以，如果要限速，请将limit设置为某个正数。单位是Byte，比如如果要设置限制为1MB，则需要传入1024*1024。
+**limit：** 最大的上传 / 下载速度，系统内部默认是最大值（即不做任何限制），如果limit小于等于0，则同样表示不做任何限制，所以，如果要限速，请将limit设置为某个正数。单位是Byte，比如如果要设置限制为1MB，则需要传入1024*1024。
 
 ### *DLBT_SetMaxUploadConnection*和*DLBT_SetMaxTotalConnection*
 
-**功能：**设置整个BT内核的总体上传 / 总的最大连接数限制
+**功能：** 设置整个BT内核的总体上传 / 总的最大连接数限制
 
 ```c++
 // 最大连接数（真正完成连接的连接数）
@@ -152,11 +152,11 @@ DLBT_API void WINAPI DLBT_SetMaxTotalConnection (int limit);
 
 **参数：**
 
-**limit:**最大的上传 / 总连接限制，系统内部默认是-1，-1表示不做任何限制。连接数限制绝大多数情况下等同于人数，一般情况下，最大上传/下载连接数限制，也就是最多同时和多少人进行上传/下载。
+**limit:** 最大的上传 / 总连接限制，系统内部默认是-1，-1表示不做任何限制。连接数限制绝大多数情况下等同于人数，一般情况下，最大上传/下载连接数限制，也就是最多同时和多少人进行上传/下载。
 
 ### *DLBT_SetMaxHalfOpenConnection*
 
-**功能：**设置最多发起的连接数（很多连接可能是发起了，但还没连上）。
+**功能：** 设置最多发起的连接数（很多连接可能是发起了，但还没连上）。
 
 ```c++
 // 最多发起的连接数（很多连接可能是发起了，但还没连上）
@@ -165,11 +165,11 @@ DLBT_API void WINAPI DLBT_SetMaxHalfOpenConnection (int limit);
 
 **参数：**
 
-**limit:**最大半开连接数限制，系统内部默认是没有限制。Xp操作系统默认限制是10个，所以，即使这里设置的很高，但如果系统本身的限制没有使用其它工具修改，也没有使用DLBT_ChangeXPConnectionLimit修改过的话，那么这里的这个limit也不会有效。
+**limit:** 最大半开连接数限制，系统内部默认是没有限制。Xp操作系统默认限制是10个，所以，即使这里设置的很高，但如果系统本身的限制没有使用其它工具修改，也没有使用DLBT_ChangeXPConnectionLimit修改过的话，那么这里的这个limit也不会有效。
 
 ### *DLBT_SetLocalNetworkLimit*
 
-**功能：**用于设置是否对跟自己在同一个局域网的用户进行限速，limit参数如果为true，则使用后面参数中的限速数值进行限速，否则不限。系统默认是不对同一个局域网下的用户应用限速的。因为局域网不占用用户的对外带宽，也可以设置为限制局域网上传。
+**功能：** 用于设置是否对跟自己在同一个局域网的用户进行限速，limit参数如果为true，则使用后面参数中的限速数值进行限速，否则不限。系统默认是不对同一个局域网下的用户应用限速的。因为局域网不占用用户的对外带宽，也可以设置为限制局域网上传。
 
 ```c++
 // 用于设置是否对跟自己在同一个局域网的用户限速，limit如果为true，则使用后面参数中的限速数值进行限速，否则不限。默认不对同一个局域网下的用户应用限速。
@@ -184,13 +184,13 @@ DLBT_API void WINAPI DLBT_SetLocalNetworkLimit (
 
 **limit**是否对和自己在同一个局域网的用户也限速。
 
-**downSpeedLimit：**如果启用局域网限速，下载限速的大小，单位字节/秒。
+**downSpeedLimit：** 如果启用局域网限速，下载限速的大小，单位字节/秒。
 
-**uploadSpeedLimit：**如果启用局域网限速，下载限速的大小，单位字节/秒。
+**uploadSpeedLimit：** 如果启用局域网限速，下载限速的大小，单位字节/秒。
 
 ### *DLBT_SetFileScanDelay*
 
-**功能：**设置文件扫描校验时的休息参数，防止特大文件扫描时磁盘占用太严重，影响客户机器正常使用。
+**功能：** 设置文件扫描校验时的休息参数，防止特大文件扫描时磁盘占用太严重，影响客户机器正常使用。
 
 ```c++
 // 设置文件扫描校验时的休息参数，circleCount代表循环多少次做一次休息。默认是0（也就是不休息）
@@ -200,13 +200,13 @@ DLBT_API void WINAPI DLBT_SetFileScanDelay (DWORD circleCount, DWORD sleepMs);
 
 **参数：**
 
-**circleCount：**代表循环多少次休息一次，0代表不休息。
+**circleCount：** 代表循环多少次休息一次，0代表不休息。
 
-**sleepMs：**代表每次休息的时间，单位是毫秒(ms)。
+**sleepMs：** 代表每次休息的时间，单位是毫秒(ms)。
 
 ### *DLBT_UseServerModifyTime*
 
-**功能：**设置文件下载完成后，是否修改为原始修改时间（制作种子时每个文件的修改时间状态）。
+**功能：** 设置文件下载完成后，是否修改为原始修改时间（制作种子时每个文件的修改时间状态）。
 
 ```c++
 // 设置文件下载完成后，是否修改为原始修改时间（制作种子时每个文件的修改时间状态）。调用该函数后，制作的torrent中会包含有每个文件此时的修改时间信息
@@ -217,7 +217,7 @@ DLBT_API void WINAPI DLBT_UseServerModifyTime(BOOL bUseServerTime);
 
 **参数：**
 
-**bUseServerTime：**是否启用，TRUE（1）代表启用，FALSE（0）代表不启用。
+**bUseServerTime：** 是否启用，TRUE（1）代表启用，FALSE（0）代表不启用。
 
 **说明：**
 
@@ -229,7 +229,7 @@ DLBT_API void WINAPI DLBT_UseServerModifyTime(BOOL bUseServerTime);
 
 ### *DLBT_EnableUDPTransfer*
 
-**功能：**用于设置是否启用UDP传输和UDP穿透传输功能，默认是自动适应，如果对方支持，在tcp无法到达时，自动切换为udp通讯。可以通过这个函数，设置永不使用UDP传输。
+**功能：** 用于设置是否启用UDP传输和UDP穿透传输功能，默认是自动适应，如果对方支持，在tcp无法到达时，自动切换为udp通讯。可以通过这个函数，设置永不使用UDP传输。
 
 **参数：** **bEnabled：**是否启用UDP传输。
 
@@ -239,7 +239,7 @@ DLBT_API void WINAPI DLBT_EnableUDPTransfer(BOOL bEnabled);
 
 ### *DLBT_SetP2PTransferAsHttp*
 
-**功能：**是否启用伪装Http传输，某些地区（比如马来西亚、巴西的一些网络）对Http不限速，但对P2P限速在20K左右，这种网络环境下，可以启用Http传输，默认是允许伪装Http的传输进入（可以接受他们的通讯），但自己发起的连接不主动伪装。如果网络中明确侦测出对Http不限速，可以考虑都设置：主动Http伪装。 但这种伪装也有副作用，国内有些地区机房（一般是网通）设置了Http必须使用域名，而不能使用IP，而BT传输中，对方没有合法域名，反而会被这种限制截杀，如果有这种限制，反而主动伪装后会没有速度。所以请根据实际使用选择。
+**功能：** 是否启用伪装Http传输，某些地区（比如马来西亚、巴西的一些网络）对Http不限速，但对P2P限速在20K左右，这种网络环境下，可以启用Http传输，默认是允许伪装Http的传输进入（可以接受他们的通讯），但自己发起的连接不主动伪装。如果网络中明确侦测出对Http不限速，可以考虑都设置：主动Http伪装。 但这种伪装也有副作用，国内有些地区机房（一般是网通）设置了Http必须使用域名，而不能使用IP，而BT传输中，对方没有合法域名，反而会被这种限制截杀，如果有这种限制，反而主动伪装后会没有速度。所以请根据实际使用选择。
 
 ```c++
 DLBT_API void WINAPI DLBT_SetP2PTransferAsHttp (bool bHttpOut, bool bAllowedIn = true);
@@ -247,13 +247,13 @@ DLBT_API void WINAPI DLBT_SetP2PTransferAsHttp (bool bHttpOut, bool bAllowedIn =
 
 **参数：**
 
-**bHttpOut：**是否对发出的请求伪装Http，默认不主动发出伪装，除非有明确设置。
+**bHttpOut：** 是否对发出的请求伪装Http，默认不主动发出伪装，除非有明确设置。
 
-**bAllowedIn：**是否接受别人发来的伪装过的Http数据请求，默认是兼容别人的Http伪装。
+**bAllowedIn：** 是否接受别人发来的伪装过的Http数据请求，默认是兼容别人的Http伪装。
 
 ### *DLBT_AddHoleServer*
 
-**功能：**是否使用单独的穿透服务器，如果不使用单独服务器，穿透的协助将由某个双方都能连上的第三方p2p节点辅助完成。穿透服务器程序需要联系点量软件申请获取。
+**功能：** 是否使用单独的穿透服务器，如果不使用单独服务器，穿透的协助将由某个双方都能连上的第三方p2p节点辅助完成。穿透服务器程序需要联系点量软件申请获取。
 
 ```c++
 // 是否使用单独的穿透服务器，如果不使用单独服务器，穿透的协助将由某个双方都能连上的第三方p2p节点辅助完成
@@ -262,13 +262,13 @@ DLBT_API BOOL WINAPI DLBT_AddHoleServer(LPCSTR ip, short port);
 
 **参数：**
 
-**ip：**UDP穿透服务器的IP地址。
+**ip：** UDP穿透服务器的IP地址。
 
 **port****:**UDP穿透服务器的监听端口。
 
 ### *DLBT_AddServerIP*
 
-**功能：**设置服务器的IP，可以多次调用设置多个，用于标记哪些IP是服务器，以便统计从服务器下载到的数据等信息，甚至速度到了一定程度可以断开服务器连接，节省服务器带宽。2022版本后的P2SP服务器，自动会被标记为服务器，不需要再单独设置
+**功能：** 设置服务器的IP，可以多次调用设置多个，用于标记哪些IP是服务器，以便统计从服务器下载到的数据等信息，甚至速度到了一定程度可以断开服务器连接，节省服务器带宽。2022版本后的P2SP服务器，自动会被标记为服务器，不需要再单独设置
 
 ```c++
 DLBT_API void WINAPI DLBT_AddServerIP (LPCSTR ip);
@@ -276,11 +276,11 @@ DLBT_API void WINAPI DLBT_AddServerIP (LPCSTR ip);
 
  **参数：**
 
-**ip：**服务器的IP地址，如果有多个服务器IP，请多次调用本函数。
+**ip：** 服务器的IP地址，如果有多个服务器IP，请多次调用本函数。
 
 ### *DLBT_AddBanServerUrl*
 
-**功能：**不去连接这个p2sp的url，可以重复调用. 目的是，如果是服务器上，这个p2sp的url就在本机，就没必要去连接这个url了。
+**功能：** 不去连接这个p2sp的url，可以重复调用. 目的是，如果是服务器上，这个p2sp的url就在本机，就没必要去连接这个url了。
 
 ```c++
 DLBT_API void WINAPI DLBT_AddBanServerUrl (LPCSTR url);
@@ -288,11 +288,11 @@ DLBT_API void WINAPI DLBT_AddBanServerUrl (LPCSTR url);
 
 **参数：**
 
-**url：**希望不去连接的p2sp地址。关于p2sp的更多信息可以参考: DLBT_Downloader_AddHttpDownload 函数。
+**url：** 希望不去连接的p2sp地址。关于p2sp的更多信息可以参考: DLBT_Downloader_AddHttpDownload 函数。
 
 ### *DLBT_SetStatusFileSavePeriod*
 
-**功能：**保存一次状态文件的条件，内部默认全部下载完成后保存一次。可以调整为自己需要的时间或者上限数目，比如每5分钟保存一次，或者下载100块数据后保存一次。
+**功能：** 保存一次状态文件的条件，内部默认全部下载完成后保存一次。可以调整为自己需要的时间或者上限数目，比如每5分钟保存一次，或者下载100块数据后保存一次。
 
 ```c++
 DLBT_API BOOL WINAPI DLBT_SetStatusFileSavePeriod (
@@ -303,15 +303,15 @@ DLBT_API BOOL WINAPI DLBT_SetStatusFileSavePeriod (
 
 **参数：**
 
-**iPeriod：**保存间隔，单位是秒，表示每多少秒保存一次，默认是0，代表除非下载完成，否则永不保存。
+**iPeriod：** 保存间隔，单位是秒，表示每多少秒保存一次，默认是0，代表除非下载完成，否则永不保存。
 
-**port:**分块数目，表示下载多少个分块数据(Piece)保存一次，默认0，代表除非下载完成，否则永不保存。
+**port:** 分块数目，表示下载多少个分块数据(Piece)保存一次，默认0，代表除非下载完成，否则永不保存。
 
 =======================================================================================
 
 ### *DLBT_SetReportIP和DLBT_GetReportIP*
 
-**功能：**设置和获取报告Tracker时的IP地址
+**功能：** 设置和获取报告Tracker时的IP地址
 
 ```c++
 DLBT_API void WINAPI DLBT_SetReportIP (LPCSTR ip); // 设置IP 
@@ -320,7 +320,7 @@ DLBT_API LPCSTR WINAPI DLBT_GetReportIP ();        // 获取当前设置，返�
 
 **参数：**
 
-**ip**需要报告给Tracker的IP地址。
+**ip** 需要报告给Tracker的IP地址。
 
 **说明：**
 
@@ -332,7 +332,7 @@ DLBT_API LPCSTR WINAPI DLBT_GetReportIP ();        // 获取当前设置，返�
 
 ### *DLBT_SetUserAgent*
 
-**功能：**设置报告Tracker时的客户端标记。
+**功能：** 设置报告Tracker时的客户端标记。
 
 ```c++
 DLBT_API void WINAPI DLBT_SetUserAgent (LPCSTR agent);
@@ -340,7 +340,7 @@ DLBT_API void WINAPI DLBT_SetUserAgent (LPCSTR agent);
 
 **参数：**
 
-**agent：**客户端的标记字符串。
+**agent：** 客户端的标记字符串。
 
 **说明：**
 
@@ -348,7 +348,7 @@ DLBT_API void WINAPI DLBT_SetUserAgent (LPCSTR agent);
 
 ### *DLBT_SetMaxCacheSize*
 
-**功能：**设置点量BT下载和上传文件最大可用的缓存。
+**功能：** 设置点量BT下载和上传文件最大可用的缓存。
 
 ```c++
 /=======================================================================================
@@ -360,7 +360,7 @@ DLBT_API void WINAPI DLBT_SetMaxCacheSize (DWORD size);
 
 **参数：**
 
-**size：**缓存的最大值，以KB为单位。比如需要设置1M缓存，则传入1024。
+**size：** 缓存的最大值，以KB为单位。比如需要设置1M缓存，则传入1024。
 
 **说明：**
 
@@ -389,7 +389,7 @@ DLBT_API void WINAPI DLBT_SetPerformanceFactor(
 
 ### *DLBT_AddIpBlackList*
 
-**功能：**添加ip黑名单(可批量添加一个范围内的ip,如果只有一个ip第二个参数允许为NULL),成功返回0，失败返回 小于0
+**功能：** 添加ip黑名单(可批量添加一个范围内的ip,如果只有一个ip第二个参数允许为NULL),成功返回0，失败返回 小于0
 
 ```c++
 DLBT_API int WINAPI DLBT_AddIpBlackList(const char*ipRangeStart,const char*ipRangeEnd);
@@ -409,7 +409,7 @@ DLBT_API void WINAPI DLBT_RemoveAllBlackList();
 
 ### *DLBT_DHT_Start*
 
-**功能：**启动DHT网络功能，DHT网络在点量BT内核中默认不启动，需要调用该函数启动。
+**功能：** 启动DHT网络功能，DHT网络在点量BT内核中默认不启动，需要调用该函数启动。
 
 ```c++
 DLBT_API void WINAPI DLBT_DHT_Start (USHORT port = 0);
@@ -427,7 +427,7 @@ DHT网络的功能主要是：可以通过用户之间信息的交流，获得�
 
 ### *DLBT_DHT_Stop*
 
-**功能：**停止DHT网络功能。
+**功能：** 停止DHT网络功能。
 
 ```c++
 DLBT_API void WINAPI DLBT_DHT_Stop ();
@@ -435,7 +435,7 @@ DLBT_API void WINAPI DLBT_DHT_Stop ();
 
 ### *DLBT_DHT_IsStarted*
 
-**功能：**判断DHT网络是否已启动，TRUE为已经启动，FALSE为尚未启动。
+**功能：** 判断DHT网络是否已启动，TRUE为已经启动，FALSE为尚未启动。
 
 ```c++
 DLBT_API BOOL WINAPI DLBT_DHT_IsStarted ();
@@ -443,7 +443,7 @@ DLBT_API BOOL WINAPI DLBT_DHT_IsStarted ();
 
 ### *DLBT_PROXY_SETTING*
 
-**功能：**当用户的机器需要使用代理才能上网时，使用该结构体来指定代理的设置。
+**功能：** 当用户的机器需要使用代理才能上网时，使用该结构体来指定代理的设置。
 
 ```c++
 //=======================================================================================
@@ -474,7 +474,7 @@ struct DLBT_PROXY_SETTING
 
 ### *标记代理的应用范围*
 
-**功能：**当用户的机器需要使用代理才能上网时，使用该结构体来指定代理的设置。
+**功能：** 当用户的机器需要使用代理才能上网时，使用该结构体来指定代理的设置。
 
 ```c++
 //=======================================================================================
@@ -492,7 +492,7 @@ struct DLBT_PROXY_SETTING
 
 ### ***DLBT_SetProxy和DLBT_GetProxySetting***
 
-**功能：**DLBT_SetProxy用于设置代理参数，DLBT_GetProxySetting用于获取当前的代理设置。
+**功能：** DLBT_SetProxy用于设置代理参数，DLBT_GetProxySetting用于获取当前的代理设置。
 
 ```c++
 DLBT_API void WINAPI DLBT_SetProxy (
@@ -510,7 +510,7 @@ DLBT_API void WINAPI DLBT_GetProxySetting (DLBT_PROXY_SETTING * proxySetting, in
 
 ### *DLBT_SetEncryptSetting加密协议和加密数据*
 
-**说明：**点量BT除了可以使用私有协议来突破运营商的限制，同时可以使用协议加密来突破。私有协议的优点是简单有效,但缺点是私有协议后，就形成了自己的私有P2P网络，而不是BT网络。意味着同其它BT客户端无法兼容（当然，如果您想自己的文件只有自己的客户端能够下载，那么点量BT的私有协议是一个不错的选择）。而加密协议不会破坏同Bitcomet等支持加密协议的BT客户端的兼容性。 同样的，如果为了传输高安全的数据，也可以选择加密数据。不同的网络下，可能需要不同设置。配合伪装Http使用，在某些网络下效果更佳。具体的设置建议，商业用户建议直接咨询点量软件售后服务人员。
+**说明：** 点量BT除了可以使用私有协议来突破运营商的限制，同时可以使用协议加密来突破。私有协议的优点是简单有效,但缺点是私有协议后，就形成了自己的私有P2P网络，而不是BT网络。意味着同其它BT客户端无法兼容（当然，如果您想自己的文件只有自己的客户端能够下载，那么点量BT的私有协议是一个不错的选择）。而加密协议不会破坏同Bitcomet等支持加密协议的BT客户端的兼容性。 同样的，如果为了传输高安全的数据，也可以选择加密数据。不同的网络下，可能需要不同设置。配合伪装Http使用，在某些网络下效果更佳。具体的设置建议，商业用户建议直接咨询点量软件售后服务人员。
    如果不需要和其他客户端兼容，并且为了最为可靠的突破封锁，可以使用点量BT 3.3以后的版本，在私有协议下实现脱离BT的痕迹，经严格测试可突破国内大部分运营商的协议封锁，也无需担心运营商的协议限制。
 
 ```c++
@@ -549,7 +549,7 @@ DLBT_API void WINAPI DLBT_SetEncryptSetting (
 
 ### *enumDLBT_DOWNLOAD_STATE*
 
-**功能：**标记下载任务当前状态。
+**功能：** 标记下载任务当前状态。
 
 ```c++
 // 单个下载的状态
@@ -570,7 +570,7 @@ enum DLBT_DOWNLOAD_STATE
 
 ### *enum DLBT_FILE_ALLOCATE_TYPE*
 
-**功能：**标记文件的磁盘分配方式。
+**功能：** 标记文件的磁盘分配方式。
 
 ```c++
 // 文件的分配模式,详见使用说明文档
@@ -592,7 +592,7 @@ FILE_ALLOCATE_REVERSED（预分配）方式，这种方式是在下载前将文�
 
 ### *DLBT_Downloader_Initialize*
 
-**功能：**启动一个种子文件的下载，返回该下载任务的句柄
+**功能：** 启动一个种子文件的下载，返回该下载任务的句柄
 
 ```c++
 DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize (
@@ -612,15 +612,15 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize (
 
 **参数：**
 
-**torrentFile：**种子文件的路径。
+**torrentFile：** 种子文件的路径。
 
-**outPath：**下载后文件的保存路径。
+**outPath：** 下载后文件的保存路径。
 
-**statusFile：**状态文件的路径（具体到文件名）。状态文件是用于记录上次下载的信息的文件，比如上次下载的文件块数、找到的节点信息等，以便下次启动时可以迅速恢复到上次的状态，快速下载。默认为” ”，表示系统会自动选择种子文件的目录下建立一个状态文件。如果是NULL则表示不使用状态文件（不建议，因为没有状态文件，下次启动时会需要扫描上次下载的数据信息、连上的节点信息也会丢失）。
+**statusFile：** 状态文件的路径（具体到文件名）。状态文件是用于记录上次下载的信息的文件，比如上次下载的文件块数、找到的节点信息等，以便下次启动时可以迅速恢复到上次的状态，快速下载。默认为” ”，表示系统会自动选择种子文件的目录下建立一个状态文件。如果是NULL则表示不使用状态文件（不建议，因为没有状态文件，下次启动时会需要扫描上次下载的数据信息、连上的节点信息也会丢失）。
 
-**fileAllocateType：**文件的分配方式，详见DLBT_FILE_ALLOCATE_TYPE。
+**fileAllocateType：** 文件的分配方式，详见DLBT_FILE_ALLOCATE_TYPE。
 
-**bPaused：**不立即运行下载任务，暂停的方式启动。一般用于只是为了读取一些信息的情况，或者需要完成某些设置后再启动的情况。
+**bPaused：** 不立即运行下载任务，暂停的方式启动。一般用于只是为了读取一些信息的情况，或者需要完成某些设置后再启动的情况。
 
 **bQuickSeed:** 是否快速供种，仅对商业版的专业上传服务器模式下有效，快速供种可以避开启动时对文件的检查，立即启动上传。
 
@@ -630,7 +630,7 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize (
 
 **bPrivateProtocol**：是否使用私有协议，私有协议下，Bitcomet等标准BT软件就无法从用户这里获取数据。此参数必须配合DLBT_Startup中的privateProtocolIDs共同使用，如果privateProtocolIDs为NULL，那么即使这里使用了bPrivateProtocol也是无效果的； bPrivateProtocol为TRUE时内核将自动使用DLBT_Startup中传入的私有串作为私有协议。
 
-**bZipTransfer：**是否启用Zip传输，在传输的双方都是点量BT3.6.3以后版本时才可以生效，否则会忽略该参数。一般用于传输一些没有进行过压缩的文本型文件，比如一些网游的更新，为了实现数据块对比，无法将整个网游压缩为一个压缩包，而一般都是文件夹的模式。此时里面有很多数据可以进一步压缩，就可以采用Zip传输模式，压缩前动态压缩，可以减少大量网络流量，提升实际的传输速度。
+**bZipTransfer：** 是否启用Zip传输，在传输的双方都是点量BT3.6.3以后版本时才可以生效，否则会忽略该参数。一般用于传输一些没有进行过压缩的文本型文件，比如一些网游的更新，为了实现数据块对比，无法将整个网游压缩为一个压缩包，而一般都是文件夹的模式。此时里面有很多数据可以进一步压缩，就可以采用Zip传输模式，压缩前动态压缩，可以减少大量网络流量，提升实际的传输速度。
 
 **说明：**
 
@@ -640,7 +640,7 @@ DLBT_Downloader_Initialize返回下载句柄，对该下载的其它所有操作
 
 ### *Downloader_Initialize_FromBuffer*
 
-**功能：**启动一个内容位于内存中的种子的下载，返回该下载任务的句柄
+**功能：** 启动一个内容位于内存中的种子的下载，返回该下载任务的句柄
 
 ```c++
 // 启动一个内存中的种子文件内容，可用于种子文件不是独立存储或者按某个加密方式加密种子的情况，可以将解密后的内容传入BT内核
@@ -663,9 +663,9 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize_FromBuffer (
 
 **参数：**
 
-**torrentFile：**种子文件在内存中的内容。
+**torrentFile：** 种子文件在内存中的内容。
 
-**dwTorrentFileSize：**种子内容的大小。
+**dwTorrentFileSize：** 种子内容的大小。
 
 其它参数的含义详见DLBT_Downloader_Initialize的说明
 
@@ -677,7 +677,7 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize_FromBuffer (
 
 ### *DLBT_Downloader_Initialize_FromTorrentHandle*
 
-**功能：**启动一个内容位于内存中的种子的下载，返回该下载任务的句柄
+**功能：** 启动一个内容位于内存中的种子的下载，返回该下载任务的句柄
 
 ```c++
 // 从一个Torrent句柄启动一个任务
@@ -697,13 +697,13 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize_FromTorrentHandle (
 
 **参数：**
 
-**torrentHandle：**内核返回的种子文件Torrent对象的句柄，请参考：DLBT_OpenTorrent接口。
+**torrentHandle：** 内核返回的种子文件Torrent对象的句柄，请参考：DLBT_OpenTorrent接口。
 
 其它参数的含义详见DLBT_Downloader_Initialize的说明。
 
 ### *DLBT_Downloader_Initialize_FromInfoHash*
 
-**功能：**无种子模式下载，只需要一个种子文件的Hash值和tracker的地址（或者一个上传者的地址），返回该下载任务的句柄
+**功能：** 无种子模式下载，只需要一个种子文件的Hash值和tracker的地址（或者一个上传者的地址），返回该下载任务的句柄
 
 ```c++
 //（无种子模式在试用版中无效，可以调用这些接口，但不会有效果）
@@ -724,13 +724,13 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize_FromInfoHash (
 
 **参数：**
 
-**trackerURL：**提供该文件追踪的Tracker服务器的地址。
+**trackerURL：** 提供该文件追踪的Tracker服务器的地址。
 
-**infoHash：**该任务的infoHash值。
+**infoHash：** 该任务的infoHash值。
 
-**outPath：**下载后文件的保存路径。
+**outPath：** 下载后文件的保存路径。
 
-**name：**在下载到种子之前，是没有办法知道名字的，因此可以传入一个临时的名字
+**name：** 在下载到种子之前，是没有办法知道名字的，因此可以传入一个临时的名字
 
 其它参数的含义详见DLBT_Downloader_Initialize的说明。
 
@@ -748,7 +748,7 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize_FromInfoHash (
 
 ### *DLBT_Downloader_Initialize_FromUrl*
 
-**功能：**无种子模式下载，只需要一个网址（网页的链接地址形式），返回该下载任务的句柄。地址格式为：地址格式为： DLBT://xt=urn:btih: Base32 编码过的info-hash [ &dn= 名字 ] [ &tr= tracker的地址 ]  ([]为可选参数)
+**功能：** 无种子模式下载，只需要一个网址（网页的链接地址形式），返回该下载任务的句柄。地址格式为：地址格式为： DLBT://xt=urn:btih: Base32 编码过的info-hash [ &dn= 名字 ] [ &tr= tracker的地址 ]  ([]为可选参数)
 
 ```c++
 // 无种子模式的另一个接口，可以直接通过地址下载，地址格式为： DLBT://xt=urn:btih: Base32 编码过的info-hash [ &dn= Base32后的名字 ] [ &tr= Base32后的tracker的地址 ]  ([]为可选参数)
@@ -768,7 +768,7 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize_FromUrl (
 
 **参数：**
 
-**url：**一个包含BT种子信息的网址，格式：DLBT://xt=urn:btih: Base32 编码过的info-hash [ &dn= Base32 编码过的名字 ] [ &tr=Base32 编码过的tracker的地址 ]  ([]为可选参数)。 这个地址可以在通过DLBT_Downloader_MakeURL函数生成，也可以用户自己根据上述规则生成。
+**url：** 一个包含BT种子信息的网址，格式：DLBT://xt=urn:btih: Base32 编码过的info-hash [ &dn= Base32 编码过的名字 ] [ &tr=Base32 编码过的tracker的地址 ]  ([]为可选参数)。 这个地址可以在通过DLBT_Downloader_MakeURL函数生成，也可以用户自己根据上述规则生成。
 
 其它参数的含义详见DLBT_Downloader_Initialize的说明。
 
@@ -782,7 +782,7 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_Initialize_FromUrl (
 
 ### *DLBT_Downloader_InitializeAsUpdater*
 
-**功能：**专业文件更新接口，点量BT的专业更新功能无需对老文件进行任何扫描校验，直接对比新老种子文件的差异，几毫秒内快速启动更新变化过的数据块。传统的BT软件在有新种子文件替换老种子时，需要先扫描原始文件才能获知需要去下载哪些数据块，如果一个几G的文件夹，扫描一次需要很久，并且扫描期间机器磁盘占用严重。所以点量BT提供的这个接口，在有大量文件需要频繁更新时极其有效。
+**功能：** 专业文件更新接口，点量BT的专业更新功能无需对老文件进行任何扫描校验，直接对比新老种子文件的差异，几毫秒内快速启动更新变化过的数据块。传统的BT软件在有新种子文件替换老种子时，需要先扫描原始文件才能获知需要去下载哪些数据块，如果一个几G的文件夹，扫描一次需要很久，并且扫描期间机器磁盘占用严重。所以点量BT提供的这个接口，在有大量文件需要频繁更新时极其有效。
 
 ```c++
 // 专业文件更新接口，任务以新老种子文件为基础，更新新种子文件相对老种子文件变化过的数据块。仅商业版中提供
@@ -804,11 +804,11 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_InitializeAsUpdater (
 
 **参数：**
 
-**curTorrentFile：**现在这些文件对应的老的种子文件的路径。如果要支持专业更新，新老种子制作时，均应在DLBT_CreateTorrent函数中传入bUpdateExt参数。
+**curTorrentFile：** 现在这些文件对应的老的种子文件的路径。如果要支持专业更新，新老种子制作时，均应在DLBT_CreateTorrent函数中传入bUpdateExt参数。
 
-**newTorrentFile：**需要更新的新的种子文件的路径。
+**newTorrentFile：** 需要更新的新的种子文件的路径。
 
-**curPath：**这些文件当前所在的路径（更新时也直接写到这个文件夹里面）。
+**curPath：** 这些文件当前所在的路径（更新时也直接写到这个文件夹里面）。
 
 **curTorrentPassword**和**newTorrentFilePassword**：分别对应新老种子文件的密码，是否加密了种子文件，如果为Null，则是普通种子，否则是种子的密码。另外，如果输入了密码，但无法成功解密，内核也会试着再把它作为一个普通未加密种子来进行尝试直接启动。加密种子只对有需要的商业版用户开放，试用版中会自动忽略该参数。
 
@@ -826,7 +826,7 @@ DLBT_API HANDLE WINAPI DLBT_Downloader_InitializeAsUpdater (
 
 ### *DLBT_Downloader_GetOldTorrentProgress*
 
-**功能：**详见DLBT_Downloader_InitializeAsUpdater，该函数用于获取新老种子有多少文件发生了改变，需要更新多少文件。只有制作种子时，传入了bUpdateExt参数的torrent才可以支持。
+**功能：** 详见DLBT_Downloader_InitializeAsUpdater，该函数用于获取新老种子有多少文件发生了改变，需要更新多少文件。只有制作种子时，传入了bUpdateExt参数的torrent才可以支持。
 
 ```c++
 // 专业文件更新时，传入新老种子，然后直接传出老种子和新种子的差异情况（进度），如果进度是99%，则意味着只有1%的数据需要下载。
@@ -842,15 +842,15 @@ DLBT_API float WINAPI DLBT_Downloader_GetOldTorrentProgress (
 
 **参数：**
 
-**curTorrentFile：**现在这些文件对应的老的种子文件的路径。如果要支持专业更新，新老种子制作时，均应在DLBT_CreateTorrent函数中传入bUpdateExt参数。
+**curTorrentFile：** 现在这些文件对应的老的种子文件的路径。如果要支持专业更新，新老种子制作时，均应在DLBT_CreateTorrent函数中传入bUpdateExt参数。
 
-**newTorrentFile：**需要更新的新的种子文件的路径。
+**newTorrentFile：** 需要更新的新的种子文件的路径。
 
-**curPath：**这些文件当前所在的路径（更新时也直接写到这个文件夹里面）。
+**curPath：** 这些文件当前所在的路径（更新时也直接写到这个文件夹里面）。
 
-**statusFile：**状态文件的路径（具体到文件名）。状态文件是用于记录上次下载的信息的文件，比如上次下载的文件块数、找到的节点信息等，以便下次启动时可以迅速恢复到上次的状态，快速下载。默认为” ”，表示系统会自动选择种子文件的目录下建立一个状态文件。如果是NULL则表示不使用状态文件（不建议，因为没有状态文件，下次启动时会需要扫描上次下载的数据信息、连上的节点信息也会丢失）。
+**statusFile：** 状态文件的路径（具体到文件名）。状态文件是用于记录上次下载的信息的文件，比如上次下载的文件块数、找到的节点信息等，以便下次启动时可以迅速恢复到上次的状态，快速下载。默认为” ”，表示系统会自动选择种子文件的目录下建立一个状态文件。如果是NULL则表示不使用状态文件（不建议，因为没有状态文件，下次启动时会需要扫描上次下载的数据信息、连上的节点信息也会丢失）。
 
-**curTorrentPassword和newTorrentFilePassword：**分别对应新老种子文件的密码，是否加密了种子文件，如果为Null，则是普通种子，否则是种子的密码。另外，如果输入了密码，但无法成功解密，内核也会试着再把它作为一个普通未加密种子来进行尝试直接启动。加密种子只对有需要的商业版用户开放，试用版中会自动忽略该参数。
+**curTorrentPassword和newTorrentFilePassword：** 分别对应新老种子文件的密码，是否加密了种子文件，如果为Null，则是普通种子，否则是种子的密码。另外，如果输入了密码，但无法成功解密，内核也会试着再把它作为一个普通未加密种子来进行尝试直接启动。加密种子只对有需要的商业版用户开放，试用版中会自动忽略该参数。
 
 **说明：**
 
@@ -862,7 +862,7 @@ DLBT_API float WINAPI DLBT_Downloader_GetOldTorrentProgress (
 
 ### *DLBT_Downloader_ReleaseAllFiles*
 
-**功能：**关闭任务之前，可以调用该函数停掉IO线程对该任务的操作
+**功能：** 关闭任务之前，可以调用该函数停掉IO线程对该任务的操作
 
 ```c++
 // 关闭任务之前，可以调用该函数停掉IO线程对该任务的操作（异步的，需要调用DLBT_Downloader_IsReleasingFiles函数来获取是否还在释放中）。
@@ -872,7 +872,7 @@ DLBT_API void WINAPI DLBT_Downloader_ReleaseAllFiles(HANDLE hDownloader);
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 **说明：**
 
@@ -880,7 +880,7 @@ DLBT_API void WINAPI DLBT_Downloader_ReleaseAllFiles(HANDLE hDownloader);
 
 ### *DLBT_Downloader_IsReleasingFiles*
 
-**功能：**是否还在释放句柄的过程中，配合DLBT_Downloader_ReleaseAllFiles查询释放文件的结果
+**功能：** 是否还在释放句柄的过程中，配合DLBT_Downloader_ReleaseAllFiles查询释放文件的结果
 
 ```c++
 DLBT_API BOOL WINAPI DLBT_Downloader_IsReleasingFiles(HANDLE hDownloader);
@@ -888,7 +888,7 @@ DLBT_API BOOL WINAPI DLBT_Downloader_IsReleasingFiles(HANDLE hDownloader);
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_Release*
 
@@ -910,9 +910,9 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_Release (HANDLE hDownloader, int nFlag =
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**nFlag：**删除的选项，具体请参考：DLBT_RELEASE_FLAG的各项可选设置，可以用 或 运算的方式组合各个选项，比如 DLBT_RELEASE_WAIT | DLBT_RELEASE_DELETE_STATUS
+**nFlag：** 删除的选项，具体请参考：DLBT_RELEASE_FLAG的各项可选设置，可以用 或 运算的方式组合各个选项，比如 DLBT_RELEASE_WAIT | DLBT_RELEASE_DELETE_STATUS
 
 **说明：**
 
@@ -920,7 +920,7 @@ bDeleteAllFiles设置后，并不一定能保证肯定可以删除文件，因�
 
 ### *DLBT_Downloader_AddHttpDownload*
 
-**功能：**增加一个Http的下载地址，在从其它P2P节点下载的同时从该http下载源进行下载。
+**功能：** 增加一个Http的下载地址，在从其它P2P节点下载的同时从该http下载源进行下载。
 
 ```c++
 // 增加一个http的地址，当该下载文件在某个Web服务器上有http下载时可以使用，web服务器的编码方式最好为UTF-8，如果是其它格式可以联系点量软件进行修改
@@ -929,9 +929,9 @@ DLBT_API void WINAPI DLBT_Downloader_AddHttpDownload (HANDLE hDownloader, LPSTR 
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**url：**Http源的地址。
+**url：** Http源的地址。
 
 **说明：**
 
@@ -941,7 +941,7 @@ Http跨协议(P2SP)，遵循Bittorrent的扩展协议：http://www.getright.com/
 
 ### *DLBT_Downloader_RemoveHttpDownload*
 
-**功能：**移除一个P2SP的地址，如果正在下载中，会进行断开并且从候选者列表中移除，不再进行重试。
+**功能：** 移除一个P2SP的地址，如果正在下载中，会进行断开并且从候选者列表中移除，不再进行重试。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_RemoveHttpDownload (HANDLE hDownloader, LPSTR url);
@@ -949,13 +949,13 @@ DLBT_API void WINAPI DLBT_Downloader_RemoveHttpDownload (HANDLE hDownloader, LPS
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**url：**Http源(p2sp)的地址。
+**url：** Http源(p2sp)的地址。
 
 ### *DLBT_Downloader_GetHttpConnections*
 
-**功能：**获取某下载任务此时在使用的所有P2SP连接信息。 
+**功能：** 获取某下载任务此时在使用的所有P2SP连接信息。 
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_GetHttpConnections(HANDLE hDownloader, LPSTR ** urls, int * urlCount);
@@ -963,11 +963,11 @@ DLBT_API void WINAPI DLBT_Downloader_GetHttpConnections(HANDLE hDownloader, LPST
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**urls：**用于传出一个url的数组（内核中分配内存，需要调用DLBT_Downloader_FreeConnections释放。
+**urls：** 用于传出一个url的数组（内核中分配内存，需要调用DLBT_Downloader_FreeConnections释放。
 
-**urlCount：**传出url数组的数目
+**urlCount：** 传出url数组的数目
 
 **说明：**
 
@@ -975,7 +975,7 @@ DLBT_API void WINAPI DLBT_Downloader_GetHttpConnections(HANDLE hDownloader, LPST
 
 ### *DLBT_Downloader_FreeConnections*
 
-**功能：**释放DLBT_Downloader_GetHttpConnections传出的Url数组的内存。
+**功能：** 释放DLBT_Downloader_GetHttpConnections传出的Url数组的内存。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_GetHttpConnections(HANDLE hDownloader, LPSTR ** urls, int * urlCount);
@@ -983,11 +983,11 @@ DLBT_API void WINAPI DLBT_Downloader_GetHttpConnections(HANDLE hDownloader, LPST
 
  **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**urls：**对应于DLBT_Downloader_GetHttpConnections中的urls变量。
+**urls：** 对应于DLBT_Downloader_GetHttpConnections中的urls变量。
 
-**urlCount：**url数组的数目。
+**urlCount：** url数组的数目。
 
 ### *DLBT_Downloader_SetMaxSessionPerHttp*
 
@@ -999,9 +999,9 @@ DLBT_API void WINAPI DLBT_Downloader_SetMaxSessionPerHttp (HANDLE hDownloader, i
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**limit：**对该任务的任意一个Http网址，最多建立多少连接
+**limit：** 对该任务的任意一个Http网址，最多建立多少连接
 
 **说明：**
 
@@ -1009,7 +1009,7 @@ DLBT_API void WINAPI DLBT_Downloader_SetMaxSessionPerHttp (HANDLE hDownloader, i
 
 ### *DLBT_Downloader_AddTracker和DLBT_Downloader_RemoveAllTracker*
 
-**功能：**DLBT_Downloader_AddTrakcer可以在现有torrent的基础上再增加一些临时tracker（不保存到torrent中，只供本次下载使用）, DLBT_Downloader_RemoveAllTracker可以清空现有的所有tracker。
+**功能：** DLBT_Downloader_AddTrakcer可以在现有torrent的基础上再增加一些临时tracker（不保存到torrent中，只供本次下载使用）, DLBT_Downloader_RemoveAllTracker可以清空现有的所有tracker。
 
 ```C++
 DLBT_API void WINAPI DLBT_Downloader_AddTracker (HANDLE hDownloader, LPCSTR url, int tier);
@@ -1018,11 +1018,11 @@ DLBT_API void WINAPI DLBT_Downloader_RemoveAllTracker (HANDLE hDownloader);
 
  **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**url：**tracker的地址，比如[Http://tracker.com:6969/announce](Http://tracker.com:6969/announce) 。
+**url：** tracker的地址，比如[Http://tracker.com:6969/announce](Http://tracker.com:6969/announce) 。
 
-**tier：**tracker的优先级，相同优先级的tracker，连上一个就不再连下一个了。不同优先级的tracker会根据优先级依次连接。所以，如果同一个tracker服务器的不同地址，应该使用相同优先级。
+**tier：** tracker的优先级，相同优先级的tracker，连上一个就不再连下一个了。不同优先级的tracker会根据优先级依次连接。所以，如果同一个tracker服务器的不同地址，应该使用相同优先级。
 
 **说明：**
 
@@ -1032,7 +1032,7 @@ DLBT_API void WINAPI DLBT_Downloader_RemoveAllTracker (HANDLE hDownloader);
 
 ### *Downloader_AddHttpTrackerExtraParams*
 
-**功能：**在每个Http tracker地址的后面，增加一个扩展参数。 
+**功能：** 在每个Http tracker地址的后面，增加一个扩展参数。 
 
 ```C++
 DLBT_API void WINAPI DLBT_Downloader_AddHttpTrackerExtraParams (HANDLE hDownloader, LPCSTR extraParams);
@@ -1040,13 +1040,13 @@ DLBT_API void WINAPI DLBT_Downloader_AddHttpTrackerExtraParams (HANDLE hDownload
 
  **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**extraParams：**想要增加的特别参数，格式如：?userID=19&macID=999223。可以结合自己修改的tracker服务器，做一些统计使用。
+**extraParams：** 想要增加的特别参数，格式如：?userID=19&macID=999223。可以结合自己修改的tracker服务器，做一些统计使用。
 
 ### *DLBT_Downloader_GetTrackerCount*
 
-**功能：**获取当前BT的某个下载任务中的Tracker数量
+**功能：** 获取当前BT的某个下载任务中的Tracker数量
 
 ```c++
 DLBT_API int WINAPI DLBT_Downloader_GetTrackerCount(HANDLE hDownloader);
@@ -1054,11 +1054,11 @@ DLBT_API int WINAPI DLBT_Downloader_GetTrackerCount(HANDLE hDownloader);
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_GetTrackerUrl*
 
-**功能：**获取任务中的某个Tracker的URL地址
+**功能：** 获取任务中的某个Tracker的URL地址
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_GetTrackerUrl (HANDLE hDownloader, int index, LPSTR url, int * urlBufferSize);
@@ -1066,17 +1066,17 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetTrackerUrl (HANDLE hDownloader, int i
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**index：**从0开始的tracker的序号，范围在0到tracker的总数量之间。
+**index：** 从0开始的tracker的序号，范围在0到tracker的总数量之间。
 
-**url：**要接收返回的字符串的内存地址。
+**url：** 要接收返回的字符串的内存地址。
 
-**urlBufferSize：**传入url的内存大小，传出出错信息的实际大小
+**urlBufferSize：** 传入url的内存大小，传出出错信息的实际大小
 
 ### *DLBT_Downloader_SetDownloadSequence*
 
-**功能：**设置下载任务是否顺序下载（默认使用稀缺块优先的方式下载）
+**功能：** 设置下载任务是否顺序下载（默认使用稀缺块优先的方式下载）
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_SetDownloadSequence (HANDLE hDownloader, BOOL ifSeq = FALSE);
@@ -1084,9 +1084,9 @@ DLBT_API void WINAPI DLBT_Downloader_SetDownloadSequence (HANDLE hDownloader, BO
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**ifSeq：**是否顺序下载。
+**ifSeq：** 是否顺序下载。
 
 **说明：**
 
@@ -1094,7 +1094,7 @@ DLBT_API void WINAPI DLBT_Downloader_SetDownloadSequence (HANDLE hDownloader, BO
 
 ### *DLBT_Downloader_GetState*
 
-**功能：**获取下载任务的当前状态。具体的状态，请参考DLBT_DOWNLOAD_STATE
+**功能：** 获取下载任务的当前状态。具体的状态，请参考DLBT_DOWNLOAD_STATE
 
 ```c++
 DLBT_API DLBT_DOWNLOAD_STATE WINAPI DLBT_Downloader_GetState (HANDLE hDownloader);
@@ -1102,11 +1102,11 @@ DLBT_API DLBT_DOWNLOAD_STATE WINAPI DLBT_Downloader_GetState (HANDLE hDownloader
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_IsPaused*
 
-**功能：**返回任务是否处于暂停状态，TRUE为已暂停，FALSE为不是暂停状态。
+**功能：** 返回任务是否处于暂停状态，TRUE为已暂停，FALSE为不是暂停状态。
 
 ```c++
 DLBT_API BOOL WINAPI DLBT_Downloader_IsPaused (HANDLE hDownloader);
@@ -1114,11 +1114,11 @@ DLBT_API BOOL WINAPI DLBT_Downloader_IsPaused (HANDLE hDownloader);
 
  **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_Pause和DLBT_Downloader_Resume*
 
-**功能：**暂停或者继续一个任务。 
+**功能：** 暂停或者继续一个任务。 
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_Pause (HANDLE hDownloader);        //暂停
@@ -1127,11 +1127,11 @@ DLBT_API void WINAPI DLBT_Downloader_Resume (HANDLE hDownloader);       //继续
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_GetLastError*
 
-**功能：**任务状态如果是BTDS_ERROR（出错状态），使用该函数获取出错的详细信息。
+**功能：** 任务状态如果是BTDS_ERROR（出错状态），使用该函数获取出错的详细信息。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_GetLastError (
@@ -1143,13 +1143,13 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetLastError (
 
  **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 **pBuffer:** 用于返回信息的内存，可以为空，为空则在pBufferSize中返回名字的实际大小。
 
 **pBufferSize:** 传入buffer的内存大小，传出出错信息的实际大小
 
-**返回值：**S_OK（0）代表成功，其他代表失败。
+**返回值：** S_OK（0）代表成功，其他代表失败。
 
 **说明：**
 
@@ -1157,7 +1157,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetLastError (
 
 ### *DLBT_Downloader_ResumeInError*
 
-**功能：**任务状态如果是BTDS_ERROR（出错状态），此时任务已经是暂停了，不再进行下载。在做了一些处理后，可以尝试调用该函数重新启动任务下载。
+**功能：** 任务状态如果是BTDS_ERROR（出错状态），此时任务已经是暂停了，不再进行下载。在做了一些处理后，可以尝试调用该函数重新启动任务下载。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_ResumeInError (HANDLE hDownloader); //清除这个错误，尝试重新开始任务
@@ -1165,7 +1165,7 @@ DLBT_API void WINAPI DLBT_Downloader_ResumeInError (HANDLE hDownloader); //清�
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 **说明：**
 
@@ -1173,7 +1173,7 @@ DLBT_API void WINAPI DLBT_Downloader_ResumeInError (HANDLE hDownloader); //清�
 
 ### *DLBT_Downloader_IsHaveTorrentInfo* 
 
-**功能：**用于无种子模式下载，用来判断在无种子启动模式下，是否已经获得到了该文件的种子信息。
+**功能：** 用于无种子模式下载，用来判断在无种子启动模式下，是否已经获得到了该文件的种子信息。
 
 ```c++
 // 无种子下载的相关接口（无种子模式在试用版中无效，可以调用这些接口，但不会有效果）
@@ -1182,7 +1182,7 @@ DLBT_API BOOL WINAPI DLBT_Downloader_IsHaveTorrentInfo (HANDLE hDownloader); // 
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 **说明：**
 
@@ -1196,7 +1196,7 @@ DLBT_Downloader_IsHaveTorrentInfo函数用于获取无种子下载时是否有�
 
 ### *DLBT_Downloader_MakeURL* *和**DLBT_Torrent_MakeURL*
 
-**功能：**用于无种子模式下载，通过种子或者下载任务，制作一个可以不需要种子即可下载的网址，参考DLBT_Downloader_Initialize_FromUrl。
+**功能：** 用于无种子模式下载，通过种子或者下载任务，制作一个可以不需要种子即可下载的网址，参考DLBT_Downloader_Initialize_FromUrl。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_MakeURL (// 通过任务，制作一个可以不需要种子即可下载的网址
@@ -1213,9 +1213,9 @@ DLBT_API HRESULT WINAPI DLBT_Torrent_MakeURL (  // 通过种子，制作一个�
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**hTorrent:**种子的句柄
+**hTorrent:** 种子的句柄
 
 **pBuffer:** 用于返回信息的内存，可以为空，为空则在pBufferSize中返回名字的实际大小。
 
@@ -1231,7 +1231,7 @@ DLBT_Downloader_Initialize_FromUrl和DLBT_Downloader_Initialize_FromInfoHash。
 
 ### *DLBT_Downloader_SaveTorrentFile*
 
-**功能：**用于无种子模式下载，在无种子模式下载的时候，内核会先通过P2P网络从其它用户（节点）那里获取到种子信息，一旦获取到了种子信息（可通过DLBT_Downloader_IsHaveTorrentInfo判断），则可以调用该函数将种子信息保存下来。
+**功能：** 用于无种子模式下载，在无种子模式下载的时候，内核会先通过P2P网络从其它用户（节点）那里获取到种子信息，一旦获取到了种子信息（可通过DLBT_Downloader_IsHaveTorrentInfo判断），则可以调用该函数将种子信息保存下来。
 
 ```c++
 // 无种子下载，如果已经下载到了种子，可以利用这个函数将种子保存起来，以后就能使用了
@@ -1244,11 +1244,11 @@ LPCSTR password = NULL
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**filePath:**种子文件的保存路径
+**filePath:** 种子文件的保存路径
 
-**password****:**标记文件是否加密，如果不为NULL，则加密，并且password是加密的密码
+**password****:** 标记文件是否加密，如果不为NULL，则加密，并且password是加密的密码
 
 **说明：**
 
@@ -1264,7 +1264,7 @@ DLBT_Downloader_Initialize_FromUrl和DLBT_Downloader_Initialize_FromInfoHash。
 
 ### *DLBT_Downloader_SetDownloadLimit*和*DLBT_Downloader_SetUploadLimit*
 
-**功能：**设置下载或上传的最大速度限制。
+**功能：** 设置下载或上传的最大速度限制。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_SetDownloadLimit (HANDLE hDownloader, int limit); //下载限速
@@ -1273,14 +1273,14 @@ DLBT_API void WINAPI DLBT_Downloader_SetUploadLimit (HANDLE hDownloader, int lim
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**limit：**要设置的最大速度限制，-1为无限速度。单位是Byte，比如，如果要设置1M的限制，需要传入1024*1024；1K的限制，则需要传入1024
+**limit：** 要设置的最大速度限制，-1为无限速度。单位是Byte，比如，如果要设置1M的限制，需要传入1024*1024；1K的限制，则需要传入1024
 
 ***\**DLBT_Downloader_SetMaxUploadConnections\**\******\**
 \**\******\**DLBT_Downloader_SetMaxTotalConnections\**\***    
 
-**功能：**设置下载或者上传的最大连接数限制。 
+**功能：** 设置下载或者上传的最大连接数限制。 
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_SetMaxUploadConnections (HANDLE hDownloader, int limit);
@@ -1289,13 +1289,13 @@ DLBT_API void WINAPI DLBT_Downloader_SetMaxTotalConnections (HANDLE hDownloader,
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**limit：**要设置的最大连接数限制，-1为无限速度。
+**limit：** 要设置的最大连接数限制，-1为无限速度。
 
 ### *DLBT_Downloader_SetOnlyUpload*
 
-**功能：**设置任务只上传，不再下载。
+**功能：** 设置任务只上传，不再下载。
 
 ```c++
 // 确保任务只上传，不下载
@@ -1304,9 +1304,9 @@ DLBT_API void WINAPI DLBT_Downloader_SetOnlyUpload (HANDLE hDownloader, bool bUp
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**bUpload：**是否只上传。
+**bUpload：** 是否只上传。
 
 **说明：**
 
@@ -1314,7 +1314,7 @@ DLBT_API void WINAPI DLBT_Downloader_SetOnlyUpload (HANDLE hDownloader, bool bUp
 
 ### *DLBT_Downloader_SetServerDownloadLimit*
 
-**功能：**设置对服务器IP进行下载限速，单位是BYTE(字节），如果需要限速1M，请输入1024*1024。
+**功能：** 设置对服务器IP进行下载限速，单位是BYTE(字节），如果需要限速1M，请输入1024*1024。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_SetServerDownloadLimit(HANDLE hDownloader, int limit);
@@ -1322,9 +1322,9 @@ DLBT_API void WINAPI DLBT_Downloader_SetServerDownloadLimit(HANDLE hDownloader, 
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**limit：**要设置的限制，单位是字节BYTE，如果需要限速1M，请输入1024*1024。-1和0代表不做限制。
+**limit：** 要设置的限制，单位是字节BYTE，如果需要限速1M，请输入1024*1024。-1和0代表不做限制。
 
 **说明：**
 
@@ -1334,7 +1334,7 @@ DLBT_API void WINAPI DLBT_Downloader_SetServerDownloadLimit(HANDLE hDownloader, 
 
 ### *DLBT_Downloader_BanServerDownload*
 
-**功能：**设置本任务不再去跟所有的服务器IP建立连接。
+**功能：** 设置本任务不再去跟所有的服务器IP建立连接。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_BanServerDownload(HANDLE hDownloader, bool bBan);
@@ -1342,9 +1342,9 @@ DLBT_API void WINAPI DLBT_Downloader_BanServerDownload(HANDLE hDownloader, bool 
 
 **参数：**
 
-**hDownloader：**要操作的下载任务的句柄。
+**hDownloader：** 要操作的下载任务的句柄。
 
-**bBan：**true: 代表不再跟服务器建立连接；false代表取消本限制。
+**bBan：** true: 代表不再跟服务器建立连接；false代表取消本限制。
 
 **说明：**
 
@@ -1352,7 +1352,7 @@ DLBT_API void WINAPI DLBT_Downloader_BanServerDownload(HANDLE hDownloader, bool 
 
 ### *DLBT_Downloader_SetShareRateLimit和DLBT_Downloader_GetShareRate*
 
-**功能：**设置最大共享率和获取当前的共享率，共享率是上传同下载的比率，代表自己的贡献程度。
+**功能：** 设置最大共享率和获取当前的共享率，共享率是上传同下载的比率，代表自己的贡献程度。
 
 ```c++
 // 下载分享率 (上传/下载的比例）的接口
@@ -1362,9 +1362,9 @@ DLBT_API double WINAPI DLBT_Downloader_GetShareRate (HANDLE hDownloader);//获�
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**fRate：**要设置的共享率，0为不限制。
+**fRate：** 要设置的共享率，0为不限制。
 
 **说明：**
 
@@ -1372,7 +1372,7 @@ DLBT_API double WINAPI DLBT_Downloader_GetShareRate (HANDLE hDownloader);//获�
 
 ### *DLBT_Downloader_GetTorrentName*
 
-**功能：**获取种子文件创建时指定的名字。
+**功能：** 获取种子文件创建时指定的名字。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_GetTorrentName (
@@ -1384,7 +1384,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetTorrentName (
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 **pBuffer:** 用于返回种子指定的文件（文件夹）的名字。如果为NULL，则在pBufferSize参数中返回名字所需空间的实际大小。
 
@@ -1392,7 +1392,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetTorrentName (
 
 ### *DLBT_Downloader_GetTotalFileSize*
 
-**功能：**获得种子文件中所有文件的总大小。
+**功能：** 获得种子文件中所有文件的总大小。
 
 ```c++
 DLBT_API UINT64 WINAPI DLBT_Downloader_GetTotalFileSize (HANDLE hDownloader);
@@ -1400,11 +1400,11 @@ DLBT_API UINT64 WINAPI DLBT_Downloader_GetTotalFileSize (HANDLE hDownloader);
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_GetProgress*
 
-**功能：**获得下载任务的当前进度百分比（完成了选定要下载文件中的多少）。
+**功能：** 获得下载任务的当前进度百分比（完成了选定要下载文件中的多少）。
 
 ```c++
 DLBT_API float WINAPI DLBT_Downloader_GetProgress (HANDLE hDownloader);
@@ -1412,7 +1412,7 @@ DLBT_API float WINAPI DLBT_Downloader_GetProgress (HANDLE hDownloader);
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 **说明：**
 
@@ -1420,7 +1420,7 @@ DLBT_API float WINAPI DLBT_Downloader_GetProgress (HANDLE hDownloader);
 
 ### *DLBT_Downloader_GetDownloadedBytes和DLBT_Downloader_GetUploadedBytes*
 
-**功能：**获取已下载或者已上传的总字节数。
+**功能：** 获取已下载或者已上传的总字节数。
 
 ```c++
 DLBT_API UINT64 WINAPI DLBT_Downloader_GetDownloadedBytes (HANDLE hDownloader);
@@ -1429,11 +1429,11 @@ DLBT_API UINT64 WINAPI DLBT_Downloader_GetUploadedBytes (HANDLE hDownloader);
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_GetDownloadSpeed和DLBT_Downloader_GetUploadSpeed*
 
-**功能：**获取当前的下载和上传速度。
+**功能：** 获取当前的下载和上传速度。
 
 ```c++
 DLBT_API UINT WINAPI DLBT_Downloader_GetDownloadSpeed (HANDLE hDownloader);
@@ -1442,11 +1442,11 @@ DLBT_API UINT WINAPI DLBT_Downloader_GetUploadSpeed (HANDLE hDownloader);
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_GetPeerNums*
 
-**功能：**获取各类节点的数目。
+**功能：** 获取各类节点的数目。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_GetPeerNums (
@@ -1462,7 +1462,7 @@ DLBT_API void WINAPI DLBT_Downloader_GetPeerNums (
 
 ### *DLBT_Downloader_GetFileCount*
 
-**功能：**获得该任务（对应一个Torrent文件）中所包含的文件的个数。
+**功能：** 获得该任务（对应一个Torrent文件）中所包含的文件的个数。
 
 ```c++
 DLBT_API int WINAPI DLBT_Downloader_GetFileCount (HANDLE hDownloader);
@@ -1470,11 +1470,11 @@ DLBT_API int WINAPI DLBT_Downloader_GetFileCount (HANDLE hDownloader);
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_GetFileSize*
 
-**功能：**获得任务（对应一个Torrent文件）中所包含的某个特定文件的大小。
+**功能：** 获得任务（对应一个Torrent文件）中所包含的某个特定文件的大小。
 
 ```c++
 DLBT_API UINT64 WINAPI DLBT_Downloader_GetFileSize (HANDLE hDownloader, int index);
@@ -1482,13 +1482,13 @@ DLBT_API UINT64 WINAPI DLBT_Downloader_GetFileSize (HANDLE hDownloader, int inde
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**index：**文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
+**index：** 文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
 
 ### *DLBT_Downloader_GetFileOffset*
 
-**功能：**获得某个指定文件在torrent中的起始位置（一般VOD点播版本中，对于多文件的种子，计算某个视频文件拖动的位置等需要使用）。
+**功能：** 获得某个指定文件在torrent中的起始位置（一般VOD点播版本中，对于多文件的种子，计算某个视频文件拖动的位置等需要使用）。
 
 ```c++
 DLBT_API UINT64 WINAPI DLBT_Downloader_GetFileOffset (HANDLE hDownloader, int index);
@@ -1496,15 +1496,15 @@ DLBT_API UINT64 WINAPI DLBT_Downloader_GetFileOffset (HANDLE hDownloader, int in
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**index：**文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
+**index：** 文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
 
-**返回值：**64位整数，返回文件在torrent中所处的位置（字节数）。
+**返回值：** 64位整数，返回文件在torrent中所处的位置（字节数）。
 
 ### *DLBT_Downloader_IsPadFile*
 
-**功能：**判断文件是否为对齐文件（padding file）。
+**功能：** 判断文件是否为对齐文件（padding file）。
 
 ```c++
 DLBT_API BOOL WINAPI DLBT_Downloader_IsPadFile (HANDLE hDownloader, int index)
@@ -1512,9 +1512,9 @@ DLBT_API BOOL WINAPI DLBT_Downloader_IsPadFile (HANDLE hDownloader, int index)
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**index：**文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
+**index：** 文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
 
 **说明：**
 
@@ -1522,7 +1522,7 @@ Bitcomet以及点量BT 3.6版本后，均有可能有padding file存在，目的
 
 ### *DLBT_Downloader_GetFilePathName*
 
-**功能：**获得任务（对应一个Torrent文件）中所包含的某个文件的路径和名称。
+**功能：** 获得任务（对应一个Torrent文件）中所包含的某个文件的路径和名称。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_GetFilePathName (
@@ -1540,7 +1540,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetFilePathName (
 
 ### *DLBT_Downloader_DeleteUnRelatedFiles*
 
-**功能：**将下载目录下存在，但torrent记录中不存在的文件全部删除，对单个文件的种子无效。
+**功能：** 将下载目录下存在，但torrent记录中不存在的文件全部删除，对单个文件的种子无效。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_DeleteUnRelatedFiles (HANDLE hDownloader);
@@ -1552,7 +1552,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_DeleteUnRelatedFiles (HANDLE hDownloader
 
 ### *DLBT_Downloader_GetFileHash*
 
-**功能：**获取某个文件的Hash值（SHA1算法）。只有制作种子时使用bUpdateExt才能获取到。
+**功能：** 获取某个文件的Hash值（SHA1算法）。只有制作种子时使用bUpdateExt才能获取到。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_GetFileHash (
@@ -1568,7 +1568,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetFileHash (
 
 ### *DLBT_Downloader_GetFileProgress*
 
-**功能：**获得任务（对应一个Torrent文件）中所包含的某个文件的下载进度。
+**功能：** 获得任务（对应一个Torrent文件）中所包含的某个文件的下载进度。
 
 ```c++
 // 取文件的下载进度，该操作需要进行较多操作，建议仅在必要时使用
@@ -1577,9 +1577,9 @@ DLBT_API float WINAPI DLBT_Downloader_GetFileProgress (HANDLE hDownloader, int i
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**index：**文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
+**index：** 文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
 
 **说明：**
 
@@ -1587,7 +1587,7 @@ DLBT_API float WINAPI DLBT_Downloader_GetFileProgress (HANDLE hDownloader, int i
 
 ### *DLBT_FILE_PRIORITIZE*
 
-**功能：**设置单个文件的下载优先级。
+**功能：** 设置单个文件的下载优先级。
 
 ```c++
 enum DLBT_FILE_PRIORITIZE
@@ -1601,7 +1601,7 @@ enum DLBT_FILE_PRIORITIZE
 
 ### *DLBT_Downloader_SetFilePrioritize*
 
-**功能：**设置文件的下载的优先级，可以通过这个接口设置某些文件不下载。
+**功能：** 设置文件的下载的优先级，可以通过这个接口设置某些文件不下载。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_SetFilePrioritize (
@@ -1614,17 +1614,17 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_SetFilePrioritize (
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**index：**文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
+**index：** 文件的序号，要求 >=0 , 小于DLBT_Downloader_GetFileCount取得的文件的总数目。
 
 **prioritize****：**文件的优先级，请参考DLBT_FILE_PRIORITIZE。
 
-**bDoPriority：**是否立即应用这个设置，如果有多个文件需要设置，建议暂时不立即应用，让最后一个文件应用设置，或者可以主动调用DLBT_Downloader_ApplyPrioritize函数来应用，因为每应用一次设置都要对所有Piece操作一遍，比较麻烦，所以应该一起应用。
+**bDoPriority：** 是否立即应用这个设置，如果有多个文件需要设置，建议暂时不立即应用，让最后一个文件应用设置，或者可以主动调用DLBT_Downloader_ApplyPrioritize函数来应用，因为每应用一次设置都要对所有Piece操作一遍，比较麻烦，所以应该一起应用。
 
 ### *DLBT_Downloader_ApplyPrioritize*
 
-**功能：**立即应用对文件优先级的设置。
+**功能：** 立即应用对文件优先级的设置。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_ApplyPrioritize (HANDLE hDownloader);
@@ -1632,11 +1632,11 @@ DLBT_API void WINAPI DLBT_Downloader_ApplyPrioritize (HANDLE hDownloader);
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
 ### *DLBT_Downloader_GetPiecesStatus*
 
-**功能：**获取当前每个分块的状态，比如可以用于判断是否需要去更新（是否已经拥有了该块）。
+**功能：** 获取当前每个分块的状态，比如可以用于判断是否需要去更新（是否已经拥有了该块）。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_GetPiecesStatus (
@@ -1650,13 +1650,13 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetPiecesStatus (
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**pieceArray：**标记分块状态的数组指针，bool （布尔）类型。该数组的长度必须与任务的总分块数相同，也就是必须是DLBT_Downloader_GetPieceCount个元素的数组，由内核逐一对数组中的元素赋值。True代表该块已经是最新了，false代表还没有该块，或者该块需要更新。
+**pieceArray：** 标记分块状态的数组指针，bool （布尔）类型。该数组的长度必须与任务的总分块数相同，也就是必须是DLBT_Downloader_GetPieceCount个元素的数组，由内核逐一对数组中的元素赋值。True代表该块已经是最新了，false代表还没有该块，或者该块需要更新。
 
-**arrayLength：**标记传入的pieceArray的长度，内核用于验证是否和任务的总分块数一致。
+**arrayLength：** 标记传入的pieceArray的长度，内核用于验证是否和任务的总分块数一致。
 
-**pieceDownloaded：**当前已经拥有的正确的分块的数目，在显示下载的分块图形时，该参数非常有用。如果发现该数字和上次获取时一致，则无需去浏览pieceArray中的内容，也无需重画分块状态图。
+**pieceDownloaded：** 当前已经拥有的正确的分块的数目，在显示下载的分块图形时，该参数非常有用。如果发现该数字和上次获取时一致，则无需去浏览pieceArray中的内容，也无需重画分块状态图。
 
 **说明：**
 
@@ -1664,7 +1664,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetPiecesStatus (
 
 ### *DLBT_Downloader_SetPiecePrioritize*
 
-**功能：**设置Piece（分块）的下载优先级，比如可以用于取消某些分块的下载，从指定位置开始下载等。index表示分块的序号。
+**功能：** 设置Piece（分块）的下载优先级，比如可以用于取消某些分块的下载，从指定位置开始下载等。index表示分块的序号。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_SetPiecePrioritize (
@@ -1677,13 +1677,13 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_SetPiecePrioritize (
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**index：**块的序号，要求 >=0 , 小于该任务块的总数目：DLBT_Downloader_GetPieceCount。
+**index：** 块的序号，要求 >=0 , 小于该任务块的总数目：DLBT_Downloader_GetPieceCount。
 
 **prioritize****：**文件的优先级，请参考DLBT_FILE_PRIORITIZE。
 
-**bDoPriority：**是否立即应用这个设置，如果有多个分块需要设置，建议暂时不立即应用，让最后一个块应用设置，或者可以主动调用DLBT_Downloader_ApplyPrioritize函数来应用，因为每应用一次设置都要对所有Piece操作一遍，比较麻烦，所以应该一起应用。
+**bDoPriority：** 是否立即应用这个设置，如果有多个分块需要设置，建议暂时不立即应用，让最后一个块应用设置，或者可以主动调用DLBT_Downloader_ApplyPrioritize函数来应用，因为每应用一次设置都要对所有Piece操作一遍，比较麻烦，所以应该一起应用。
 
 **说明：**
 
@@ -1691,7 +1691,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_SetPiecePrioritize (
 
 ### *DLBT_Downloader_AddPeerSource*
 
-**功能：**手工指定连接哪一个用户。
+**功能：** 手工指定连接哪一个用户。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_AddPeerSource (HANDLE hDownloader, char * ip, USHORT port);
@@ -1699,11 +1699,11 @@ DLBT_API void WINAPI DLBT_Downloader_AddPeerSource (HANDLE hDownloader, char * i
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**ip**:要连接的用户的IP地址。
+**ip**: 要连接的用户的IP地址。
 
-**port:**要连接的用户的端口号。
+**port:** 要连接的用户的端口号。
 
 **说明：**
 
@@ -1711,7 +1711,7 @@ DLBT_API void WINAPI DLBT_Downloader_AddPeerSource (HANDLE hDownloader, char * i
 
 ### *DLBT_Downloader_GetInfoHash*
 
-**功能：**获得任务（对应一个Torrent文件）的可读InfoHash值。
+**功能：** 获得任务（对应一个Torrent文件）的可读InfoHash值。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_GetInfoHash (
@@ -1727,7 +1727,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_GetInfoHash (
 
 ### *DLBT_Downloader_GetPieceCount和DLBT_Downloader_GetPieceSize*
 
-**功能：**获得任务（对应一个Torrent文件）的Piece（分块）数和每块的大小。
+**功能：** 获得任务（对应一个Torrent文件）的Piece（分块）数和每块的大小。
 
 ```c++
 DLBT_API int WINAPI DLBT_Downloader_GetPieceCount (HANDLE hDownloader);
@@ -1740,7 +1740,7 @@ DLBT_API int WINAPI DLBT_Downloader_GetPieceSize (HANDLE hDownloader);
 
 ### *DLBT_Downloader_SaveStatusFile*
 
-**功能：**主动保存一次状态文件。
+**功能：** 主动保存一次状态文件。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_SaveStatusFile (HANDLE hDownloader);
@@ -1752,7 +1752,7 @@ DLBT_API void WINAPI DLBT_Downloader_SaveStatusFile (HANDLE hDownloader);
 
 ### *DLBT_Downloader_SetStatusFileMode*
 
-**功能：**设置状态文件的保存模式。
+**功能：** 设置状态文件的保存模式。
 
 ```c++
 DLBT_API void WINAPI DLBT_Downloader_SetStatusFileMode (HANDLE hDownloader, BOOL bOnlyPieceStatus);
@@ -1770,7 +1770,7 @@ DLBT_API void WINAPI DLBT_Downloader_SetStatusFileMode (HANDLE hDownloader, BOOL
 
 ### *DLBT_Downloader_IsSavingStatus*
 
-**功能：**检查是否状态文件在保存。
+**功能：** 检查是否状态文件在保存。
 
 ```c++
 DLBT_API BOOL WINAPI DLBT_Downloader_IsSavingStatus (HANDLE hDownloader);
@@ -1782,7 +1782,7 @@ DLBT_API BOOL WINAPI DLBT_Downloader_IsSavingStatus (HANDLE hDownloader);
 
 ### *DLBT_Downloader_AddPartPieceData*
 
-**功能：**向BT系统中写入通过其它方式接收来的数据块。
+**功能：** 向BT系统中写入通过其它方式接收来的数据块。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_AddPartPieceData(HANDLE hDownloader, UINT64 offset, UINT64 size, char *data);
@@ -1790,13 +1790,13 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_AddPartPieceData(HANDLE hDownloader, UIN
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**offset：**本数据块在整个任务中的起始位置。
+**offset：** 本数据块在整个任务中的起始位置。
 
-**size：**数据的长度。
+**size：** 数据的长度。
 
-**data：**数据指针。
+**data：** 数据指针。
 
 **说明：**
 
@@ -1804,7 +1804,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_AddPartPieceData(HANDLE hDownloader, UIN
 
 ### *DLBT_Downloader_AddPieceData*
 
-**功能：**向BT系统中写入通过其它方式接收来的数据块。
+**功能：** 向BT系统中写入通过其它方式接收来的数据块。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_AddPieceData(
@@ -1817,13 +1817,13 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_AddPieceData(
 
 **参数：**
 
-**hDownloader：**下载任务的句柄。
+**hDownloader：** 下载任务的句柄。
 
-**piece：**本数据块对应于torrent中的哪个分块
+**piece：** 本数据块对应于torrent中的哪个分块
 
-**data：**数据指针，数据内存必须为本分块的pieceSize大小，完全一样大。
+**data：** 数据指针，数据内存必须为本分块的pieceSize大小，完全一样大。
 
-**bOverWrite：**如果本分块已经有了，是否需要覆盖。
+**bOverWrite：** 如果本分块已经有了，是否需要覆盖。
 
 **说明：**
 
@@ -1831,7 +1831,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_AddPieceData(
 
 ### *DLBT_REPLACE_PROGRESS_CALLBACK*
 
-**功能：**每次要替换一个文件分片时调用的回调，外部可以获取到替换过程执行的进度，以及随时取消替换。
+**功能：** 每次要替换一个文件分片时调用的回调，外部可以获取到替换过程执行的进度，以及随时取消替换。
 
 ```c++
 typedef BOOL (WINAPI * DLBT_REPLACE_PROGRESS_CALLBACK) (
@@ -1856,7 +1856,7 @@ typedef BOOL (WINAPI * DLBT_REPLACE_PROGRESS_CALLBACK) (
 
 ### *DLBT_Downloader_ReplacePieceData*
 
-**功能：**替换数据块的接口：将某块数据直接替换到目标文件的相同位置。
+**功能：** 替换数据块的接口：将某块数据直接替换到目标文件的相同位置。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Downloader_ReplacePieceData(
@@ -1881,7 +1881,7 @@ DLBT_API HRESULT WINAPI DLBT_Downloader_ReplacePieceData(
 
 ### *DLBT_Downloader_GetReplaceResult和DLBT_Downloader_CancelReplace*
 
-**功能：**获取替换数据的结果。
+**功能：** 获取替换数据的结果。
 
 ```c++
 // ReplacePieceData的一些状态，可以通过DLBT_Downloader_GetReplaceResult来进行查看
@@ -1914,7 +1914,7 @@ DLBT_API void WINAPI DLBT_Downloader_CancelReplace(HANDLE hDownloader);
 
 ### *DLBT_Downloader_Move和**DLBT_Downloader_GetMoveResult*
 
-**功能：**获得任务（对应一个Torrent文件）的Piece（分块）数和每块的大小。
+**功能：** 获得任务（对应一个Torrent文件）的Piece（分块）数和每块的大小。
 
 ```c++
 enum DOWNLOADER_MOVE_RESULT // Move的结果
@@ -1945,7 +1945,7 @@ DLBT_API DOWNLOADER_MOVE_RESULT WINAPI DLBT_Downloader_GetMoveResult (
 
 ### *enum* *DLBT_TORRENT_TYPE*
 
-**功能：**标记要创建的种子的类型
+**功能：** 标记要创建的种子的类型
 
 ```c++
 enum DLBT_TORRENT_TYPE
@@ -1962,7 +1962,7 @@ enum DLBT_TORRENT_TYPE
 
 ### *DLBT_CreateTorrent*
 
-**功能：**创建一个种子，返回种子的句柄
+**功能：** 创建一个种子，返回种子的句柄
 
 ```c++
 DLBT_API HANDLE WINAPI DLBT_CreateTorrent (
@@ -1999,7 +1999,7 @@ DLBT_API HANDLE WINAPI DLBT_CreateTorrent (
 
 ### *DLBT_***Torrent_****AddTracker** 
 
-**功能：**指定种子包含的Tracker地址
+**功能：** 指定种子包含的Tracker地址
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Torrent_AddTracker (
@@ -2030,7 +2030,7 @@ DLBT_API void WINAPI DLBT_Torrent_RemoveAllTracker (HANDLE hTorrent);
 
 ### *DLBT_Torrent_AddHttpUrl*
 
-**功能：**指定种子可以使用的http源，如果下载的客户端支持http跨协议下载，则自动从该地址下载
+**功能：** 指定种子可以使用的http源，如果下载的客户端支持http跨协议下载，则自动从该地址下载
 
 ```c++
 DLBT_API void WINAPI DLBT_Torrent_AddHttpUrl (HANDLE hTorrent, LPCWSTR httpUrl);
@@ -2042,7 +2042,7 @@ DLBT_API void WINAPI DLBT_Torrent_AddHttpUrl (HANDLE hTorrent, LPCWSTR httpUrl);
 
 ### *DLBT_SaveTorrentFile*
 
-**功能：**保存种子到指定目录，生成种子文件。
+**功能：** 保存种子到指定目录，生成种子文件。
 
 ```c++
 // 保存torrent为磁盘文件,filePath为路径（包括文件名）
@@ -2062,19 +2062,19 @@ DLBT_API HRESULT WINAPI DLBT_SaveTorrentFile (
 
 **hTorrent:** 种子句柄，一般是由DLBT_CreateTorrent返回。
 
-**filePath：**filePath为要保存的torrent的文件路径，一般是包括文件名在内的。 但如果bUseHashName是TRUE，说明要求使用hash值字符串作为torrent的文件名，那么filePath参数就不再需要传入文件名，就只是路径即可。
+**filePath：** filePath为要保存的torrent的文件路径，一般是包括文件名在内的。 但如果bUseHashName是TRUE，说明要求使用hash值字符串作为torrent的文件名，那么filePath参数就不再需要传入文件名，就只是路径即可。
 
 **Password:** 如果传入一个密码字符串，则使用该字符串加密，否则不对种子进行加密。加密后只能用相同的密码打开。另外一个小功能：如果password传入"ZiP-OnLY"(区分大小写)则内部不会真正加密，只是对torrent进行一次zip压缩，并不真正加密，可以减小torrent大小。3.7.5版本以后，如果设置其它密码，加密的同时也会自动zip压缩的，因此3.7.5版本后，加密后的torrent有可能比不加密时更小。
 
 试用版该参数会被忽略，仅对商业版有效。加密后的种子不能被Bitcomet等其它BT软件使用，防止了别人使用你制作的种子。3.7.5版本后的加密自动加入了zip压缩功能。
 
-**bUseHashName：**是否直接使用hash值字符串（唯一的标记字符）作为torrent的名字，如果是，则filePath请只需要传入文件路径，而不包括文件名。
+**bUseHashName：** 是否直接使用hash值字符串（唯一的标记字符）作为torrent的名字，如果是，则filePath请只需要传入文件路径，而不包括文件名。
 
-**extName：**要保存的文件的扩展名，配合bUseHashName使用，仅在bUseHashName为TRUE时有效。如果为NULL，内部自动使用.torrent作为扩展名；否则，请自行传入扩展名，如".abc"。
+**extName：** 要保存的文件的扩展名，配合bUseHashName使用，仅在bUseHashName为TRUE时有效。如果为NULL，内部自动使用.torrent作为扩展名；否则，请自行传入扩展名，如".abc"。
 
 ### ***DLBT_ReleaseTorrent***
 
-**功能：**用完种子句柄后，释放该句柄
+**功能：** 用完种子句柄后，释放该句柄
 
 ```c++
 // 释放torrent文件的句柄
@@ -2089,7 +2089,7 @@ DLBT_API void WINAPI DLBT_ReleaseTorrent (HANDLE hTorrent);
 
 ### *DLBT_TM_ITEM**和**DLBT_TM_LIST*
 
-**功能：**分别用于标记种子市场中的一个种子文件和一批种子文件（列表）。
+**功能：** 分别用于标记种子市场中的一个种子文件和一批种子文件（列表）。
 
 ```c++
 struct DLBT_TM_ITEM     //标记种子市场中的一个种子文件
@@ -2111,7 +2111,7 @@ struct DLBT_TM_LIST //标记种子市场中的一批种子文件（多个）
 
 ### *DLBT_TM_AddSelfTorrentr**和**DLBT_TM_RemoveSelfTorrent*
 
-**功能：**在本机的种子市场中添加或者删除自己机器上的一个种子。
+**功能：** 在本机的种子市场中添加或者删除自己机器上的一个种子。
 
 ```c++
 // 在本机的种子市场中添加一个种子文件
@@ -2122,7 +2122,7 @@ DLBT_API HRESULT WINAPI DLBT_TM_RemoveSelfTorrent (LPCWSTR torrentFile, LPCSTR p
 
 **参数：**
 
-**torrentFile：**种子文件的全路径。
+**torrentFile：** 种子文件的全路径。
 
 **Password**：种子文件的密码（如果加密了）。
 
@@ -2130,7 +2130,7 @@ DLBT_API HRESULT WINAPI DLBT_TM_RemoveSelfTorrent (LPCWSTR torrentFile, LPCSTR p
 
 ### *DLBT_TM_ClearRemoteTorrentList*和*DLBT_TM_ClearSelfTorrentList*
 
-**功能：**清空所有其它人的种子列表 和 清空自己种子市场中的种子列表
+**功能：** 清空所有其它人的种子列表 和 清空自己种子市场中的种子列表
 
 ```c++
 // 清空所有获取到的其它人的种子列表
@@ -2141,7 +2141,7 @@ DLBT_API void WINAPI DLBT_TM_ClearSelfTorrentList ();
 
 ### *DLBT_EnableTorrentMarket*
 
-**功能：**启用种子市场功能（默认情况下，种子市场是关闭的，为了节省资源，如果要开启种子市场，请在启动内核后，调用该函数启动种子市场功能）
+**功能：** 启用种子市场功能（默认情况下，种子市场是关闭的，为了节省资源，如果要开启种子市场，请在启动内核后，调用该函数启动种子市场功能）
 
 ```c++
 // 设置一下是否启用种子市场，默认不启用。
@@ -2150,7 +2150,7 @@ DLBT_API BOOL WINAPI DLBT_EnableTorrentMarket (bool bEnable);
 
 ### *DLBT_TM_GetSelfTorrentList和DLBT_TM_GetRemoteTorrentList*
 
-**功能：**获取本机的种子市场中种子列表 和 获取其它人种子市场中共享的种子列表
+**功能：** 获取本机的种子市场中种子列表 和 获取其它人种子市场中共享的种子列表
 
 ```c++
 // 获取本机种子市场中的种子列表，获取到的列表需要调用DLBT_TM_FreeTMList函数进行释放掉
@@ -2161,11 +2161,11 @@ DLBT_API HRESULT WINAPI DLBT_TM_GetRemoteTorrentList (DLBT_TM_LIST ** ppList);
 
 **参数：**
 
-**ppList：**返回一个种子市场的情况列表，需要调用DLBT_TM_FreeTMList函数进行释放内存。必要时跟作者索取详细示例程序。
+**ppList：** 返回一个种子市场的情况列表，需要调用DLBT_TM_FreeTMList函数进行释放内存。必要时跟作者索取详细示例程序。
 
 ### *DLBT_TM_FreeTMList*
 
-**功能：**释放DLBT_TM_GetSelfTorrentList或者DLBT_TM_GetRemoteTorrentList获取到的种子列表的内存
+**功能：** 释放DLBT_TM_GetSelfTorrentList或者DLBT_TM_GetRemoteTorrentList获取到的种子列表的内存
 
 ```c++
 // 释放DLBT_TM_GetSelfTorrentList或者DLBT_TM_GetRemoteTorrentList获取到的种子列表的内存
@@ -2176,7 +2176,7 @@ DLBT_API HRESULT WINAPI DLBT_TM_FreeTMList (DLBT_TM_LIST * pList);
 
 ### *DLBT_OpenTorrent*
 
-**功能：**打开一个种子文件的句柄，用于读取种子内部的信息。用完后，需要调用DLBT_ReleaseTorrent释放torrent文件的句柄。
+**功能：** 打开一个种子文件的句柄，用于读取种子内部的信息。用完后，需要调用DLBT_ReleaseTorrent释放torrent文件的句柄。
 
 ```c++
 DLBT_API HANDLE WINAPI DLBT_OpenTorrent (
@@ -2186,13 +2186,13 @@ DLBT_API HANDLE WINAPI DLBT_OpenTorrent (
 
 **参数：**
 
-**torrentFile:** 种子文件的路径，包含种子文件的名字。
+**torrentFile:**  种子文件的路径，包含种子文件的名字。
 
-**Password:**对应于加密后的种子文件。如果传入一个密码字符串，则使用该字符串解密，否则不对种子进行解密。试用版该参数会被忽略，仅对商业版有效。加密后的种子不能被Bitcomet等其它BT软件使用，防止了别人使用你制作的种子。
+**Password:** 对应于加密后的种子文件。如果传入一个密码字符串，则使用该字符串解密，否则不对种子进行解密。试用版该参数会被忽略，仅对商业版有效。加密后的种子不能被Bitcomet等其它BT软件使用，防止了别人使用你制作的种子。
 
 ### *DLBT_OpenTorrentFromBuffer*
 
-**功能：**打开一个内存中流方式的种子文件，用于读取种子内部的信息。用完后，需要调用DLBT_ReleaseTorrent释放torrent文件的句柄。
+**功能：** 打开一个内存中流方式的种子文件，用于读取种子内部的信息。用完后，需要调用DLBT_ReleaseTorrent释放torrent文件的句柄。
 
 ```c++
 DLBT_API HANDLE WINAPI DLBT_OpenTorrentFromBuffer (
@@ -2204,15 +2204,15 @@ DLBT_API HANDLE WINAPI DLBT_OpenTorrentFromBuffer (
 
 **参数：**
 
-**torrentFile：**种子文件在内存中的内容。
+**torrentFile：** 种子文件在内存中的内容。
 
-**dwTorrentFileSize：**种子内容的大小。
+**dwTorrentFileSize：** 种子内容的大小。
 
 **Password:** 对应于加密后的种子文件。如果传入一个密码字符串，则使用该字符串解密，否则不对种子进行解密。试用版该参数会被忽略，仅对商业版有效。加密后的种子不能被Bitcomet等其它BT软件使用，防止了别人使用你制作的种子。
 
 ### *DLBT_Torrent_GetComment  DLBT_Torrent_GetCreator和DLBT_Torrent_GetPublisherUrl*
 
-**功能：**打开一个种子文件的句柄，用于读取种子内部的信息
+**功能：** 打开一个种子文件的句柄，用于读取种子内部的信息
 
 ```c++
 //获取种子的备注信息
@@ -2241,7 +2241,7 @@ DLBT_API HRESULT WINAPI DLBT_Torrent_GetPublisherUrl (
 
 ### *DLBT_Torrent_GetTrackerCount*
 
-**功能：**获得种子文件中记录的所有tracker的个数
+**功能：** 获得种子文件中记录的所有tracker的个数
 
 ```c++
 DLBT_API int WINAPI DLBT_Torrent_GetTrackerCount (HANDLE hTorrent);
@@ -2253,7 +2253,7 @@ DLBT_API int WINAPI DLBT_Torrent_GetTrackerCount (HANDLE hTorrent);
 
 ### *DLBT_Torrent_GetTrackerUrl*
 
-**功能：**获得种子中，指定次序的Tracker的URL地址
+**功能：** 获得种子中，指定次序的Tracker的URL地址
 
 ```c++
 DLBT_API LPCSTR WINAPI DLBT_Torrent_GetTrackerUrl (
@@ -2264,7 +2264,7 @@ DLBT_API LPCSTR WINAPI DLBT_Torrent_GetTrackerUrl (
 
 ### *DLBT_Torrent_GetTotalFileSize*
 
-**功能：**获得种子中所有文件的总大小 
+**功能：** 获得种子中所有文件的总大小 
 
 ```c++
 DLBT_API UINT64 WINAPI DLBT_Torrent_GetTotalFileSize (
@@ -2274,7 +2274,7 @@ HANDLE hTorrent    // 种子文件句柄
 
 ### *DLBT_Torrent_GetFileCount*
 
-**功能：**获得种子中所有文件的个数 
+**功能：** 获得种子中所有文件的个数 
 
 ```c++
 DLBT_API int WINAPI DLBT_Torrent_GetFileCount (
@@ -2284,7 +2284,7 @@ HANDLE hTorrent    // 种子文件句柄
 
 ### *DLBT_Torrent_IsPadFile*
 
-**功能：**判断某个序号的文件是否Pad补齐文件
+**功能：** 判断某个序号的文件是否Pad补齐文件
 
 ```c++
 DLBT_API BOOL WINAPI DLBT_Torrent_IsPadFile (HANDLE hTorrent, int index);
@@ -2292,9 +2292,9 @@ DLBT_API BOOL WINAPI DLBT_Torrent_IsPadFile (HANDLE hTorrent, int index);
 
 **参数：**
 
-**hTorrent：**种子文件的句柄。
+**hTorrent：** 种子文件的句柄。
 
-**index：**文件的序号，要求 >=0 , 小于DLBT_Torrent_GetFileCount取得的文件的总数目。
+**index：** 文件的序号，要求 >=0 , 小于DLBT_Torrent_GetFileCount取得的文件的总数目。
 
 **说明：**
 
@@ -2302,7 +2302,7 @@ Bitcomet以及点量BT 3.6版本后，均有可能有padding file存在，目的
 
 ### *DLBT_Torrent_GetFileSize*
 
-**功能：**获得种子中某个文件的大小 
+**功能：** 获得种子中某个文件的大小 
 
 ```c++
 DLBT_API UINT64 WINAPI DLBT_Torrent_GetFileSize (
@@ -2313,7 +2313,7 @@ DLBT_API UINT64 WINAPI DLBT_Torrent_GetFileSize (
 
 ### *DLBT_Torrent_GetFilePathName*
 
-**功能：**获得种子中某个文件的名称
+**功能：** 获得种子中某个文件的名称
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_Torrent_GetFilePathName (
@@ -2324,11 +2324,11 @@ DLBT_API HRESULT WINAPI DLBT_Torrent_GetFilePathName (
     );
 ```
 
-**说明：**类似的用法和说明参考DLBT_Downloader_GetFilePathName。
+**说明：** 类似的用法和说明参考DLBT_Downloader_GetFilePathName。
 
 ### *DLBT_Torrent_GetPieceCount*和*DLBT_Torrent_GetPieceSize*
 
-**功能：**获得分块数目和分块的大小，hTorrent参数为种子文件的句柄。
+**功能：** 获得分块数目和分块的大小，hTorrent参数为种子文件的句柄。
 
 ```c++
 DLBT_API int WINAPI DLBT_Torrent_GetPieceCount (HANDLE hTorrent); // 获取分块数目
@@ -2337,7 +2337,7 @@ DLBT_API int WINAPI DLBT_Torrent_GetPieceSize (HANDLE hTorrent); // 获取分块
 
 ### *DLBT_Torrent_GetPieceInfoHash**和**DLBT_Torrent_GetInfoHash*
 
-**功能：**获得每个分块的Hash值。
+**功能：** 获得每个分块的Hash值。
 
 ```c++
 // 获取每个分块的Hash值
@@ -2362,7 +2362,7 @@ DLBT_API HRESULT WINAPI DLBT_Torrent_GetInfoHash (
 
 ### *enum PORT_TYPE*
 
-**功能：**标记端口类型（TCP或者UDP端口）
+**功能：** 标记端口类型（TCP或者UDP端口）
 
 ```c++
 enum PORT_TYPE
@@ -2374,7 +2374,7 @@ enum PORT_TYPE
 
 ### *DLBT_AddAppToWindowsXPFirewall*
 
-**功能：**将某个应用程序添加到ICF防火墙的例外中去，可独立于内核应用，不启动内核仍可使用该函数
+**功能：** 将某个应用程序添加到ICF防火墙的例外中去，可独立于内核应用，不启动内核仍可使用该函数
 
 ```c++
 DLBT_API BOOL WINAPI DLBT_AddAppToWindowsXPFirewall (
@@ -2389,7 +2389,7 @@ DLBT_API BOOL WINAPI DLBT_AddAppToWindowsXPFirewall (
 
 ### *DLBT_GetCurrentXPLimit*
 
-**功能：**获得当期系统的并发连接数限制，如果返回0则表示系统可能不是受限的XP系统，无需修改连接数限制。可独立于内核使用，启动内核前即可使用。
+**功能：** 获得当期系统的并发连接数限制，如果返回0则表示系统可能不是受限的XP系统，无需修改连接数限制。可独立于内核使用，启动内核前即可使用。
 
 ```c++
 DLBT_API DWORD WINAPI DLBT_GetCurrentXPLimit ();
@@ -2401,7 +2401,7 @@ XP SP2增加了一个限制，单个进程最多只能建立10个连接，但这
 
 ### *DLBT_ChangeXPConnectionLimit*
 
-**功能：**修改XP的并发连接数限制为指定的数目，返回BOOL标志操作是否成功。
+**功能：** 修改XP的并发连接数限制为指定的数目，返回BOOL标志操作是否成功。
 
 ```c++
 DLBT_API BOOL WINAPI DLBT_ChangeXPConnectionLimit (DWORD num);
@@ -2417,7 +2417,7 @@ XP SP2增加了一个限制，单个进程最多只能建立10个连接，但这
 
 ### *struct KERNEL_INFO*
 
-**功能：**用于传递内核整体运行信息的结构体，包含了常见的多个内核整体信息。
+**功能：** 用于传递内核整体运行信息的结构体，包含了常见的多个内核整体信息。
 
 `
 
@@ -2441,7 +2441,7 @@ struct KERNEL_INFO
 
 ### *struct DOWNLOADER_INFO*
 
-**功能：**用于传递单个任务运行时大量信息的结构体，包含了常见的任务相关的多个信息。
+**功能：** 用于传递单个任务运行时大量信息的结构体，包含了常见的任务相关的多个信息。
 
 ```c++
 struct DOWNLOADER_INFO
@@ -2485,7 +2485,7 @@ struct DOWNLOADER_INFO
 
 ### *struct PEER_INFO_ENTRY*
 
-**功能：**用于传递一个连接者信息的结构体，一般配合PEER_INFO结构体返回所有连接上用户的信息。
+**功能：** 用于传递一个连接者信息的结构体，一般配合PEER_INFO结构体返回所有连接上用户的信息。
 
 ```c++
 struct PEER_INFO_ENTRY
@@ -2504,7 +2504,7 @@ struct PEER_INFO_ENTRY
 
 ### *struct PEER_INFO*
 
-**功能：**用于传递所有连接者信息的结构体，一般配合PEER_INFO结构体返回所有连接上用户的信息。
+**功能：** 用于传递所有连接者信息的结构体，一般配合PEER_INFO结构体返回所有连接上用户的信息。
 
 ```c++
 struct PEER_INFO
@@ -2516,7 +2516,7 @@ struct PEER_INFO
 
 ### *DLBT_GetKernelInfo*
 
-**功能：**获取内核整体信息，返回一个KERNEL_INFO结构体。
+**功能：** 获取内核整体信息，返回一个KERNEL_INFO结构体。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_GetKernelInfo (KERNEL_INFO * info);
@@ -2533,7 +2533,7 @@ DLBT_GetKernelInfo (&info); // 传入一个指向合法KERNEL_INFO的指针，�
 
 ### *DLBT_GetDownloaderInfo*
 
-**功能：**获取一个下载任务的整体信息，返回一个DOWNLOADER_INFO结构体。
+**功能：** 获取一个下载任务的整体信息，返回一个DOWNLOADER_INFO结构体。
 
 ```c++
 `DLBT_API HRESULT WINAPI DLBT_GetDownloaderInfo (HANDLE hDownloader, DOWNLOADER_INFO * info);`
@@ -2550,7 +2550,7 @@ DLBT_GetDownloaderInfo (hDownloader, &info); //传入指向合法DOWNLOADER_INFO
 
 ### *DLBT_GetDownloaderPeerInfoList和DLBT_FreeDownloaderPeerInfoList*
 
-**功能：**DLBT_GetDownloaderPeerInfoLis获取一个下载任务所有当前连接的信息，返回一个PEER_INFO指针，指向连接列表。DLBT_FreeDownloaderPeerInfoList用于释放这个列表的内存。
+**功能：** DLBT_GetDownloaderPeerInfoLis获取一个下载任务所有当前连接的信息，返回一个PEER_INFO指针，指向连接列表。DLBT_FreeDownloaderPeerInfoList用于释放这个列表的内存。
 
 ```c++
 DLBT_API HRESULT WINAPI DLBT_GetDownloaderPeerInfoList (HANDLE hDownloader, PEER_INFO ** ppInfo);
@@ -2571,7 +2571,7 @@ DLBT_FreeDownloaderPeerInfoList (pInfo);		//用完后释放列表内存
 
 ### *DLBT_SetDHTFilePathName*
 
-**功能：**设置DHT状态文件的全路径名。
+**功能：** 设置DHT状态文件的全路径名。
 
 ```C++
 DLBT_API void WINAPI DLBT_SetDHTFilePathName (LPCWSTR dhtFile);
@@ -2583,7 +2583,7 @@ DLBT_API void WINAPI DLBT_SetDHTFilePathName (LPCWSTR dhtFile);
 
 ### *DLBT_Set_IO_OP*和*DLBT_InitDefault_IO_OP*
 
-**功能：**设置IO操作的结构体的指针；或者先对结构体初始化默认IO函数，然后自行修改个别函数。
+**功能：** 设置IO操作的结构体的指针；或者先对结构体初始化默认IO函数，然后自行修改个别函数。
 
 ```c++
 // 可以自定义IO操作的函数（可以将BT里面的读写文件等所有操作外部进行处理，替换内部的读写函数等）
@@ -2601,7 +2601,7 @@ DLBT_API void WINAPI DLBT_InitDefault_IO_OP(void * op);
 
 ### *DLBT_Get_IO_OP*和*DLBT_Get_RAW_IO_OP*
 
-**功能：**获取当前所用的IO结构体指针或者获取系统原始默认的IO操作的结构体指针.
+**功能：** 获取当前所用的IO结构体指针或者获取系统原始默认的IO操作的结构体指针.
 
 ```C++
 // 获取系统内部目前在用的IO对象的指针
