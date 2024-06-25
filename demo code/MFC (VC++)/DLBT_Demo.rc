@@ -1,0 +1,511 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 中文(中华人民共和国) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+#ifdef _WIN32
+LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
+#pragma code_page(936)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
+    "LANGUAGE 4, 2\r\n"
+    "#pragma code_page(936)\r\n"
+    "#include ""res\\DLBT_Demo.rc2""  // ·? Microsoft Visual C++ ±à?-1yμ?×ê?′\r\n"
+    "#include ""afxres.rc""         // ±ê×?×é?t\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\DLBT_Demo.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 243, 108
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "关于点量BT内核和演示程序"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "Programming:   点量软件（www.dolit.cn）",IDC_STATIC,40,13,144,8
+    DEFPUSHBUTTON   "确定",IDOK,186,7,50,16,WS_GROUP
+    LTEXT           "Copyright (C) 2008-2022 Dolit Software ",IDC_STATIC,40,56,174,8
+    LTEXT           "HomePage: ",IDC_STATIC,40,27,40,8
+    LTEXT           "    点量BT致力于做最专业的内核，个人可以自由免费使用，如需商业应用，需同作者购买使用权，源码开放",IDC_STATIC,16,77,210,17
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,11,73,221,1
+    LTEXT           "http://www.dolit.cn",IDC_HOME_PAGE,86,27,100,10,SS_NOTIFY
+    LTEXT           "http://www.dolit.cloud",IDC_HOME_PAGE2,86,39,100,10,SS_NOTIFY
+END
+
+IDD_DLBT_DEMO_DIALOG DIALOGEX 0, 0, 423, 321
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "点量BT内核的演示程序"
+MENU IDR_MENU1
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LIST_DOWNLOADER,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,3,3,416,156
+    CONTROL         "",IDC_TAB_INFO,"SysTabControl32",TCS_FOCUSNEVER,3,162,416,145
+END
+
+IDD_ADDFILEDIALOG DIALOGEX 0, 0, 293, 79
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "启动新下载"
+FONT 9, "宋体", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,84,55,50,15
+    PUSHBUTTON      "取消",IDCANCEL,148,55,50,15
+    EDITTEXT        IDC_EDIT_TORRENT_PATH,58,10,165,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "浏览",IDC_BUTTON_BROWSER1,233,10,43,13
+    LTEXT           "种子位置：",IDC_STATIC,14,13,44,12
+    LTEXT           "下载到：",IDC_STATIC,21,33,34,12
+    EDITTEXT        IDC_EDIT_SAVE_PATH,58,31,165,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "浏览",IDC_BUTTON_BROWSER2,234,30,43,13
+END
+
+IDD_MAKETORRENTDLG DIALOGEX 0, 0, 323, 381
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "制作BT种子文件"
+FONT 9, "宋体", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,116,358,50,16
+    PUSHBUTTON      "取消",IDCANCEL,189,358,50,16
+    GROUPBOX        "常规设置",IDC_STATIC,7,7,309,236
+    EDITTEXT        IDC_EDIT_FILE_PATH,89,36,154,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "浏览",IDC_BUTTON_BROWSER_FILE,258,36,43,13
+    LTEXT           "文件或文件夹：",IDC_STATIC,24,39,60,12
+    EDITTEXT        IDC_EDIT_HTTP_PATH,89,55,154,14,ES_AUTOHSCROLL
+    LTEXT           "可选http地址：",IDC_STATIC,24,58,59,12
+    LTEXT           "Tracker服务器列表：",IDC_STATIC,20,121,83,12
+    EDITTEXT        IDC_EDIT_TRACKER,19,137,284,62,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN
+    LTEXT           "生成的种子文件：",IDC_STATIC,21,223,67,12
+    EDITTEXT        IDC_EDIT_TORRENT_PATH,96,221,154,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "浏览",IDC_BUTTON_BROWSER_TORRENT,263,220,41,13
+    LTEXT           "每行一个服务器，具有相同信息的等效Tracker服务器，请使用 | 间隔",IDC_STATIC,19,205,280,12
+    LTEXT           "分块大小：",IDC_STATIC,23,97,43,12
+    EDITTEXT        IDC_EDIT_PIECE_SIZE,81,94,51,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "点量BT支持http路径下载，防备没有种子时可以从http下载，多个Http地址使用 | 间隔",IDC_STATIC,26,73,277,16
+    LTEXT           "K",IDC_STATIC,141,96,19,12
+    GROUPBOX        "发布者",IDC_STATIC,7,249,309,106
+    EDITTEXT        IDC_EDIT_COMMENT,18,304,286,28,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_EDIT_PUBLISHER,57,257,244,14,ES_AUTOHSCROLL
+    LTEXT           "发布者：",IDC_STATIC,16,260,35,12
+    LTEXT           "备注：",IDC_STATIC,16,294,35,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDFRAME,17,116,292,1
+    CONTROL         "单个文件",IDC_RADIO_FILE,"Button",BS_AUTORADIOBUTTON,29,21,67,9
+    CONTROL         "整个目录",IDC_RADI_DIRECTORY,"Button",BS_AUTORADIOBUTTON,110,21,79,9
+    COMBOBOX        IDC_COMBO_TYPE,109,119,193,44,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_EDIT_PUBLISHER_URL,57,275,244,14,ES_AUTOHSCROLL
+    LTEXT           "网址：",IDC_STATIC,19,276,26,12
+    LTEXT           "0代表由系统智能判断分块大小",IDC_STATIC,156,96,125,10
+    CONTROL         "制作完成后自动启动上传",IDC_CHECK_AutoUpload,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,18,337,220,13
+END
+
+IDD_SETTINGDLG DIALOGEX 0, 0, 258, 206
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "设置"
+FONT 9, "宋体", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,63,178,50,16
+    PUSHBUTTON      "取消",IDCANCEL,134,177,50,16
+    LTEXT           "总体下载速度限制：",IDC_STATIC,26,12,80,13
+    EDITTEXT        IDC_EDIT1,119,9,55,13,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "KB/s",IDC_STATIC,182,9,25,13
+    LTEXT           "总体上传速度限制：",IDC_STATIC,27,33,80,13
+    EDITTEXT        IDC_EDIT2,119,30,55,13,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "KB/s",IDC_STATIC,182,32,25,13
+    CONTROL         "启用DHT网络",IDC_CHECK_DHT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,155,60,15
+    CONTROL         "启用UPNP穿透",IDC_CHECK_UPNP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,173,156,69,15
+    CONTROL         "启用系统防火墙穿透",IDC_CHECK_FIREWALL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,81,155,90,15
+    LTEXT           "报告Tracker的地址：",IDC_STATIC,26,54,77,11
+    LTEXT           "如机器在内网，报告给tracker的是本机内网ip，别人无法直接连接，最好设置路由器的IP地址，留空默认使用本机ip,上传的服务器尤为需要注意正确设置",IDC_STATIC,25,72,219,30,SS_SUNKEN
+    CONTROL         "",IDC_IPADDRESS1,"SysIPAddress32",WS_TABSTOP,118,53,108,12
+    LTEXT           "最大磁盘缓存：",IDC_STATIC,25,109,60,11
+    EDITTEXT        IDC_EDIT_DISK_CACHE,83,105,43,13,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
+    LTEXT           "目前暂时只有商业版提供，其它版本使用系统默认磁盘缓存",IDC_STATIC,24,124,217,9
+    CONTROL         "启用专业上传服务器模式",IDC_CHECK_DHT2,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,18,140,105,13
+    LTEXT           "暂时只有商业版提供",IDC_STATIC,128,142,75,9
+END
+
+IDD_DOWNLOADERSETTING DIALOGEX 0, 0, 256, 139
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "对话框"
+FONT 9, "宋体", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,75,113,50,16
+    PUSHBUTTON      "取消",IDCANCEL,141,113,50,16
+    GROUPBOX        "限速  (-1为无限)",IDC_STATIC,7,7,242,58
+    LTEXT           "下载限速：",IDC_STATIC,15,25,41,12
+    LTEXT           "上传限速：",IDC_STATIC,15,43,42,12
+    EDITTEXT        IDC_EDIT_DOWNLOAD_SPEED,59,21,45,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_UPLOAD_SPEED,59,42,43,14,ES_AUTOHSCROLL
+    LTEXT           "上传连接数：",IDC_STATIC,130,42,51,12
+    LTEXT           "下载连接数：",IDC_STATIC,132,24,51,12
+    EDITTEXT        IDC_EDIT_DOWNLOAD_CONNECTION,185,20,45,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_UPLOAD_CONNECTION,186,39,44,14,ES_AUTOHSCROLL
+    LTEXT           "K/s",IDC_STATIC,106,21,15,9
+    LTEXT           "K/s",IDC_STATIC,106,43,15,9
+    GROUPBOX        "最大共享",IDC_STATIC,7,72,242,35
+    LTEXT           "最大共享率：",IDC_STATIC,22,85,48,12
+    EDITTEXT        IDC_EDIT_MAX_SHARE_RATE,76,82,43,14,ES_AUTOHSCROLL
+    LTEXT           "上传同下载的比例， 0为无限",IDC_STATIC,130,84,111,12
+END
+
+IDD_ADVSETTINGDLG DIALOGEX 0, 0, 349, 282
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "对话框"
+FONT 9, "宋体", 0, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "确定",IDOK,106,258,50,16
+    PUSHBUTTON      "取消",IDCANCEL,184,258,50,16
+    GROUPBOX        "加密传输（防止ISP封锁或者安全保密数据传送）",IDC_STATIC,7,7,335,73
+    LTEXT           "BT加密选项（防止ISP封锁）：",IDC_STATIC,27,23,113,11
+    LTEXT           "加密等级：",IDC_STATIC,27,37,102,11
+    COMBOBOX        IDC_COMBO_ENCRYPT_OPTION,141,21,193,65,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBO_ENCRYPT_LEVEL,140,39,194,62,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "代理设置",IDC_STATIC,7,92,326,157
+    LTEXT           "代理服务器类型：",IDC_STATIC,23,106,66,11
+    COMBOBOX        IDC_COMBO_PROXY_TYPE,107,104,122,86,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "服务器IP：",IDC_STATIC,24,124,66,11
+    LTEXT           "端口：",IDC_STATIC,209,125,29,11
+    EDITTEXT        IDC_EDIT_HOST,107,122,67,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PORT,245,122,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "用户名：",IDC_STATIC,25,143,38,11
+    EDITTEXT        IDC_EDIT_USER,108,141,67,14,ES_AUTOHSCROLL
+    LTEXT           "密码：",IDC_STATIC,209,144,29,11
+    EDITTEXT        IDC_EDIT_PASS,245,142,46,14,ES_AUTOHSCROLL
+    CONTROL         "对全部连接应用代理设置（演示程序为简单，默认全部应用同一代理设置）",IDC_CHECK_ALL,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,24,162,280,11
+    GROUPBOX        "单独使用代理",IDC_STATIC,26,179,292,63
+    CONTROL         "对连接Tracker使用代理",IDC_CHECK_TRACKER,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,37,192,111,11
+    CONTROL         "对Http跨协议下载使用代理",IDC_CHECK_HTTP,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,192,191,111,11
+    CONTROL         "对下载使用代理",IDC_CHECK_PEER,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,37,208,111,11
+    CONTROL         "对DHT使用代理",IDC_CHECK_DHT,"Button",BS_AUTOCHECKBOX | WS_DISABLED | WS_TABSTOP,192,208,111,11
+    LTEXT           "点量BT内核支持模块分别单独设置代理，演示程序为省事，暂不实现",IDC_STATIC,37,226,259,12
+    CONTROL         "对BT协议启用Http伪装（在马来西亚等部分对非Http模式限速的网络下有效）",IDC_CHECK_P2PAsHttp,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,27,62,308,14
+END
+
+IDD_MT_PROGRESS_DLG DIALOGEX 0, 0, 269, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "制作种子"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "取消",IDCANCEL,111,42,50,14
+    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,7,23,255,11
+    LTEXT           "正在制作种子，请稍候...",IDC_STATIC,89,7,107,11
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 3,7,9,0
+ PRODUCTVERSION 3,7,9,0
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x21L
+#else
+ FILEFLAGS 0x20L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "080403a8"
+        BEGIN
+            VALUE "Comments", "点量BT内核示例程序2022版"
+            VALUE "CompanyName", "点量软件(http://www.dolit.cn)"
+            VALUE "FileDescription", "致力于提供最专业的BT内核"
+            VALUE "FileVersion", "3.7.9.0"
+            VALUE "InternalName", "DLBT_Demo.exe"
+            VALUE "LegalCopyright", "(C) <点量软件有限公司>。保留所有权利。"
+            VALUE "OriginalFilename", "DLBT_Demo.exe"
+            VALUE "ProductName", "点量BT内核示例程序"
+            VALUE "ProductVersion", "3.7.9.0"
+            VALUE "SpecialBuild", "20220104"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x804, 936
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 236
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 100
+    END
+
+    IDD_DLBT_DEMO_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 419
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 314
+    END
+
+    IDD_ADDFILEDIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 286
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 72
+    END
+
+    IDD_MAKETORRENTDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 316
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 374
+    END
+
+    IDD_SETTINGDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 251
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 199
+    END
+
+    IDD_DOWNLOADERSETTING, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 249
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 132
+    END
+
+    IDD_ADVSETTINGDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 342
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 274
+    END
+
+    IDD_MT_PROGRESS_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 262
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU1 MENU 
+BEGIN
+    POPUP "文件"
+    BEGIN
+        MENUITEM "新增BT下载",                      ID_MENU_ADD_FILE
+        MENUITEM SEPARATOR
+        MENUITEM "制作种子",                        ID_MENU_MAKE_TORRENT
+        MENUITEM SEPARATOR
+        MENUITEM "退出",                          ID_MENU_EXIT
+    END
+    POPUP "选项"
+    BEGIN
+        MENUITEM "基本配置",                        ID_MENU_CONFIG
+        MENUITEM "高级设置",                        ID_MENU_ADV_CONFIG
+    END
+    POPUP "帮助"
+    BEGIN
+        MENUITEM "关于点量BT内核",                    ID_MENU_ABOUT
+    END
+END
+
+IDR_MENU2 MENU 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "停止删除任务",                      ID_STOP_MENU
+        MENUITEM "暂停",                          ID_PAUSE_MENU
+        MENUITEM "继续",                          ID_RESUME_MENU
+        MENUITEM SEPARATOR
+        MENUITEM "顺序下载",                        ID__32798
+        MENUITEM "设置",                          ID_SETTING_MENU
+        MENUITEM SEPARATOR
+        MENUITEM "打开所在文件夹",                     ID_OPEN_FOLDER_MENU
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_CURSOR1             CURSOR                  "res\\Hand.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_MAKETORRENTDLG DLGINIT
+BEGIN
+    IDC_COMBO_TYPE, 0x403, 22, 0
+0xd3bc, 0xebc8, 0xabb9, 0xb2b9, 0x4844, 0xcd54, 0xc2f8, 0x28e7, 0xc6cd, 
+0xf6bc, 0x0029, 
+    IDC_COMBO_TYPE, 0x403, 22, 0
+0xbbb2, 0xb9ca, 0xc3d3, 0xabb9, 0xb2b9, 0x4844, 0xcd54, 0xc2f8, 0xbde7, 
+0xb5da, 0x00e3, 
+    IDC_COMBO_TYPE, 0x403, 45, 0
+0xf6bd, 0xb9ca, 0xc3d3, 0x7254, 0x6361, 0x656b, 0xa372, 0xbdac, 0xd6fb, 
+0xbcb9, 0xc8d3, 0x44eb, 0x5448, 0xf8cd, 0xe7c2, 0xcdba, 0xc3d3, 0xa7bb, 
+0xb4c0, 0xb4d4, 0xbbbd, 0xbbbb, "\000" 
+    0
+END
+
+IDD_ADVSETTINGDLG DLGINIT
+BEGIN
+    IDC_COMBO_ENCRYPT_OPTION, 0x403, 11, 0
+0xbbb2, 0xcad4, 0xedd0, 0xd3bc, 0xdcc3, "\000" 
+    IDC_COMBO_ENCRYPT_OPTION, 0x403, 43, 0
+0xe6bc, 0xddc8, 0xd4d0, 0xd3bc, 0xdcc3, 0xa8a3, 0xa2b7, 0xf0c6, 0xd5c6, 
+0xa8cd, 0xacc1, 0xd3bd, 0xaca3, 0xabb5, 0xcad4, 0xedd0, 0xd3bc, 0xdcc3, 
+0xacc1, 0xd3bd, 0xa9a3, "\000" 
+    IDC_COMBO_ENCRYPT_OPTION, 0x403, 41, 0
+0xeacd, 0xfbd5, 0xd3bc, 0xdcc3, 0xa8a3, 0xa2b7, 0xf0c6, 0xd3bc, 0xdcc3, 
+0xacc1, 0xd3bd, 0xaca3, 0xabb5, 0xcad4, 0xedd0, 0xd5c6, 0xa8cd, 0xacc1, 
+0xd3bd, 0xa9a3, "\000" 
+    IDC_COMBO_ENCRYPT_OPTION, 0x403, 43, 0
+0xbfc7, 0xc6d6, 0xd3bc, 0xdcc3, 0xa8a3, 0xf6bd, 0xa7d6, 0xd6b3, 0xd3bc, 
+0xdcc3, 0xa8cd, 0xb6d1, 0xaca3, 0xbbb2, 0xd3bd, 0xdcca, 0xd5c6, 0xa8cd, 
+0xacc1, 0xd3bd, 0xa9a3, "\000" 
+    IDC_COMBO_ENCRYPT_LEVEL, 0x403, 11, 0
+0xf6bd, 0xadd0, 0xe9d2, 0xd3bc, 0xdcc3, "\000" 
+    IDC_COMBO_ENCRYPT_LEVEL, 0x403, 11, 0
+0xf6bd, 0xfdca, 0xddbe, 0xd3bc, 0xdcc3, "\000" 
+    IDC_COMBO_ENCRYPT_LEVEL, 0x403, 39, 0
+0xf7d6, 0xafb6, 0xf8bd, 0xd0d0, 0xadd0, 0xe9d2, 0xd3bc, 0xdcc3, 0xabb5, 
+0xa7d6, 0xd6b3, 0xd4b6, 0xbdb7, 0xd3bc, 0xdcc3, 0xfdca, 0xddbe, 0xa8cd, 
+0xb6d1, "\000" 
+    IDC_COMBO_ENCRYPT_LEVEL, 0x403, 17, 0
+0xadd0, 0xe9d2, 0xcdba, 0xfdca, 0xddbe, 0xf9be, 0xd3bc, 0xdcc3, "\000" 
+    IDC_COMBO_PROXY_TYPE, 0x403, 11, 0
+0xbbb2, 0xb9ca, 0xc3d3, 0xfab4, 0xedc0, "\000" 
+    IDC_COMBO_PROXY_TYPE, 0x403, 7, 0
+0x6f53, 0x6b63, 0x3473, "\000" 
+    IDC_COMBO_PROXY_TYPE, 0x403, 7, 0
+0x6f53, 0x6b63, 0x3573, "\000" 
+    IDC_COMBO_PROXY_TYPE, 0x403, 8, 0
+0x6f53, 0x6b63, 0x3573, 0x0061, 
+    IDC_COMBO_PROXY_TYPE, 0x403, 5, 0
+0x7448, 0x7074, "\000" 
+    IDC_COMBO_PROXY_TYPE, 0x403, 6, 0
+0x7448, 0x7074, 0x0041, 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "关于 点量BT内核演示程序(&A)..."
+    IDS_STATUSBAR_TEXT      "      点量BT内核的演示程序，点量BT，做最专业的P2P传输库"
+END
+
+#endif    // 中文(中华人民共和国) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
+LANGUAGE 4, 2
+#pragma code_page(936)
+#include "res\DLBT_Demo.rc2"  // ·? Microsoft Visual C++ ±à?-1yμ?×ê?′
+#include "afxres.rc"         // ±ê×?×é?t
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

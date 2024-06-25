@@ -1,0 +1,225 @@
+绝大部分用法可以直接参考 MFC(C++)文件夹下的代码。
+
+这里大概说明下启动一个任务下载（上传）的步骤：
+
+#include "DLBT.hpp"
+#pragma comment(lib, "DLBT.lib")
+
+（一）程序启动时，初始化BT环境，如下所示：
+
+void __fastcall TformMain::BTStartup()
+{
+	// BT模块代码
+	WCHAR path[260];
+
+    // 将应用程序加入ICF防火墙的例外，以免被用户选择了"阻止该程序"
+	HMODULE hModule = GetModuleHandle (NULL);
+	if (hModule != NULL && GetModuleFileNameW(hModule, path, 260) != 0)
+	{
+		DLBT_AddAppToWindowsXPFirewall (path, L"点量BT内核示例程序");
+	}
+
+    // 检测是否需要修改系统的并发连接数限制
+    DWORD curLimit = DLBT_GetCurrentXPLimit ();
+    if (curLimit != 0 && curLimit < 256)
+	{
+		if (DLBT_ChangeXPConnectionLimit (256))
+		{
+			//建议提示下用户已经修改了
+			/*
+			CString str;
+			str.Format (_T ("点量BT（DLBT内核）检测到您系统上的连接数需要优化，为了更好的下载效果，\r\n 点量BT已自动进行了系统优化，需要重启电脑后方能生效，如下载效果不好，请手工重启电脑后使用！\r\n \r\n 原来的连接限制数为%d，现在改为了256"), curLimit);
+			MessageBox (str, _T ("点量BT自动优化"), MB_OK);
+			*/
+        }
+    }
+
+	// 启动点量BT内核和DHT网络，设置客户端标记（只是连接Tracker时使用）
+	DLBT_KERNEL_START_PARAM param;
+        param.startPort = 8010;    //绑定端口，从8010开始尝试，如果8010没被占用，则使用8010，否则尝试下一个，最多尝试到endPort指定的范围
+        param.endPort = 8030;
+	DLBT_Startup (param);
+	DLBT_DHT_Start ();	
+}
+
+（二）启动一个torrent的下载（上传）
+
+       // 目前demo只演示一个的下载
+	if (m_hDownloader != NULL)
+	{
+	   return;
+	}
+	m_hDownloader =  DLBT_Downloader_Initialize(L"D:\\Test\\dlbt.torrent", L"D:\\Test\\");
+
+（三）用timer周期性获取任务的速度、进度等信息
+
+
+void __fastcall TformMain::TimerBTStatusTimer(TObject *Sender)
+{
+		HANDLE hDownloader = m_hDownloader;
+		if (hDownloader == NULL) {
+			return;
+		}
+	//TODO: 示例程序可以这样写，正式程序最好判断下名字的程度，动态分配空间
+        int nameLen = 1024;
+		WCHAR name[1025] = {0};
+		std::wstring str;
+		if (DLBT_Downloader_GetTorrentName (hDownloader, name, &nameLen) == S_OK)
+		{
+			str = L"文件名:";
+			str += name;
+		}
+
+		DLBT_DOWNLOAD_STATE state = DLBT_Downloader_GetState (hDownloader);
+		str += L" 状态：";
+        switch (state)
+        {
+        case BTDS_QUEUED:
+			str += L"初始化";
+			break;
+		case BTDS_CHECKING_FILES:
+			str += L"检查文件";
+			break;
+		case BTDS_DOWNLOADING_TORRENT:
+			str += L"获取种子";
+			break;
+		case BTDS_DOWNLOADING:
+			str += L"下载中";
+			break;
+		case BTDS_PAUSED:
+			str += L"暂停";
+            break;
+		case BTDS_FINISHED:
+			str += L"下载完成";
+            break;
+		case BTDS_SEEDING:
+			str += L"供种中";
+            break;
+		case BTDS_ALLOCATING:
+			str += L"分配存储空间";
+            break;
+		case BTDS_ERROR:
+			str += L"出错";
+			/*CStringA errA = DLBT_Downloader_GetLastError (hDownloader);
+			CString err = A2T ((LPSTR)(LPCSTR)errA);
+			SetItemText (i, 1, CString (_T (": ")) + err);*/
+            break;
+        }
+
+		UINT64 uSize = DLBT_Downloader_GetTotalFileSize (hDownloader);
+		if (state == BTDS_DOWNLOADING || state == BTDS_CHECKING_FILES || state == BTDS_FINISHED
+			|| state == BTDS_SEEDING || state == BTDS_PAUSED)
+        {
+            UINT64 uDone = DLBT_Downloader_GetDownloadedBytes (hDownloader);
+            float val;
+			TCHAR szDim [10];
+			float progress;
+			//BytesToDisplayBytes (uDone, &val, szDim);
+		    if (uSize != _UI64_MAX)
+				progress = DLBT_Downloader_GetProgress (hDownloader);
+		    else
+				progress = 0.0f;
+			//SetItemText (i, 3, str);
+
+
+			UINT64 uLeft = uSize - uDone;
+			UINT uSpeed = DLBT_Downloader_GetDownloadSpeed (hDownloader);
+
+			/*
+			if (uLeft == _UI64_MAX || uSpeed == 0)
+				SetItemText (i, 4, _T (""));
+			else
+				SetItemText (i, 4, TimeInSecondToStr (UINT (uLeft / uSpeed)));
+				*/
+        }
+		else
+		{
+			UINT uSpeed = 0;
+			uSpeed = DLBT_Downloader_GetDownloadSpeed (hDownloader);
+		}
+
+
+		// 常规信息
+		std::string aStr;
+		char infoHash [256];
+		int nLen = sizeof (infoHash) / sizeof (infoHash[0]);
+		if (DLBT_Downloader_GetInfoHash (hDownloader, infoHash, &nLen) == S_OK)
+			aStr = infoHash;
+
+		int pieceCount = DLBT_Downloader_GetPieceCount (hDownloader);
+		int pieceSize =  DLBT_Downloader_GetPieceSize (hDownloader);
+		UINT upSpeed = DLBT_Downloader_GetUploadSpeed (hDownloader);
+		UINT64 uBytes = DLBT_Downloader_GetUploadedBytes (hDownloader);
+		float shareRate = (float)DLBT_Downloader_GetShareRate (hDownloader);
+
+		int connectedPeers = 0, totalSeeds = 0, seedsConnected = 0, inCompleteCount = 0, curTotalSeeds = 0, curTotalPeers = 0;
+		DLBT_Downloader_GetPeerNums (hDownloader, &connectedPeers, &totalSeeds, &seedsConnected, &inCompleteCount, &curTotalSeeds, &curTotalPeers);
+
+		KERNEL_INFO info;
+		DLBT_GetKernelInfo (&info);
+
+		//文件信息
+		int fileCount = DLBT_Downloader_GetFileCount (hDownloader);
+		for (int i = 0; i < fileCount; i ++)
+		{
+			//不显示padding_file
+			if (DLBT_Downloader_IsPadFile (hDownloader, i))
+				continue;
+
+			// 示例程序只调用显示10个文件
+			if (i > 10)
+			{
+				break;
+			}
+
+			WCHAR fileName[MAX_PATH];
+			int len = MAX_PATH;
+			if (DLBT_Downloader_GetFilePathName (hDownloader, i, fileName, &len) != S_OK)
+				continue;
+
+			std::wstring strFileName = fileName;
+			UINT64 fileSize = DLBT_Downloader_GetFileSize (hDownloader, i);
+
+			// **** 注意： 取文件进度的操作可能会造成系统资源浪费，建议仅在必要时使用 ****
+			float  filePercent = DLBT_Downloader_GetFileProgress (hDownloader, i);
+
+			// 制作种子时如果设置了bUpdateExt，会有每个文件的hash，如果不需要快速对比更新，其实不需要这个
+			char infoHash [48] = {0};
+			std::string fileHash;
+			int nLen = sizeof (infoHash) / sizeof (infoHash[0]);
+			if (DLBT_Downloader_GetFileHash (hDownloader, i, infoHash, &nLen) == S_OK)
+				fileHash = infoHash;
+		}
+
+		//连接信息
+
+		PEER_INFO * pInfo = NULL;
+		DLBT_GetDownloaderPeerInfoList (hDownloader, &pInfo);
+		if (pInfo != NULL)
+		{
+			for (int i = 0; i < pInfo->count; i++)
+			{
+				std::string ip = pInfo->entries[i].ip;
+				std::string client = pInfo->entries[i].client;
+				std::string strType;
+
+				if (pInfo->entries[i].connectionType == 1)
+					strType = "P2SP";
+				else if (pInfo->entries[i].connectionType == 2)
+					strType = "UDP直连或穿透";
+				else
+					strType = "标准协议";
+
+
+				UINT64 downBytes =pInfo->entries[i].downloadedBytes;
+				UINT downSpeed = pInfo->entries[i].downloadSpeed;
+
+				UINT64 upBytes = pInfo->entries[i].uploadedBytes;
+				UINT upSpeed = pInfo->entries[i].uploadSpeed;
+			}
+
+			DLBT_FreeDownloaderPeerInfoList (pInfo);
+		}
+}
+
+

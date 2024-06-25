@@ -1,0 +1,14 @@
+Borland C++下可以直接使用 标准Unicode接口内核（推荐）文件夹中的DLBT.dll
+
+并使用这里的DLBT.hpp文件和DLBT.lib
+
+
+该DLBT.lib也可以基于标准Unicode接口内核文件夹中的DLBT.dll直接命令行生成，方法是：
+
+将DLBT.dll放入C盘根目录（或者其他目录也可以，但后面的命令需要切换到该目录进行）
+
+在Borland C++的命令行环境下，输入：
+
+cd C:\（切换到当前目录）
+
+implib DLBT.lib DLBT.dll 即可生成。

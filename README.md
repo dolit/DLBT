@@ -1,714 +1,319 @@
-# DLBT：大并发文件快速传输省带宽解决方案
-版权说明:   如果您是个人作为非商业目的使用，可以完全自由、免费的使用点量BT内核库和演示程序以及本文档的内容，也期待收到您反馈的意见和建议。
+# **DLBT: Large Concurrency File Transfer Solution with Low Bandwidth Usage P2P Technology**
+**Copyright Notice:** For personal non-commercial use, you are free to use the BitTorrent kernel library and demo programs provided by Dolit Software, as well as the content of this document without any charge. We look forward to receiving your feedback and suggestions.
 
-如果您是作为商业使用，请联系作者申请产品的商业授权。点量BT内核库所有演示程序的代码对外公开，内核库的代码只限付费用户使用。
+For commercial use, please contact Dolit Software to apply for a commercial license. The code of all demo programs of the BitTorrent kernel library is open to the public, while the core library code is available only to paying customers.
 
-# 关于DLBT
-## 为什么开发DLBT?它有哪些功能？
-DLBT的开发目的是让用户无需关心和了解BT的具体实现细节，只需要写几十行甚至几行代码，便可以实现一个功能完善而且强大的BT应用软件，减少越来越多的应用程序需要纳入BT功能时,大量重复性开发和资金成本消耗。
-DLBT内核提供标准的BT功能支持，同时支持目前流行的各类BT扩展协议，是一个功能丰富的BT应用开发工具包。除了BT功能，DLBT还支持客户自定义协议，在基于BT架构的基础上，帮助您实现自己的P2P网络通讯协议，构建自己的P2P用户群。
-DLBT内核是目前资源占用最少、下载速度最快、速度最稳定的内核，您可以通过试用它来更多地了解DLBT内核，用它来快速实现您的P2P战略。
+## **1. About DLBT**
 
-这里先列举DLBT的一些基本功能：
+### **1.1 Why was DLBT developed? What are its features?** 
 
-**标准BT协议支持：**
-完全标准官方BT协议的支持，并支持常用的多项扩展协议，DLBT完全兼容各类BT应用软件。并且在现有的所有内核中，DLBT的兼容性是最好的，您可以使用点量示例程序下载一个流行的种子文件，速度是目前内核中最好的。这主要是由于DLBT内核完全支持DHT和Peer交换等各项扩展协议，以及对BT协议做了很多优化。
+DLBT is developed to allow users to implement a powerful BitTorrent application with just a few lines of code without having to understand the specific implementation details of BT. It aims to reduce the repetitive development and financial cost when more and more applications need to incorporate BT functionality.
 
-**极其方便的调用方式：**
-采用标准DLL方式，调用方式完全类似于系统API (CreateFile等函数），结合作者完善的开发文档和演示代码，开发一个功能完善的BT应用软件，所需时间之短超出你的想象。 
+The DLBT core provides standard BT functionality support and also supports various popular BT extension protocols. It is a feature-rich BT application development toolkit. In addition to BT functions, DLBT also supports custom protocols, helping you implement your own P2P network communication protocol based on the BT architecture and build your own P2P user base.
 
-**强大的跨平台支持：**
-DLBT内核是目前最具有可移植性的BT内核之一，目前发布有Windows、Linux、Android、IOS等主流平台的支持版本（3.7.7以后版本）。如需要Windows CE等其他平台的支持，也可以联系我们交流定制开发。
+The DLBT core is currently the kernel with the least resource usage, the fastest download speed, and the most stable speed. You can try it to understand more about the DLBT core and use it to quickly implement your P2P strategy.
 
-**极低的资源占用：**
-DLBT的内存和CPU占用您可以通过测试了解，极低的资源占用以及高效稳定的传输速度，是您选择BT的最佳选择。 DLBT的CPU、内存、硬盘等资源是目前国内资源占用最低的内核，3.4版本以后，示例程序自动设置了8M的缓存，计算内存占用时可以考虑去除8M的缓存使用。其实早在DLBT的第一个版本，就已经做到了是国内最少资源占用和速度最稳定的的内核,3.4版本的优化使得资源占用有了进一步降低，体现了在BT内核领域我们的不懈追求和专业。
+Here are some basic features of DLBT:
 
-**兼容uTorrent的UDP穿透传输：**
-DLBT3.6以后版本支持兼容uTorrent等的udp穿透传输，对无法映射的用户可以自动适应进行udp穿透传输。并且，DLBT3.6版本的udp穿透传输功能，无需任何额外服务器资源，在p2p网络中自动适应穿透，根据网络类型自动判断适应。(3.6以后版本)
+**Standard BT Protocol Support:** Full support for the official standard BT protocol, along with support for many commonly used extended protocols, DLBT is fully compatible with various BT application software. Among all existing kernels, DLBT has the best compatibility. You can use the DLBT example program to download a popular torrent file, and the speed is the best among current kernels. This is mainly due to DLBT's full support for extended protocols such as DHT and Peer Exchange, as well as many optimizations made to the BT protocol.
 
-**支持HTTP协议同时下载（P2SP）：**
-DLBT当前版本支持Http跨协议下载，一方面突破了国内很多网络环境对BT端口和协议的封锁，另一方面解决了无人供种时的下载问题。将一个Http地址作为P2P系统中的一个节点，实现了在Http服务器和P2P用户之间同时下载。 IIS的稳定性，以及一些使用了CDN的用户，可以用IIS作为上传源。
+**Extremely Convenient Calling Method:** Adopting the standard DLL method, the calling method is completely similar to system API calls (such as CreateFile and other functions). Combined with the author's comprehensive development documentation and demonstration code, developing a fully functional BT application software takes an unimaginably short amount of time.
 
-**可调节不同网络下的性能参数：**
-比如在千M局域网中，高速硬盘环境下，通过设置该参数，可以实现单对单传输达50M/s以上的速度，多人同时下载时可以达到磁盘或者网络的极限。默认设置为适合绝大多数普通网络模式的用户配置。(3.6.3以后版本)
+**Powerful Cross-platform Support:** The DLBT kernel is one of the most portable BT kernels currently available, with support versions released for mainstream platforms such as Windows, Linux, Android, and iOS (post version 3.7.7). If you need support for other platforms like Windows CE, please contact us for custom development discussions.
 
-**商业正式版中新增端游边下边玩模式：**
-首创P2P下载支持微端流式下载，玩到哪里下到哪里，流畅按需按unit下载。
+**Very Low Resource Usage:** You can test and understand the low memory and CPU usage of DLBT, along with its efficient and stable transmission speed, making it the best choice for selecting BT. DLBT's CPU, memory, and disk resources have the lowest usage in the country at present. After version 3.4, the example program automatically set an 8M cache, which can be excluded when calculating memory usage. In fact, as early as the first version of DLBT, it had achieved the lowest resource usage and the most stable speed in the country. The optimization of version 3.4 further reduced resource usage, reflecting our relentless pursuit and professionalism in the field of BT kernel.
 
-**DHT网络支持：**
-DLBT提供标准的DHT网络支持，并自动加入Bitcomet、官方Bittorent等流行客户端的DHT网络，共享整个BT网络内的用户资源，一方面解决了无Tracker状态下的文件下载，另一方面提高了下载速度。 
+**Compatible with uTorrent's UDP Hole Punching Transmission:** Versions of DLBT after 3.6 support UDP hole punching transmission compatible with uTorrent and others. For users who cannot map, it can automatically adapt to UDP hole punching transmission. Moreover, the UDP hole punching transmission function of DLBT version 3.6 does not require any additional server resources and automatically adapts to hole punching in the P2P network, adapting automatically according to the network type. (Available in versions after 3.6)
 
-**可选zip压缩传输：**
-在传输前可对文本型文件可以进行压缩，收到后自动解压，大大减少传输的数据量和节约带宽，适合文件夹中很多文本型文件的情况，比如一些游戏的资源文件。(3.6.3以后版本)
+**Support for HTTP Protocol Downloading (P2SP):** The current version of DLBT supports cross-protocol downloading via HTTP, which on the one hand, breaks through the blockage of BT ports and protocols in many domestic network environments, and on the other hand, solves the download problem when no one is seeding. By using an HTTP address as a node in the P2P system, it achieves simultaneous downloading between HTTP servers and P2P users. The stability of IIS, and some users who have used CDN, can use IIS as an upload source.
 
-**支持伪装Http协议：**
-用于突破一些特殊环境下的封锁。（目前发现的有巴西、马来西亚等一些网络封锁需要启用该功能）。该功能可以和不启用的用户自动兼容。(3.6.3以后版本)
+**Adjustable Performance Parameters for Different Networks:** For example, in a gigabit local area network and high-speed hard drive environment, by setting this parameter, it is possible to achieve a one-to-one transfer speed of over 50M/s. When multiple people download simultaneously, it can reach the limits of the disk or network. The default settings are suitable for the majority of users with ordinary network configurations. (Available in versions after 3.6.3)
 
-**支持私有Tracker协议：**
-2013年底左右，我们接到用户反馈和测试发现，部分地区运营商启用了tracker协议的封锁，标准的Tracker协议在很多地区获取不到邻居节点，也就无法拥有下载速度。因此，我们新版加入了私有协议Tracker功能，但需要Tracker服务器支持，目前配合我们自主研发的DLBT高性能Tracker服务器可以解决这一问题，强烈建议老客户升级这一功能。(3.7.5以后版本)
+**New End Game Play-As-You-Download Mode in the Commercial Official Version:** The first to support micro-end streaming download for P2P downloads, play where you download, smoothly downloading on-demand by unit.
 
-**智能磁盘分配：**
-支持全面预分配模式，此模式下可以文件下载前预先分配磁盘空间，减少磁盘碎片的产生；同时也支持边下载边分配的方式，用户可以根据需要自己选择。 在NTFS格式的磁盘系统，还支持SPARSE稀缺分配方式。
+**DHT Network Support:** DLBT provides standard DHT network support and automatically joins the DHT networks of popular clients such as Bitcomet and official BitTorrent, sharing user resources within the entire BT network. This solves the problem of file downloading in the absence of a Tracker on one hand, and improves download speed on the other.
 
-**支持HTTP和UDP**
- Tracker协议，支持多Tracker协议，支持等效Tracker报告。 
+**Optional ZIP Compression Transfer:** Before transmission, text-based files can be compressed, and they will be automatically decompressed upon receipt, significantly reducing the amount of data transferred and saving bandwidth. This is suitable for situations where there are many text-based files in a folder, such as resource files for some games. (Available in versions after 3.6.3)
 
-**高效的UPnP穿透：**
-无需XP SP2的支持，实现各版本系统下的内网免配置。
+**Support for Disguised HTTP Protocol:** Used to break through blocks in some special environments. (It has been found that this feature needs to be enabled for network blocks in Brazil, Malaysia, and some other places). This feature is automatically compatible with users who do not enable it. (Available in versions after 3.6.3)
 
-**支持PMP方式的内网穿透：**
-新型的PMP穿透作为UPnP的补充，进一步提升内网穿透的效率 。
+**Support for Private Tracker Protocol:** Around the end of 2013, we received user feedback and test results showing that some operators in certain areas have blocked the Tracker protocol. The standard Tracker protocol could not obtain neighbor nodes in many areas, and thus could not have download speeds. Therefore, our new version has added a private protocol Tracker feature, which requires support from the Tracker server. Currently, it can solve this problem in conjunction with our self-developed DLBT high-performance Tracker server, and we strongly recommend that old customers upgrade this feature. (Available in versions after 3.7.5)
 
-**支持内网自动发现：**
-在同一个局域网内有两个以上用户下载时，系统会进行自动寻找，尽量利用上局域网内部带宽，速度得到迅速提升。
+**Intelligent Disk Allocation:** Supports a full pre-allocation mode, where disk space can be pre-allocated before file download to reduce the generation of disk fragments; it also supports the method of allocating while downloading, and users can choose according to their needs. On the NTFS formatted disk system, it also supports the SPARSE sparse allocation method.
 
-**支持兼容Bitcomet的padding_file技术：**
-制作种子时可以选择是否对齐文件，如果对齐文件后，一个分块不会横跨2个大的文件，文件末尾不足一整块的，由小文件或者padding_file对齐。这种机制非常适合文件更新的应用，保证了一个种子文件中，一个文件的某些变化，不会影响到其它文件也需要更新。 而传统的BT技术如果做大型文件夹的更新，由于没有padding_file间隔开文件，一个分块可能横跨了两个文件，第一个文件如果长度发生了变化，该文件后面的所有数据的分块hash均会变化，这样，该文件后面的所有文件都可能需要重新下载。 所以，DLBT的padding_file技术大大减少了文件更新量。(3.6以后版本)
+**Support for HTTP and UDP Tracker Protocol, Support for Multiple Tracker Protocols, Support for Equivalent Tracker Reporting.**
 
-**实现了专业的文件更新功能：**
+**Efficient UPnP Penetration:** No need for support from XP SP2, achieving no configuration required for internal networks under various system versions.
 
-1）提供Update接口，DLBT的专业更新功能无需对老文件进行任何扫描校验，直接对比新老种子文件的差异，几毫秒内快速启动更新变化过的数据块。传统的BT软件在有新种子文件替换老种子时，需要先扫描原始文件才能获知需要去下载哪些数据块，如果一个几G的文件夹，扫描一次需要很久，并且扫描期间机器磁盘占用严重。所以DLBT提供的这个接口，在有大量文件需要频繁更新时极其有效。（3.5以后版本）。
+**Support for PMP Method Internal Network Penetration:** The new PMP penetration serves as a supplement to UPnP, further improving the efficiency of internal network penetration.
 
-2）使用最少量局部更新算法，比如一个1G大的文件，只有几十k的数据块发生了改变，那么内核可以自动检索出有效数据，这在大文件的更新中极为重要。
+**Support for Automatic Internal Network Discovery:** When there are two or more users downloading within the same local area network, the system will automatically search to make full use of the internal bandwidth of the local area network, and the speed is rapidly increased.
 
-3）3.6版本以后，基于padding_file技术，改进专业更新接口，使得一个文件的变化，不会影响到其它文件，进一步减少需要更新的数据量。(3.6以后版本)
+**Support for Bitcomet's Padding File Technology:** When making a seed, you can choose whether to align the file. If the file is aligned, a block will not span two large files. If the end of the file is not enough for a whole block, it is aligned by a small file or a padding file. This mechanism is very suitable for file update applications, ensuring that some changes in a file in a seed file will not affect the need to update other files. Traditional BT technology, when updating a large folder, does not have a padding file to separate the files, and a block may span two files. If the length of the first file changes, the hash of all the data blocks behind the file will change, and all the files behind the file may need to be re-downloaded. Therefore, DLBT's padding file technology greatly reduces the amount of file updates. (Available in versions after 3.6)
 
-4）支持临时目录接口，更新文件时，可以将所需下载的分块下载到一个临时目录，下载完成后一次性替换，这样下载过程中原始文件可以正常使用。该功能可以提供调用示例。（3.6.3以后版本）
+**Implementation of Professional File Update Function:**
 
-**数据块级别下载优先级指定：**
-优化数据块下载优先级算法，支持数据块级别的下载优先级设定，使得高优先级的数据块最快下载，更好地支持了音视频点播直播等P2P应用；提升点播直播数据时拖动的响应速度。
+1. Provide Update interface, DLBT's professional update function does not need to scan and verify the old files, directly compare the differences between the new and old seed files, and quickly start updating the changed data blocks within a few milliseconds. Traditional BT software, when replacing the old seed with a new seed file, needs to first scan the original files to know which data blocks need to be downloaded. If it is a folder of several G, scanning once takes a long time, and the disk occupancy of the machine is serious during the scanning period. So the interface provided by DLBT is extremely effective when there are a large number of files that need to be updated frequently. (Available in versions after 3.5).
+2. Use the minimum local update algorithm, for example, a 1G large file, only a few tens of K data blocks have changed, then the core can automatically retrieve the effective data, which is extremely important in the update of large files.
+3. After version 3.6, based on the padding file technology, the professional update interface is improved, making the changes in one file not affect other files, further reducing the amount of data that needs to be updated. (Available in versions after 3.6)
+4. Support for a temporary directory interface, when updating files, the required downloaded blocks can be downloaded to a temporary directory, and replaced all at once after the download is completed, so that the original files can be normally used during the download process. This feature can provide a call example. (Available in versions after 3.6.3)
 
-**自动防火墙穿透技术：**
-全自动穿透XP、Vista网络连接防火墙(ICF)和网络连接共享(ICS)。 
-**支持XP SP2的TCP/IP连接数限制的破解修改**，保证P2P的良好效果。 
+**Data Block Level Download Priority Specification:** Optimize the data block download priority algorithm, support for data block level download priority settings, making high-priority data blocks download the fastest, better supporting P2P applications such as audio and video on-demand live broadcast; improve the response speed when dragging data during on-demand live broadcast.
 
-**智能文件续传：**
-记录上次文件的各种信息，下次启动时无需扫描，立即启动下载。并且保存了上次的Peer信息，提高启动下载的速度。 
+**Automatic Firewall Penetration Technology:** Automatically penetrate the network connection firewall (ICF) and network connection sharing (ICS) of XP, Vista.
 
-**完善丰富的接口支持：**
-提供丰富的控制和获取信息的接口，满足应用程序绝大部分的功能需求。比如，不仅可以限制全局上传下载速度和连接数，也可以对每个任务单独设置等。可获取当前所有连接的详情、整体情况、单个任务情况、每个文件的信息、健康率、分享率等。 
+**Support for Cracking and Modifying the TCP/IP Connection Limit of XP SP2**, ensuring the good effect of P2P.
 
-**提供专业上传服务器模式：**
-DLBT配套有专业上传服务器内核，该内核专注于上传性能的提升，优化大量文件上传时的传输效率和IO性能，适合提供大量文件给客户下载时使用（比如视频网站、游戏程序的分发时，由专门的服务器使用上传服务器模式支撑大量用户的下载）。 
+**Intelligent File Resumption:** Record the various information of the last file, and start downloading immediately without scanning the next time it starts. And save the last Peer information to improve the speed of starting the download.
 
-**私有种子加密：**
-通过私有种子加密，可以构建自己的私有BT网络，防止其它客户端使用你公司的种子文件。并且对于较大的torrent文件还可以选择zip压缩，减少torrent文件的大小。 
+**Comprehensive and Rich Interface Support:** Provide a wealth of control and information acquisition interfaces to meet the vast majority of functional requirements of the application. For example, you can not only limit the global upload and download speeds and connection numbers, but also set each task separately, etc. You can obtain the details of all current connections, the overall situation, the situation of a single task, the information of each file, health rate, sharing rate, etc.
 
-**私有协议支持：**
-支持设置自定义协议，构建自己的私有P2P网络（可防止其它BT软件下载您的文件），并突破各网络环境对BT应用的封锁。私有模式下去除了BT的痕迹，可以穿透运营商对BT协议的封锁。
+**Provide Professional Upload Server Mode:** DLBT is equipped with a professional upload server kernel, which focuses on improving upload performance, optimizing the transmission efficiency and IO performance when uploading a large number of files, suitable for providing a large number of files for customers to download (for example, when video websites, game programs are distributed, a special server is used to support the download of a large number of users using the upload server mode).
 
-**协议加密和数据加密支持：**
-DLBT 3.0以后的版本支持对协议进行加密，或者对数据进行加密，在不兼容Bitcomet等BT客户端的同时，突破运营商对BT软件的封锁。同时，数据加密还可用于传输保密数据。 
+**Private Seed Encryption:** Through private seed encryption, you can build your own private BT network to prevent other clients from using your company's seed files. And for larger torrent files, you can also choose ZIP compression to reduce the size of the torrent file.
 
-**支持常见的各类代理：**
-支持用户设置Http、Http1.1、Socks4、Socks5、需要密码的Socks5等代理。 
+**Private Protocol Support:** Support for setting custom protocols, building your own private P2P network (can prevent other BT software from downloading your files), and breaking through the blockade of BT applications in various network environments. In private mode, the traces of BT are removed, and the blockade of BT protocol by operators can be penetrated.
 
-**高兼容性的种子制作功能：**
-支持UTF-8扩展和多语言，支持嵌入发布者等信息到种子文件。 
-**支持所有字符的种子文件、支持UTF-8和非UTF-8的标准和非标准种子文件：**
-DLBT已经在几十种字符文件中进行了测试，可以完美支持日韩等东方字符，以及各类特殊字符的文件；同时完美兼容UTF-8和非UTF-8的种子文件。 
+**Protocol Encryption and Data Encryption Support:** DLBT versions after 3.0 support encrypting the protocol or encrypting the data. While being incompatible with Bitcomet and other BT clients, it breaks through the blockade of BT software by operators. At the same time, data encryption can also be used for the transmission of confidential data.
 
-**支持种子市场、Peer信息交换等扩展协议**。
+**Support for Common Various Proxies:** Support for users to set Http, Http1.1, Socks4, Socks5, Socks5 with password, and other proxies.
 
-**优秀的磁盘缓存效率：**
-DLBT内核3.6版本改进的磁盘缓存机制，自动适应多种磁盘缓存算法，提高磁盘缓存命中率，从而提升下载和上传速度，较好地提升内核整体性能。
+**High Compatibility Seed Production Function:** Support for UTF-8 extension and multi-language, support for embedding publisher and other information into the seed file. **Support for Seed Files of All Characters, Support for Standard and Non-standard Seed Files of UTF-8 and Non-UTF-8:** DLBT has been tested in dozens of character files and can perfectly support East Asian characters such as Japanese and Korean, as well as various special character files; at the same time, it perfectly compatible with standard and non-standard seed files of UTF-8 and non-UTF-8.
 
-**支持IPV6：**
-同时兼容IPV4和IPV6扩展，可以自动适应。
+**Support for Seed Market, Peer Information Exchange and Other Extension Protocols.**
 
-**支持无种子模式下载（magnet磁链）：**
+**Excellent Disk Cache Efficiency:** DLBT core version 3.6 improved disk cache mechanism, automatically adapt to a variety of disk cache algorit.
 
-可以高效的支持  “DLBT://4DFFG5667F44DD346A0C944225432452(种子文件的Hash值)/天龙八部(名称）”  这种地址直接从网址上自动下载，而不再需要种子文件，种子文件将通过P2P网络传输，减轻服务器提供种子文件的压力 --- 我们同时可提供这类网站和客户端的架设、设计方案。
+**Support for IPV6:**
+It is compatible with both IPV4 and IPV6 extensions and can adapt automatically.
 
-**提供源代码：**
-BT源代码可以在支付一定费用后对用户提供，解除您的后顾之忧，可以完全控制您的BT控件。
+**Support for Seedless Download Mode (Magnet Links):**
 
-**完善的多种语言示例代码：**
-DLBT开发包目前提供VC （C++/MFC）版本、Delphi版本、C#版本、VB版本、Java、Borland C++、VB.NET等示例程序源代码，易语言等其它语言的示例程序也可以联系点量软件申请获得，尽可能减少客户的开发量。
-## 适用场景
-如果您需要开发BT或者P2P的下载功能，那么可以考虑使用DLBT，您可以在DLBT的基础上开发，希望能对您有所帮助，节省您的开发成本。
+It can efficiently support direct downloads from URLs like "DLBT://4DFFG5667F44DD346A0C944225432452 (the Hash value of the seed file)/Demi-Gods and Semi-Devils (Name)" without the need for a seed file. The seed file will be transmitted through the P2P network, reducing the pressure on the server to provide seed files --- We can also provide construction and design solutions for such websites and clients.
 
-如果您需要提供较大数据量的软件、视频等文件供其它人在互联网进行下载，而且您希望节省带宽和服务器成本，并获取更快的速度，那么可以考虑使用DLBT，使用DLBT开发工具包很快就可以实现您想要的上传服务。
+**Source Code Provided:**
+The BT source code can be made available to users after paying a certain fee, relieving your concerns and allowing you to fully control your BT control component.
 
-DLBT可以被应用于视频网站、软件站点、网络游戏的下载和更新、教育视频和文档的下载、视频点播VOD系统等领域。
-## DLBT专业上传服务器
-DLBT已经于2009年1月3日，正式发布了专业上传服务器内核。该服务器专注于提供上传，适用于视频和游戏等运营商，可以采用该版本提供上万文件的上传，该版本具有如下特点：
+**Comprehensive Example Code in Multiple Languages:**
+The DLBT development package currently provides example program source code for VC (C++/MFC), Delphi, C#, VB, Java, Borland C++, VB.NET, and other languages. Example programs in other languages such as Easy Language can also be requested from Dolit Software to minimize the development effort for clients.
 
-**大并发量支持：**
-可以支持数万用户的同时下载，由于采用了高效的服务器编程模式，因此该服务器可以支持大量用户的同时下载。
-支持特大文件和特大文件量的上传：
-DLBT专业上传服务器，可以支持单个种子几十G的上传，支持单个种子几十万文件的上传。对任务的大小和文件数没有限制。
+### **1.2 Applicable Scenarios:**
 
-**独创的休眠模式：**
-如果你有1000个任务启动了上传，但可能此时只有20个任务有人下载，这时，剩余的980个任务是休眠的，只是定期报告Tracker，但任何资源都不占用，此时可以使得资源最少占用，比如在200个任务（每个平均2G的游戏任务）时，如果只有几个任务下载只需要30M左右的内存，一旦有用户下载，系统则自动开启任务，实现全自动化处理，一旦任务一段时间无人下载，则自动转入休眠，释放所有资源占用。
+If you are in need of developing functionalities for BT or P2P downloads, DLBT is an ideal choice to consider. You can build upon the foundation that DLBT provides, which we hope will be of assistance and help reduce your development costs.
 
-**极低的资源占用：**
-一方面由于采用休眠模式，不上传的任务不占用资源；另一方面，点量专业上传服务器大量采用内存池、线程池等高性能服务器设计模式，实现了资源的重复利用，在几千个大任务的上传时，很好地体现了资源占用极低的优势。
-长时间运行保障：点量专业上传服务器内核，已经被多家游戏更新运营商使用，经过了成熟的测试，可实现长时间无障碍运行。
+Should you require offering large volumes of data, such as software, videos, and other files, for others to download over the Internet, and you wish to save on bandwidth and server costs while achieving faster speeds, DLBT is worth considering. By utilizing the DLBT development toolkit, you can swiftly implement the upload services you desire.
 
-**节省您的服务器资源：**
-根据客户的反馈，原来有些客户使用北京某家公司的内核，一方面是长期上传大量文件不稳定，经常崩溃；另一方面，由于内核不是为上传而设计，几乎只能同时上传300个左右的大型游戏文件，客户如果要上传全部自己的内容，需要很多台服务器资源；后来客户更换了点量专业上传服务器内核，一台服务器可以支持1000个大型游戏文件的上传 + 3000多个中小型软件的上传，节省了至少3倍以上的服务器硬件资源。并且下载速度比以前高出了60%以上。这一点，我们可以做出承诺，DLBT专业上传服务器的性能肯定高于目前国内的任何一家BT软件。
+DLBT is suitable for a variety of applications including video websites, software distribution sites, game downloads and updates, educational video and document downloads, video-on-demand (VOD) systems, and more.
 
-**单服务器可支撑几十万文件、数十T的大小、数万用户的下载。**
+### 1.3 DLBT Professional Upload Server
 
-另外，DLBT还拥有自己的Tracker服务器，结合专业上传服务器，提供更为专业和高效的BT上传服务器系统。
-如果您需要一个服务器，提供上万文件的上传，那么DLBT专业上传服务器是您的最佳选择。
+DLBT officially released the professional upload server kernel on January 3, 2009. This server is dedicated to providing uploads and is suitable for operators such as video and game providers. It can handle uploads of tens of thousands of files using this version, which has the following features:
 
-DLBT专业上传服务器版本的信息，请及时关注点量官方网站，关于点量专业上传服务器版本：http://blog.dolit.cn/dlbtserver-introduction-html  
-## DLBT内核和DLBT专业上传服务器内核有什么区别？
-**DLBT专业上传服务器内核**主要用于几百、几千、上万文件的供种上传，是**专门用于提供BT文件上传的服务器程序**。可以单服务器支持**几十万用户**的并发下载，并支持**几十G的超大文件的上传**，和**大数量文件的上传**。
+**High Concurrency Support:** Capable of supporting tens of thousands of users downloading simultaneously. Thanks to the efficient server programming model adopted, this server can support a large number of users downloading at the same time.
 
-**独创了休眠模式，上传休眠模式是指的：**
-如果你有1000个任务启动了上传，但可能此时只有20个任务有人下载，这时，剩余的980个任务是休眠的，只是定期报告Tracker，但任何资源都不占用，此时可以使得资源最少占用，比如在200个任务（每个平均2G的游戏任务）时，如果只有几个任务有人下载，只需要30M左右的内存，一旦有用户下载，系统则自动开启任务，实现全自动化处理，一旦任务一段时间无人下载，则自动转入休眠，释放所有资源占用。
+**Support for Extremely Large Files and Volumes of Uploads:** The DLBT professional upload server can support uploads of individual seeds of dozens of GBs and uploads of hundreds of thousands of files per seed. There are no restrictions on the size of tasks or the number of files.
 
-而**DLBT内核版本**，则是**标准的BT内核**，提供标准的BT功能支持，同时支持目前流行的各类BT扩展协议，是一个**功能丰富的BT应用开发工具包**，提供更多的功能，它也可以提供大量文件的上传，并且在支持大量文件上不逊于任何一款BT软件。
+**Innovative Sleep Mode:** If you have 1000 tasks initiated for upload, but perhaps only 20 tasks are being downloaded at the moment, then the remaining 980 tasks are in sleep mode. They only report to the Tracker periodically but do not consume any resources. This can result in minimal resource usage. For example, when there are 200 tasks (each an average game task of 2GB), if only a few tasks are being downloaded, it requires only about 30MB of memory. Once a user starts downloading, the system automatically activates the task, achieving fully automated processing. If a task goes undownloaded for a period, it automatically enters sleep mode, releasing all resource occupation.
 
-比如有些客户使用它在每天上传几千个游戏，每个游戏都是几个G的大小，每个游戏中有上万个文件，这种情况下DLBT内核仍然可以稳定上传。但是，我们是致力于最佳效果，最佳性能的团队，我们没有满足现在的这个现状，而是如何更好、更有效，于是就有了专致力于上传的DLBT专业上传服务器内核。
-**一般的应用，使用DLBT内核就足够**了，因为它完全也能胜任上千文件的上传，在支持上传和大量文件上绝不逊于任何一款BT软件。在您需要更高要求的服务器上，可以使用DLBT专业上传服务器版本提供文件的供种和上传。
+**Very Low Resource Consumption:** On the one hand, due to the sleep mode, tasks that are not being uploaded do not consume resources. On the other hand, the DLBT professional upload server extensively uses high-performance server design patterns such as memory pools and thread pools, achieving repeated use of resources. When uploading thousands of large tasks, it well demonstrates the advantage of very low resource consumption.
 
-## 支持的语言和开发环境
-DLBT提供标准的动态链接库/静态库文件（DLL/SO/Lib），可供C/C++、Delphi、C#、Java、VB、易语言、VB.NET等语言调用，让您完全像调用系统API一样的使用DLBT开发工具包（SDK）。
+**Long-term Operation Assurance:** The DLBT professional upload server kernel has been used by many game update operators and has undergone mature testing, capable of running without faults for 365×24 hours, proving to be stable and reliable.
 
-DLBT内核和MFC版本示例程序的开发环境是Visual Studio .Net 2005 （也可以采用2003版本），如果您需要编译和阅读DLBT SDK中的MFC版本的示例程序，建议您安装 Visual Studio .Net 2005以上开发环境。
+**Save Your Server Resources:** Based on customer feedback, some customers previously used a kernel from a company in Beijing, which was unstable for long-term uploading of a large number of files and often crashed. On the other hand, since the kernel was not designed for uploading, it could only upload about 300 large game files at a time. If customers wanted to upload all their content, many server resources were needed. After switching to the DLBT professional upload server kernel, one server could support the upload of 1000 large game files + more than 3000 small and medium-sized software files, saving at least three times the server hardware resources. Moreover, the download speed has increased by more than 60% compared to before. We can promise that the performance of the DLBT professional upload server is definitely higher than that of any other BT software in the country currently.
 
-DLBT开发工具包中提供了分别基于MFC、Delphi、C#、VB、VB.NET、JAVA等版本的示例程序，你完全可以参考来调用DLBT内核。Delphi版本感谢网友ZZL、萧峰等提供，可供Delphi中使用进行参考；具体调用的规则和功能方面，以VC版的示例程序代码为准。
+**A Single Server Can Support Hundreds of Thousands of Files, Dozens of T in Size, and Downloads for Tens of Thousands of Users.**
 
-# DLBT接口整体介绍
-# 接口的模块结构
-DLBT对外提供的接口，可以划分为如下几个部分：
-**Kernel整体环境相关：**
-Kernel整体环境承担着整个DLBT整体的管理功能，负责监听一个TCP端口和一个UDP端口（UDP端口可选，用于DHT通讯，如果不启动DHT则不需要监听UDP端口）。它管理着内核中所有的下载任务和整个内核。
+Additionally, DLBT also has its own Tracker server, which, combined with the professional upload server, provides a more professional and efficient BT upload server system.
 
-**下载任务的相关接口：**
-每个Torrent种子文件的下载对应一个下载任务对象Downloader，该部分提供对某个单一下载任务的控制（启动、暂停、限速等）和信息的读取接口。
+If you need a server to provide uploads for tens of thousands of files, then the DLBT professional upload server is your best choice.
 
-**制作种子的相关接口：**
-用于种子文件的制。该部分不仅符合标准BT协议规范，并且支持国内比较流行的BT客户端软件Bitcomet的一些扩展做法（嵌入发布者信息、默认使用公共DHT网络节点等）。一个Torrent文件中可以包含多个要下载文件的描述。
+Please follow the official Dianliang website for information on the DLBT professional upload server version, about the DLBT professional upload server version: http://blog.dolit.cn/dlbtserver-introduction-html
 
-**获取种子信息的接口：**可以在不启动任务下载的情况下，打开指定的种子文件，获取种子文件内的相关信息。
+**1.4 Supported Languages and Development Environments** DLBT provides standard dynamic link library/static library files for languages such as C/C++, Delphi, C#, Java, VB, Easy Language, VB.NET, etc., allowing you to use the DLBT development toolkit (SDK) just like calling system APIs.
 
-P**2P辅助功能接口：**这部分提供P2P软件都需要的一些接口，包括UPnP穿透、穿透ICF防火墙、突破操作系统并发连接数限制等。不仅可以应用于DLBT，也可以应用于其它任何需要的程序，独立于内核，不需要内核的启动。
+**2. Overall Introduction to DLBT Interface** DLBT, as a middleware product, was initially designed to allow developers who need BT technology to integrate it quickly without having to develop it from scratch. The interface is as simple as possible to facilitate easier understanding and use of DLBT's interface.
 
-**批量获取信息接口：**该部分是为了方便一次性取出大量信息时调用，可以通过调用少量接口函数返回一个信息的结构体或者结构体数组，包含常用的大量信息。
+**2.1 Interface Module Structure** The interfaces provided by DLBT can be divided into several parts: Kernel overall environment related, download task related interfaces, seed production related interfaces, seed information acquisition interfaces, and P2P auxiliary function interfaces.
 
-## 2.2常见的调用流程
+**2.2 Common Calling Process** The document outlines the steps for initializing the BT application, starting a download task, monitoring the download process, and ending the task and kernel before the program exits.
 
-1）首先，在程序启动的时候，根据实际需要，选择调用突破系统防火墙的接口将当前的应用程序以及相关进程加入防火墙的例外；调用接口检查操作系统的并发连接数限制，判断是否需要进行连接数的修改；调用UPnP穿透接口，将相关应用程序所有需要监听的端口，添加到UPnP设备中去――DLBT内核内部使用的TCP和UDP端口无需外部程序调用添加，内部会自动添加。
+**3. Interface Functions** The document provides examples of some of the interface functions available in DLBT, such as getting the listening port, setting upload/download speed limits, and setting maximum upload connections and total connections.
 
-2）程序启动后，根据用户的界面操作，启动一个Torrent文件的下载。一般需要用户选择一个Torrent文件和下载的保存路径。启动Torrent文件时，只需要调用下载任务的启动接口即可，下载任务会自动启动下载，并立即返回该任务的句柄。
+**4. Frequently Asked Questions (FAQ)** The document answers common questions about the advantages of DLBT, comparison with other BT software, resource usage, professional upload server kernel, and the convenience of using DLBT.
 
-3）下载过程中应用程序可以随时调用下载任务的接口获取下当前下载的速度和进度、连接情况、Torrent中每个文件的进度等各种信息，可以随时调用下载任务的接口设置下载限速等。
+### 1.4 Supported Languages and Development Environments
 
-4）下载任务启动成功后，内核不会自动停止该任务，需要应用程序主动调用停止和删除。一般地当检查到下载任务的进度到了100％或者状态是供种状态时，程序可以选择停止任务或者设置一个上传限速，继续上传。
+DLBT offers standard dynamic link library/static library files (DLL/SO/Lib) that can be invoked by languages such as C/C++, Delphi, C#, Java, VB, Easy Language, VB.NET, etc., allowing you to use the DLBT Development Toolkit (SDK) just as you would use system APIs.
 
-5）程序结束前，需要调用下载任务的接口，将每个Torrent任务停止，然后调用内核的关闭接口，释放内核的所有资源。
+The development environment for the DLBT kernel and the MFC version sample programs is Visual Studio .Net 2005 (the 2003 version can also be used). If you need to compile and read the MFC version sample programs in the DLBT SDK, it is recommended that you install the Visual Studio .Net 2005 or higher development environment.
 
-**注意：**
-建议对BT相关操作尽量控制在一个线程内进行，除非特殊情况，尽量不要跨线程，这样便于避免系统内部需要等待不同线程锁，提高系统运行速度。这个可以参考演示程序源码中的实现。
+The DLBT Development Toolkit provides sample programs based on MFC, Delphi, C#, VB, VB.NET, JAVA, and other versions, which you can refer to for calling the DLBT kernel. The Delphi version, for which thanks go to netizens ZZL, Xiao Feng, and others, is provided for reference in Delphi; the specific calling rules and functionalities are subject to the example program code of the VC version.
 
-# 接口函数
-## 接口整体说明
-**DLBT_API和WINAPI**
-**功能：**设置DLL库导出方式，对用户使用DLBT没有影响，可以忽略。
-~~~ #define DLBT_API extern "C"  __declspec(dllimport)
+# 2. Overall Introduction to DLBT Interface
+
+DLBT, as a middleware product, was developed to facilitate the rapid integration of BT technology for developers, eliminating the need to start from scratch. This approach is designed to make it easier for those who require this technology but may not be familiar with it, to better utilize the convenience brought by technological advancements. Therefore, the interface has been kept as simple as possible. For your convenience in understanding the calling of DLBT interfaces, here is a comprehensive introduction.
+
+## 2.1 Interface Module Structure
+
+The interfaces provided by DLBT can be divided into the following parts:
+
+**Kernel Environment Related:**
+The Kernel environment is responsible for the overall management of the entire DLBT, monitoring a TCP port and an optional UDP port (used for DHT communication; if DHT is not enabled, there is no need to monitor the UDP port). It manages all download tasks within the kernel and the kernel itself.
+
+**Download Task Related Interfaces:**
+Each Torrent seed file download corresponds to a download task object, Downloader. This part provides control (start, pause, rate limiting, etc.) and information reading interfaces for a single download task.
+
+**Seed Production Related Interfaces:**
+Used for the creation of seed files. This part complies not only with the standard BT protocol specifications but also supports some extended practices of popular BT client software like Bitcomet in China (embedding publisher information, default use of public DHT network nodes, etc.). A Torrent file can contain descriptions of multiple files to be downloaded.
+
+**Seed Information Acquisition Interfaces:**
+Allows you to open a specified seed file and obtain relevant information within the seed file without starting the task download.
+
+**P2P Auxiliary Function Interfaces:**
+This part provides some interfaces needed by P2P software, including UPnP penetration, penetration of ICF firewalls, and overcoming the operating system's concurrent connection limit. It can be applied to any program that requires it, independent of the kernel and without the need to start the kernel.
+
+**Batch Information Acquisition Interfaces:**
+This part is designed to facilitate the retrieval of a large amount of information at once. A few interface functions can return a structure or an array of structures containing commonly used information.
+
+## 2.2 Common Calling Process
+
+1) First, at program startup, according to actual needs, choose to call the interface that breaks through the system firewall to add the current application and related processes to the firewall's exceptions; call the interface to check the operating system's concurrent connection limit and determine whether a change is needed; call the UPnP penetration interface to add all ports that the application needs to monitor to the UPnP device — the TCP and UDP ports used internally by the DLBT kernel are automatically added internally and do not require external program calls to add.
+
+2) After the program starts, based on user interface operations, initiate the download of a Torrent file. Users typically need to select a Torrent file and the download save path. When starting the Torrent file, simply call the download task's start interface, and the download task will automatically start downloading and immediately return the handle of the task.
+
+3) During the download process, the application can call the download task's interface at any time to obtain current download speed and progress, connection status, progress of each file in the Torrent, and various other information. It can also set download rate limits as needed.
+
+4) After the download task is successfully started, the kernel will not automatically stop the task, and the application needs to actively call stop and delete. Generally, when the download task's progress reaches 100% or the status is seeding, the program can choose to stop the task or set an upload rate limit to continue uploading.
+
+5) Before the program ends, it is necessary to call the download task's interface to stop each Torrent task, and then call the kernel's shutdown interface to release all kernel resources.
+
+**Note:**
+It is recommended to try to control BT-related operations within a single thread. Unless special circumstances, try not to cross threads to avoid the system needing to wait for different thread locks, which improves system speed. This can be seen in the implementation of the demonstration program's source code.
+
+#  3. Interface Functions
+
+**Note:** Due to the large number of interface functions, only a few are selected as examples here. For details, please refer to the `api` folder.
+
+**DLBT_API and WINAPI** 
+
+**Function:** Sets the export method for the DLL library. It has no impact on the user's utilization of DLBT and can be disregarded.
+
+~~~ c++
 #define WINAPI   __stdcall
 ~~~
 
-**说明：**
-用户使用接口函数时，不需要理会这两个宏，比如调用DLBT_Startup函数时，可以完全想象它的声明是：BOOL DLBT_Startup。
-## Kernel整体环境接口
-***DLBT_Startup***
-
-**功能：**启动DLBT内核，初始化BT的运行环境,返回值表示是否成功
-~~~// 内核启动时的基本参数（是否启动DHT以及启动端口等）
-struct DLBT_KERNEL_START_PARAM
-{
-    BOOL bStartLocalDiscovery;		// 是否启动局域网内的自动发现（不通过DHT、Tracker，只要在一个局域网也能立即发现，局域网速度快，可以加速优先发现同一个局域网的人）
-
-    BOOL bStartUPnP;				// 是否自动UPnP映射DLBT内核所需的端口
-
-    BOOL bStartDHT;				// 是否启动DHT，如果默认不启动，可以后面调用接口来启动
-
-BOOL bLanUser;                  // 是否纯局域网用户（不希望用户进行外网连接和外网通讯，纯局域网下载模式---不占用外网带宽，只通过内网的用户间下载），适用于内网下载。
-
-    BOOL bVODMode;                  // 设置内核的下载模式是否严格的VOD模式，严格的VOD模式下载时，一个文件的分块是严格按比较顺序的方式下载，从前向后下载；或者从中间某处拖动的位置向后下载
- 该模式比较适合边下载边播放,针对这个模式做了很多优化。但由于不是随机下载，所以不大适合纯下载的方案，只建议在边下载边播放时使用。默认是普通模式下载。仅VOD以上版本中有效
-
-    USHORT  startPort;	            // 内核监听的端口，如果startPort和endPort均为或者startPort > endPort || endPort > 32765 这种参数非法，则内核随机监听一个端口。如果startPort和endPort合法
-
-    USHORT  endPort;				// 内核则自动从startPort ---- endPort之间监听一个可用的端口。这个端口可以从DLBT_GetListenPort获得
-    
-    // 以下是内核内部的默认设置（默认使用随机端口，并启动DHT等）
-    DLBT_KERNEL_START_PARAM ()
-    {
-        bStartLocalDiscovery = bStartUPnP = bStartDHT = TRUE;
-        bLanUser = FALSE;
-bVODMode = FALSE;
-        startPort = 0;
-        endPort = 0;
-    }
-};
-//=======================================================================================
-//  内核的启动函数，商业授权版才有私有协议功能，演示版只能用标准BT方式
-//=======================================================================================
-DLBT_API BOOL WINAPI DLBT_Startup (
-    DLBT_KERNEL_START_PARAM * param = NULL, // 内核启动设置，参考DLBT_KERNEL_START_PARAM，如果为NULL，则使用内部默认设置
-    LPCSTR  privateProtocolIDs = NULL,  // 可以自定义私有协议，突破运营商限制。如果为NULL，则作为标准的BT客户端启动， DLBT的私有协议在.4版本中进行了全新改进，可以穿透大部分运营商对协议的封锁
-    bool    seedServerMode = false,     // 是否上传模式，上传模式内部有些参数进行了优化，适合大并发上传，但不建议普通客户端启用，只建议上传服务器使用,专业上传服务器模式仅在商业版中有效，演示版暂不支持该功能。
-    LPCSTR  productNum = NULL           // 商业版用户的数字ID，在购买后作者会提供一个产品密钥，激活商业版功能，试用版用户请使用NULL。   
-    );
-~~~
-
-  
-**参数：**
-
-**param：**内核启动设置的参数指针，参考DLBT_KERNEL_START_PARAM结构体中各项注释的含义。如果传入NULL，则使用内置的默认参数（启动DHT、UPnP以及内网自动发现，并使用随机端口），随机端口可以在监听成功后通过 DLBT_GetListenPort 来获得。如果使用固定端口，则可以将param里面的startPort和endPort设置完全相同，比如都是9010，内部则会使用9010作为启动端口，一旦9010被其他程序使用，则会返回失败。
-**privateProtocolIDs：**自定义的私有协议串，可以突破运营商对标准BT协议的限制，或者用于构建自己专属的保密数据传输。如果为NULL（默认），则作为标准的BT客户端启动。DLBT的私有协议在3.3版本中进行了全新改进，私有模式下去除了BT的痕迹，可以穿透运营商对协议的封锁。建议字符串的长度为6到16个字符，比如“DLBT Protocol”
-如果使用标准协议，则是完全兼容uTorrent、Bitcomet、迅雷等BT软件的；如果使用私有协议，则是完全私有化的网络，下载的用户只能是相同私有协议串的DLBT内核，好处是可以穿透任意的协议封锁。当然，标准协议下，如果使用了BT扩展协议中的加密传输（详见DLBT_SetEncryptSetting的说明）方式，也可以穿透大部分运营商的封锁，同时可以和uTorrent、Bitcomet、比特精灵等兼容。
-
-**seedServerMode：**是否以上传为主，适合上传要求大于下载要求时使用。--- DLBT内核3.1版本以后，已经正式推出了独立的专业上传服务器，因此如果需要几万文件的使用，可以参考了解DLBT专业上传服务器的介绍。 该参数为保留参数，暂时不对外开放，商业用户请在点量官方客服的指导下使用该参数。
-
-**productNum：**商业版用户的数字ID，在购买后作者会提供一个产品密钥，激活商业版功能，试用版用户请使用NULL。
-
-**说明：**
-DLBT_Startup 函数必须作为第一个被调用的BT函数，如果传入了Port并且Port已经被占用,则返回失败,如果没有指定端口,一般情况下会成功,因为内核会尝试多个端口找一个可用的,这种情况下，可以调用DLBT_GetListenPort函数获得。建议第一次运行时使用一个随机端口（或者端口固定某个端口范围，一旦监听成功后下次就使用该固定端口，并可以浮动一个范围，以免端口被占用（可以记录到外部程序的配置文件中）。
-
-***DLBT_SetLsdSetting***
-
-**功能：**设置局域网自动发现的一些设置
-~~~
-DLBT_API void WINAPI DLBT_SetLsdSetting (int interval_seconds, bool bUseBroadcast);
-~~~
-
-interval_seconds：组播周期秒数：建议不要低于10s。内部默认是5分钟一次。
-bUseBroadcast：是否使用广播模式，默认内部使用组播，如果使用广播，可能局域网有无用流量太多，一般不建议。
-
- ***DLBT_SetP2SPExtName***
-
-**功能:** 设置P2SP时需要的扩展名、是否随机一个参数，以及服务器对中文文件名路径的编码
-
-~~~
-DLBT_API void WINAPI DLBT_SetP2SPExtName (LPCSTR extName, bool bUseRandParam, bool bUtf8);
-~~~
-
-
-**extName：** 用于防止一些运营商对http有他们网内缓存，所以导致下载的是缓存的老版本的文件。可以考虑使用一个.php这种扩展名，防止他们用缓存。但需要服务器配置将.php后缀忽略，返回真正的文件，可以通过nginx的rewrite等规则实现。
-
-**bUseRandParam：** 是否随机一个?a=b这种参数，也是防止缓存的，但不是对所有运营商都有效
-
-**bUtf8：** 是否使用utf8的路径编码，默认是true。可以设置false（如果有些中文路径获取不到）
-
-**说明：**
-该函数为全局的，不是针对某个任务设置，设置后对所有任务均生效。
+**Function：**
+When utilizing the interface functions, users should not be concerned with these two macros. For instance, when calling the `DLBT_Startup` function, you can simply envision its declaration as: `BOOL DLBT_Startup();`.
 
 ***DLBT_GetListenPort***
 
-**功能：** 获得当前内核监听的端口。
+**Function:** Retrieve the port that the current kernel is listening on.
 
-~~~
+~~~c++
 DLBT_API USHORT WINAPI DLBT_GetListenPort ();   
 ~~~
-***DLBT_Shutdown***
-
-**功能：** 关闭DLBT内核，释放所有内核资源，返回值为void型。该函数必须作为最后一个调用的BT内核函数，调用该函数前请调用下载任务的接口将所有的下载任务先停止。
-
-**说明：**
-DLBT_Shutdown会等待所有资源都正确释放并报告Tracker后退出,所以可能比较慢。建议调用DLBT_Shutdown之前调用一次DLBT_PreShutdown, DLBT_PreShutdown将提前启动对Tracker的报告和部分资源的释放,这样保证了下线的速度. 一般的调用时机可以是,用户点击程序的关闭时,立即先调用一次DLBT_PreShutdown,然后继续执行应用程序的其它释放工作,程序退出前最后执行DLBT_Shutdown函数。
-***DLBT_PreShutdown***
-
-**功能：** 提前执行一些关闭操作，由于报告Tracker下线需要一个网络通讯的过程，因此提前执行有助于提高下线的速度。
-
 ***DLBT_SetUploadSpeedLimit 和 DLBT_SetDownloadSpeedLimit***
 
-**功能：** 设置整个BT内核的总体上传 / 下载的最大速度限制。
+**Function:** Set the maximum overall upload/download speed limit for the entire BT kernel.
 
+~~~c++
+DLBT_API void WINAPI DLBT_SetUploadSpeedLimit (int limit);   	// Upload Limit
+DLBT_API void WINAPI DLBT_SetDownloadSpeedLimit (int limit);		// download Limit
 ~~~
-DLBT_API void WINAPI DLBT_SetUploadSpeedLimit (int limit);   	// 上传限制
+**Parameter:**
 
-DLBT_API void WINAPI DLBT_SetDownloadSpeedLimit (int limit);		// 下载限制
-~~~
-**参数：**
-
-**limit：** 最大的上传 / 下载速度，系统内部默认是最大值（即不做任何限制），如果limit小于等于0，则同样表示不做任何限制，所以，如果要限速，请将limit设置为某个正数。单位是Byte，比如如果要设置限制为1MB，则需要传入1024*1024。
+**limit:** The maximum upload/download speed. The system's default is set to the maximum value (i.e., no restrictions are applied). If the limit is less than or equal to 0, it also indicates no restrictions. Therefore, to set a speed limit, please set the limit to a positive number. The unit is bytes. For example, to set the limit to 1MB, you need to enter 1024*1024.
 
 ***DLBT_SetMaxUploadConnection 和 DLBT_SetMaxTotalConnection***
 
-**功能：** 设置整个BT内核的总体上传 / 总的最大连接数限制
+**Function:** Set the overall maximum number of connections for the entire BT kernel's uploads.
+
+~~~c++
+DLBT_API void WINAPI DLBT_SetMaxUploadConnection (int limit);   	// Upload Connection Limit
+DLBT_API void WINAPI DLBT_SetMaxTotalConnection (int limit);		// TotalConnection Limit
 ~~~
-DLBT_API void WINAPI DLBT_SetMaxUploadConnection (int limit);   	// 上传连接数限制
+**Parameters:**
 
-DLBT_API void WINAPI DLBT_SetMaxTotalConnection (int limit);		// 总连接数限制
-~~~
-**参数：**
+**limit:** The maximum limit for upload/total connections. The system's default is -1, which means no restrictions are applied. The connection limit is, in most cases, equivalent to the number of people. Generally, the maximum number of upload/download connections limit refers to the maximum number of people with whom you can simultaneously upload or download.
 
-**limit：** 最大的上传 / 总连接限制，系统内部默认是-1，-1表示不做任何限制。连接数限制绝大多数情况下等同于人数，一般情况下，最大上传/下载连接数限制，也就是最多同时和多少人进行上传/下载。
+##   4. Frequently Asked Questions - FAQ
 
-***DLBT_SetMaxHalfOpenConnection***
+**4.1 What are the advantages of DLBT?**
 
-**功能：** 设置最多发起的连接数（很多连接可能是发起了，但还没连上）。
-~~~
-DLBT_API void WINAPI DLBT_SetMaxHalfOpenConnection (int limit);   	// 半开连接数限制
-~~~
+1. **Fast Download Speed:** Since DLBT is a fully standard BT protocol and has implemented a large number of extended BT protocols such as DHT, Peer Exchange, and LAN Discovery, you can download a popular movie and compare it with other BT kernels, and the download speed of DLBT is very fast.
 
+   **Why is the download not as fast as Bitcomet or Xunlei?** It is well known in the download field that Xunlei and Bitcomet have very aggressive upload restrictions, and only when uploading to their own users are there no restrictions. If the other party is Dianliang or other software, the upload speed of Xunlei and others is extremely low (this can be seen through the upload speed of the other party in the connection). Because Xunlei has a large user base, their download speed is very fast (they have many people). But this does not mean that the download speed of Dianliang is slow. --- As long as you use Dianliang to build your own BT network, when the network is all using Dolit software, Dianliang is a non-aggressive, healthy upload, so everyone's speed will be very fast. I can promise you that the speed is definitely not lower than the speed of Xunlei and others, which has been confirmed by many customers.
 
-**参数：**
+2. **Very Low Resource Occupation:** DLBT's CPU, memory, hard disk, and other resources are the lowest in the country at present. After version 3.4, the example program automatically set an 8M cache, which can be excluded when calculating memory occupation. In fact, as early as the first version of DLBT, it has achieved the lowest resource occupation and the most stable speed in the country. The optimization of version 3.4 further reduced the resource occupation, reflecting our relentless pursuit and professionalism in the field of BT kernel.
 
+   You can use it in conjunction with our Dianliang Professional Upload Server Kernel. If you use the Dianliang Professional Upload Server Kernel on the seed server, compared with any other BT software, you can ensure that you only need less server hardware resources to obtain higher upload speeds. The reason is the professional upload design of our professional upload server kernel and very low resource occupation.
 
-**limit：**  最大半开连接数限制，系统内部默认是没有限制。Xp操作系统默认限制是10个，所以，即使这里设置的很高，但如果系统本身的限制没有使用其它工具修改，也没有使用DLBT_ChangeXPConnectionLimit修改过的话，那么这里的这个limit也不会有效。
+   According to customer feedback, some customers previously used self-developed or other open-source kernels developed online, which were unstable and often crashed when uploading and handling a large number of files in the long run; on the other hand, since the kernel was not designed for uploading, it could only upload about 300 large game files at the same time. If customers want to upload all their own content, many server resources are needed; later, customers switched to the Dianliang Professional Upload Server Kernel, and one server could support the upload of 1000 large game files + thousands of small and medium-sized software, saving at least more than 3 times the server hardware resources. And the download speed is more than 60% higher than before. We can promise that the performance of DLBT Professional Upload Server is definitely higher than that of any other BT software in the country at present.
 
+For a detailed introduction to the Professional Upload Server Kernel, please refer to:
 
-***DLBT_SetLocalNetworkLimit***
+http://blog.dolit.cn/dlbtserver-introduction-html
 
-**功能：** 用于设置是否对跟自己在同一个局域网的用户进行限速，limit参数如果为true，则使用后面参数中的限速数值进行限速，否则不限。系统默认是不对同一个局域网下的用户应用限速的。因为局域网不占用用户的对外带宽，也可以设置为限制局域网上传。
-~~~
+**Comprehensive Services and Good Service Attitude:** You can see the professionalism and thoughtfulness of our services from the completeness of our documents, example programs, and functions. With our detailed documents, excellent services, and complete example programs, you can quickly master the DLBT kernel. In addition, genuine users of DLBT kernel enjoy free upgrade services for one year after purchase, lifelong bug upgrades, and after one year, you only need to pay the price difference of the version at the time of purchase or a small service fee to enjoy lifelong free upgrade services, eliminating your worries.
 
-DLBT_API void WINAPI DLBT_SetLocalNetworkLimit (
-    bool    limit,              // 是否启用局域网限速
-    int     downSpeedLimit,     // 如果启用局域网限速，下载限速的大小，单位字节/秒
-    int     uploadSpeedLimit    // 如果启用局域网限速，限制上传速度大小，单位字节/秒
-    );
-~~~
+1. **Focus leads to professionalism, and professionalism leads to trust:** From the speed of our continuous upgrades, you can see that we are a team that specializes in P2P kernels, and we will also be committed to the research and development and improvement of the kernel for a long time, which is different from companies or individuals whose main business is other businesses.
+2. **Stability:** We have many customers who used their own R&D or other company's kernels in the early stage, but encountered many problems in download speed and stability. After finally choosing DLBT, they truly achieved unattended operation throughout the year.
+3. **Break through the operator's blockade:** In addition to private protocols, it also supports encrypted transmission, achieving compatibility with Bitcomet and other BT software while breaking through the operator's blockade. It can also use disguised Http transmission to break through the blockade in some special networks such as Malaysia and Brazil.
+4. **Complete Functions: Support** intelligent disk allocation, minimized block-level partial updates, LAN discovery acceleration, seedless mode downloading, DHT and Peer Exchange protocols, private protocols, data transmission encryption (breaking through operator blockade), and many other functions. For details, see: http://blog.dolit.cn/dlbt-introduction-html
+5. **Customizable Development Services:** We have long-term R&D experience in P2P and project design experience. The P2P projects we have developed cover P2P downloads, P2P on-demand, P2P live broadcasts, P2P software updates and upgrades, cloud computing infrastructure platforms, etc. Therefore, we can provide you with excellent customized development services in the field of P2P. In addition, our technical team has rich development experience in C++, C#, PHP/AJAX/Perl/Python/Asp.net/ASP, VB, Delphi, Flash AS3, etc., and has various technical strengths such as network communication, optimization and construction of websites with large concurrent users, distributed processing of website databases, building efficient servers, DRM copyright control, PDF, UI libraries, etc. So if you have any software development needs, you might as well consult our professional development engineers, who will provide you with a good solution. Reducing the repetitive development and basic development for customers has always been our goal!
 
+**4.2 There are some open-source BT software now, why do you still need DLBT?**
 
-**参数：**
+There are some open-source BT software now, but they are not so easy to call, and open-source software often has problems with documentation and ease of use. Even more seriously, many open-source BT software has bugs of varying degrees. What's more serious is that they all lack reliable technical support services, so I developed DLBT, hoping to improve in these aspects and promote the broader development of BT applications. You can choose the appropriate BT kernel according to your needs.
 
-**limit：** 是否对和自己在同一个局域网的用户也限速。
+Another reason is that basically all open-source BT software is not adapted to the national conditions of our country, there are many problems that are not suitable for the domestic network situation and file situation. DLBT can make you completely don't need to worry about these, and make your own P2P application in a few days.
 
-**downSpeedLimit：** 如果启用局域网限速，下载限速的大小，单位字节/秒。
+**4.3 Does DLBT have a follow-up upgrade plan?**
 
-**uploadSpeedLimit：** 如果启用局域网限速，下载限速的大小，单位字节/秒。
+Since the release of DLBT, it has been continuously improved and has released multiple versions of DLBT. We will also continue to persist in optimizing and improving DLBT, allowing more people and more applications to develop directly based on DLBT, saving the waste of development repetition - this is also the long-term goal of Dolit software. We will later on the one hand, according to customer feedback, on the other hand, based on our understanding of BT applications, BT protocols, and the P2P industry, continuously improve and update. We also provide special versions suitable for various segments and scenarios such as online game updates, video while downloading and playing, and system image large file distribution.
 
-***DLBT_SetFileScanDelay***
+If you have good suggestions for improvement, we also look forward to your contact.
 
-**功能：** 设置文件扫描校验时的休息参数，防止特大文件扫描时磁盘占用太严重，影响客户机器正常使用。
-~~~
-DLBT_API void WINAPI DLBT_SetFileScanDelay (DWORD circleCount, DWORD sleepMs);
-~~~
-**参数：**
+**4.4 Does DLBT Provide Source Code?**
 
-**circleCount：** 代表循环多少次休息一次，0代表不休息。
-**sleepMs：** 代表每次休息的时间，单位是毫秒(ms)。
+All the code for the DLBT demonstration programs is fully open-sourced. However, the code for the demonstration programs is merely for the purpose of demonstrating the use of the kernel and may not be as elegant and reliable as the actual DLBT kernel code itself. You will need to use the demonstration programs as a reference to write your own calling code that suits your needs.
 
-***DLBT_UseServerModifyTime***
+If you require the source code for the DLBT kernel program, you will first need to pay a certain authorization fee. Please contact Dolit software for more detailed information.
 
-**功能：** 设置文件下载完成后，是否修改为原始修改时间（制作种子时每个文件的修改时间状态）。
-~~~
-DLBT_API void WINAPI DLBT_UseServerModifyTime(BOOL bUseServerTime);
-~~~
-**参数：**
+**4.5 Is the DLBT Kernel Fully Compatible with the BT Protocol?**
 
-**bUseServerTime：** 是否启用，TRUE（1）代表启用，FALSE（0）代表不启用。
-**说明：**
+Yes, it is fully compatible. It is currently the most standard commercial kernel for the BT protocol. Unlike other kernels that are only compatible with the basic BT protocol, we also support a variety of extended BT protocols. You can compare this when downloading torrent files online; the download speed of the DLBT kernel is far superior to other kernels. Many of them only have basic BT protocols, whereas the DLBT kernel supports all kinds of BT extended protocols and DHT, making it a standard BT program like Bitcomet.
 
-调用该函数后，以后制作的torrent中会包含有每个文件此时的修改时间信息。
-用户在下载时，发现种子中有这个信息，并且启用了修改后（本函数设置了TRUE），则会在每个文件完成时，自动将文件的修改时间设置为torrent种子中记录的时间。
-如果只是下载的机器上启用了该函数，但制作种子的机器上在制作种子时没有使用该函数（种子中没有每个文件的时间信息），则也无法进行时间修改；同样的，如果种子中有了文件的时间信息，但如果下载的用户机器上没启用该函数，同样无法进行文件的时间修改。
+**4.6 Can I Request the Author to Add Functions That Are Not Currently Provided?**
 
-***DLBT_EnableUDPTransfer***
-~~~
-DLBT_API void WINAPI DLBT_EnableUDPTransfer(BOOL bEnabled);
-~~~
+Absolutely, we welcome your feedback. Based on your needs, we can add specific features at an appropriate time.
 
-**功能：** 用于设置是否启用UDP传输和UDP穿透传输功能，默认是自动适应，如果对方支持，在tcp无法到达时，自动切换为udp通讯。可以通过这个函数，设置永不使用UDP传输。
+**4.7 How Can I Provide Feedback to the Author?**
 
-**参数：**
-**bEnabled：** 是否启用UDP传输。
+You can obtain our latest contact information on the DLBT homepage at http://www.dolit.cn or on the official blog at http://blog.dolit.cn. The official website's contact information includes email, phone, QQ (52401692), and other contact methods.
 
-***DLBT_SetP2PTransferAsHttp***
-~~~
-DLBT_API void WINAPI DLBT_SetP2PTransferAsHttp (bool bHttpOut, bool bAllowedIn = true);
-~~~
+Alternatively, you can send us an email directly at: [market@dolit.cn](mailto:market@dolit.cn)
 
-**功能：** 是否启用伪装Http传输，某些地区（比如马来西亚、巴西的一些网络）对Http不限速，但对P2P限速在20K左右，这种网络环境下，可以启用Http传输，默认是允许伪装Http的传输进入（可以接受他们的通讯），但自己发起的连接不主动伪装。如果网络中明确侦测出对Http不限速，可以考虑都设置：主动Http伪装。 但这种伪装也有副作用，国内有些地区机房（一般是网通）设置了Http必须使用域名，而不能使用IP，而BT传输中，对方没有合法域名，反而会被这种限制截杀，如果有这种限制，反而主动伪装后会没有速度。所以请根据实际使用选择。
+We will strive to respond to your feedback as quickly as possible.
 
-**参数：**
+**4.8 Can I Use the DLBT Kernel for Free?**
 
-**bHttpOut：** 是否对发出的请求伪装Http，默认不主动发出伪装，除非有明确设置。
-**bAllowedIn：** 是否接受别人发来的伪装过的Http数据请求，默认是兼容别人的Http伪装。
+Yes, you can, but there are some usage restrictions on the free version, and it cannot be used for commercial purposes. The software developed can only be used on up to 3 personal machines, cannot be released publicly, and is only for personal learning and understanding. It is not allowed to publish programs that include the DLBT kernel online; otherwise, we can pursue legal responsibility.
 
-***DLBT_AddHoleServer***
+**4.9 How Can I Obtain the Commercial Version of DLBT and Its Authorization?**
 
-~~~
-DLBT_API BOOL WINAPI DLBT_AddHoleServer(LPCSTR ip, short port);
-~~~
+Contact us, pay a certain fee, and sign a commercial agreement to obtain the commercial version's serial number.
 
-**功能：** 是否使用单独的穿透服务器，如果不使用单独服务器，穿透的协助将由某个双方都能连上的第三方p2p节点辅助完成。穿透服务器程序需要联系点量软件申请获取。
+**4.10 What Is the Difference Between the Commercial Version and the Demonstration Version?**
 
-**参数：**
-**ip：** UDP穿透服务器的IP地址。
-**port:** UDP穿透服务器的监听端口。
+The commercial version has no usage restrictions, and we can provide functions such as seedless downloading, seed encryption, encrypted protocol transmission, etc., according to your needs, and offer customized functions and more comprehensive technical guidance. The demonstration version is not authorized for commercial use.
 
-***DLBT_AddServerIP***
+**4.11 Is It Convenient to Use DLBT?**
 
-**功能：** 
-设置服务器的IP，可以多次调用设置多个，用于标记哪些IP是服务器，以便统计从服务器下载到的数据等信息，甚至速度到了一定程度可以断开服务器连接，节省服务器带宽。2022版本后的P2SP服务器，自动会被标记为服务器，不需要再单独设置
-~~~
-DLBT_API void WINAPI DLBT_AddServerIP (LPCSTR ip);
-~~~
-**参数：**
-**ip：** 服务器的IP地址，如果有多个服务器IP，请多次调用本函数。
+It is very convenient. You can call DLBT in a way that is similar to calling system APIs like DeleteFile. If you are a programmer with some work experience, you can master the use of DLBT in just 3 days and develop a very functional BT application software within a week.
 
-***DLBT_AddBanServerUrl***
-~~~
-DLBT_API void WINAPI DLBT_AddBanServerUrl (LPCSTR url); 
-~~~
+Moreover, we provide example program source code in various languages such as VC, Delphi, Borland C++, and C#.
 
+**4.12 How to Call DLBT in Languages Like VC, VB, C#, etc.?**
 
-**功能：** 不去连接这个p2sp的url，可以重复调用. 目的是，如果是服务器上，这个p2sp的url就在本机，就没必要去连接这个url了。
-
-**参数：**
-**url：** 希望不去连接的p2sp地址。关于p2sp的更多信息可以参考: DLBT_Downloader_AddHttpDownload 函数。
-
-***DLBT_SetStatusFileSavePeriod***
-
-**功能：** 保存一次状态文件的条件，内部默认全部下载完成后保存一次。可以调整为自己需要的时间或者上限数目，比如每5分钟保存一次，或者下载100块数据后保存一次。
-~~~
-DLBT_API BOOL WINAPI DLBT_SetStatusFileSavePeriod (
-    int             iPeriod,          //保存间隔，单位是秒。默认是，代表除非下载完成，否则永不保存
-    int             iPieceCount       //分块数目，默认，代表除非下载完成，否则永不保存
-    );
-~~~
-
-**参数：**
-
-**iPeriod：** 保存间隔，单位是秒，表示每多少秒保存一次，默认是0，代表除非下载完成，否则永不保存。
-**port: ** 分块数目，表示下载多少个分块数据(Piece)保存一次，默认0，代表除非下载完成，否则永不保存。
-
-***DLBT_SetReportIP和DLBT_GetReportIP***
-
-**功能：** 设置和获取报告Tracker时的IP地址。
-
-~~~
-DLBT_API void WINAPI DLBT_SetReportIP (LPCSTR ip); // 设置IP 
-DLBT_API LPCSTR WINAPI DLBT_GetReportIP ();        // 获取当前设置，返回当前的IP，如果未设则为NULL
-~~~
-
-**参数：**
-
-**ip：** 需要报告给Tracker的IP地址。
-
-**说明：**
-
-如果是要专门对外部提供上传，并且该机器（可以称作上传的服务器）同Tracker服务器在同一个局域网，那么建议设置报告Tracker的IP为外网地址，否则，Tracker通知别人的上传服务器的IP可能是一个局域网地址，外人无法同服务器通讯。一般地，如果是客户机器，同Tracker一般都不会在同一个网段，这时候需要看Tracker的配置，如果Tracker自动将每个客户的外网地址记录（这是目前大多数Tracker在做的），那么就无需设置这个IP地址，使用Tracker自动获得到的即可。如果为了防止Tracker使用每个用户的内网地址（这个比较少见），那么也可以使用该设置将IP设为外网地址。
-
-还有一种情况下可能会使用该函数：如果某个下载都集中在局域网内，这种情况下，防止Tracker记录自己的外部IP，可以设置每个人的内网IP，可以实现很好的互连。
-
-注意：不是所有的Tracker都支持这个扩展协议，需要使用支持报告IP协议的tracker服务器。
-
-***DLBT_SetUserAgent***
-
-**功能：** 设置报告Tracker时的客户端标记。
-~~~
-DLBT_API void WINAPI DLBT_SetUserAgent (LPCSTR agent);   	
-~~~
-
-
-**参数：**
-
-**agent：** 客户端的标记字符串。
-
-**说明：**
-
-报告Http Tracker是标准的HTTP协议通讯，agent标记串就放到了HTTP协议Header中的user-agent域中。可以使用自定义的agent串，结合对Tracker的少量修改，实现一个简单的下载限制，限制非自己的客户端不能下载自己Tracker中提供的文件 ―― 这种限制只能是限制特定的客户端可以使用自己的Tracker，但无法突破某些运营商对BT协议的限制。
-
-***DLBT_SetMaxCacheSize***
-
-**功能：** 设置DLBT下载和上传文件最大可用的缓存。
-~~~
-DLBT_API void WINAPI DLBT_SetMaxCacheSize (DWORD size);   	
-~~~
-
-**参数：**
-**size：**缓存的最大值，以KB为单位。比如需要设置1M缓存，则传入1024。
-
-
-**说明：**
-
-缓存的最大值不能超过2.5G或者机器的物理内存。这个限制是由于目前DLBT仅测试过32位操作系统，（32位操作系统下，每个程序的地址空间最大为4G，但默认操作系统需要占用2G的空间，这样每个程序自己可用的内存地址空间就是2G。通过修改操作系统的配置，可以使得每个程序可以使用3G的地址空间，考虑到程序本身运行所需的地址空间等，安全起见，缓存最大可以设置到2.5G。  如果设置的最大值大于机器的物理内存，则默认使用90％的物理内存。
-
-不过一般地，需要设置大量缓存的情况是在专业提供大量下载或者上传的服务器上才会可能用到，比如有些服务器为了提升IO的效率，可以设置大量的缓存，将经常用到的文件块进行缓存，减少对磁盘的访问压力。
-
-DLBT内核3.4版本后内部默认设置了8M的缓存，普通用户的机器基本不需要修改和设置这个缓存，除非下载和上传的数据量很多，建议可以在 8 – 128M之间。
-
-***DLBT_SetPerformanceFactor***
-
-**功能：** 一些性能参数设置，默认情况下，DLBT是为了普通网络环境下的下载所用，如果是在千M局域网下并且磁盘性能良好，想获得50M/s甚至100M/s的文件传输速度，则需要设置这些参数，具体参数的设置建议，请咨询点量软件获取。
-~~~
-DLBT_API void WINAPI DLBT_SetPerformanceFactor(
-    int             socketRecvBufferSize,      // 网络的接收缓冲区，默认是用操作系统默认的缓冲大小
-
-    int             socketSendBufferSize,      // 网络的发送缓冲区，默认用操作系统的默认大小
-
-    int             maxRecvDiskQueueSize,      // 磁盘如果还未写完，超过这个参数后，将暂停接收，等磁盘数据队列小于该参数
-
-    int             maxSendDiskQueueSize       // 如果小于该参数，磁盘线程将为发送的连接塞入数据，超过后，将暂停磁盘读取
-    
-    );
-~~~
-
-**参数：**
-
-参数的具体含义以及合适的设置，请联系点量软件咨询。
-
-***DLBT_AddIpBlackList***
-
-**功能：** 添加ip黑名单(可批量添加一个范围内的ip,如果只有一个ip第二个参数允许为NULL),成功返回0，失败返回 小于0
-~~~
-DLBT_API int WINAPI DLBT_AddIpBlackList(const char*ipRangeStart,const char*ipRangeEnd);
-~~~
-
-**参数：**
-IP传入190.120.1.1这类字符串，会将起始到结束的全部给禁用。ipRangeEnd可传入NULL，代表只禁用单个的IP，用ipRangeStart标记。
-
-***DLBT_RemoveAllBlackList***
-
-**功能：** 清空当前ip黑名单列表
-~~~
-DLBT_API void WINAPI DLBT_RemoveAllBlackList();
-~~~
-
-***DLBT_DHT_Start***
-
-**功能：** 启动DHT网络功能，DHT网络在DLBT内核中默认不启动，需要调用该函数启动。
-~~~
-DLBT_API void WINAPI DLBT_DHT_Start (USHORT port = 0);   	
-~~~
-**参数：**
-**port：** DHT网络监听的端口。
-**说明：**
-建议不设置参数，将端口设为0，在端口为0时，系统将自动使用内核监听成功的TCP端口号用于DHT网络监听，由于DHT网络是基于UDP方式，因此可以共同使用同一个端口不冲突。DHT启动后，内核会自动试着进行UPnP映射，不需要应用程序再次调用UPnP接口设置DHT的映射。
-
-DHT网络的功能主要是：可以通过用户之间信息的交流，获得更多的下载者的信息，在连接不上Tracker时比较有效，同时一定程度上可以起到突破运营商封锁的效果。
-
-***DLBT_DHT_Stop***
-
-**功能：** 停止DHT网络功能。
-~~~
-DLBT_API void WINAPI DLBT_DHT_Stop ();   	
-~~~
-
-***DLBT_DHT_IsStarted***
-
-**功能：** 判断DHT网络是否已启动，TRUE为已经启动，FALSE为尚未启动。
-
-~~~
-DLBT_API BOOL WINAPI DLBT_DHT_IsStarted ();   	
-~~~
-
-***DLBT_PROXY_SETTING***
-
-**功能：** 当用户的机器需要使用代理才能上网时，使用该结构体来指定代理的设置。
-~~~
-struct DLBT_PROXY_SETTING
-{
-    char    proxyHost [256];    // 代理服务器地址 
-
-    int     nPort;              // 代理服务器的端口
-
-    char    proxyUser [256];    // 如果是需要验证的代理,输入用户名
-
-    char    proxyPass [256];    // 如果是需要验证的代理,输入密码
-
-
-    enum DLBT_PROXY_TYPE
-    {
-
-        DLBT_PROXY_NONE,            // 不使用代理
-
-        DLBT_PROXY_SOCKS4,          // 使用SOCKS4代理，需要用户名
-
-        DLBT_PROXY_SOCKS5,          // 使用SOCKS5代理，无需用户名和密码
-
-        DLBT_PROXY_SOCKS5A,         // 使用需要密码验证的SOCKS5代理，需要用户名和密码
-
-        DLBT_PROXY_HTTP,            // 使用HTTP代理，匿名访问，仅适用于标准的HTTP访问，Tracker和Http跨协议传输，下载则不可以
-
-        DLBT_PROXY_HTTPA            // 使用需要密码验证的HTTP代理
-
-    };
-~~~
-
-***标记代理的应用范围***
-
-**功能：** 当用户的机器需要使用代理才能上网时，使用该结构体来指定代理的设置。
-~~~
-//=======================================================================================
-
-//  标识代理将应用于哪些连接（Tracker、下载、DHT和http跨协议下载等）
-
-//=======================================================================================
-
-#define DLBT_PROXY_TO_TRACKER       1  // 仅对连接Tracker使用代理
-
-#define DLBT_PROXY_TO_DOWNLOAD      2  // 仅对下载时同用户（Peer）交流使用代理
-
-#define DLBT_PROXY_TO_DHT           4  // 仅对DHT通讯使用代理，DHT使用udp通讯，需要代理是支持udp的
-
-#define DLBT_PROXY_TO_HTTP_DOWNLOAD 8  // 仅对HTTP下载使用代理，当任务有http跨协议下载时有效（不包括Tracker）
-
-// 对所有均使用代理
-
-#define DLBT_PROXY_TO_ALL   (DLBT_PROXY_TO_TRACKER | DLBT_PROXY_TO_DOWNLOAD | DLBT_PROXY_TO_DHT | DLBT_PROXY_TO_HTTP_DOWNLOAD)
-~~~
-
-***DLBT_SetProxy和DLBT_GetProxySetting***
-
-**功能：** DLBT_SetProxy用于设置代理参数，DLBT_GetProxySetting用于获取当前的代理设置。
-~~~
-DLBT_API void WINAPI DLBT_SetProxy (
-
-    DLBT_PROXY_SETTING  proxySetting,   // 代理设置，包括IP端口等 
-
-    int                 proxyTo         // 代理应用于哪些连接，就是上面宏定义的几种类型，比如DLBT_PROXY_TO_ALL
-
-    ); 
-
-//=======================================================================================
-
-//  获取代理的设置，proxyTo标识想获得哪一类连接的代理信息，但proxyTo只能单个获取某类连接
-
-//  的代理设置，不能使用DLBT_PROXY_TO_ALL这种多个混合选择
-
-//=======================================================================================
-
-DLBT_API void WINAPI DLBT_GetProxySetting (DLBT_PROXY_SETTING * proxySetting, int proxyTo);
-
-~~~
-
-***DLBT_SetEncryptSetting加密协议和加密数据***
-
-**说明：** DLBT除了可以使用私有协议来突破运营商的限制，同时可以使用协议加密来突破。私有协议的优点是简单有效,但缺点是私有协议后，就形成了自己的私有P2P网络，而不是BT网络。意味着同其它BT客户端无法兼容（当然，如果您想自己的文件只有自己的客户端能够下载，那么DLBT的私有协议是一个不错的选择）。而加密协议不会破坏同Bitcomet等支持加密协议的BT客户端的兼容性。 同样的，如果为了传输高安全的数据，也可以选择加密数据。不同的网络下，可能需要不同设置。配合伪装Http使用，在某些网络下效果更佳。具体的设置建议，商业用户建议直接咨询点量软件售后服务人员。
-
-如果不需要和其他客户端兼容，并且为了最为可靠的突破封锁，可以使用DLBT 3.3以后的版本，在私有协议下实现脱离BT的痕迹，经严格测试可突破国内大部分运营商的协议封锁，也无需担心运营商的协议限制。
-~~~
-
-enum DLBT_ENCRYPT_OPTION
-{
-    DLBT_ENCRYPT_NONE,                // 不支持任何加密的数据，遇到加密的通讯则断开
-    DLBT_ENCRYPT_COMPATIBLE,         // 兼容模式：自己发起的连接不使用加密，但允许别人的加密连接进入，遇到加密的则同对方用加密模式会话；
-    DLBT_ENCRYPT_FULL,               // 完整加密：自己发起的连接默认使用加密，同时允许普通和加密的连接连入。遇到加密则用加密模式会话；遇到非加密则用明文模式会话。 默认是完整加密
-    DLBT_ENCRYPT_FORCED,            // 强制加密，仅支持加密通讯，不接受普通连接，遇到不加密的则断开
-};
-
-// 加密层级高，理论上会浪费一点CPU，但数据传输安全和突破封锁的能力会有提升
-
-enum DLBT_ENCRYPT_LEVEL
-
-{
-    DLBT_ENCRYPT_PROTOCOL,          // 仅加密BT的通讯握手协议 －－一般用于防止运营商的阻止
-    DLBT_ENCRYPT_DATA,              // 仅加密数据流（数据内容）－－用于保密性强的文件传输
-    DLBT_ENCRYPT_PROTOCOL_MIX,      // 主动发起的连接使用加密协议模式，但如果对方使用了数据加密，也支持同他使用数据加密模式通讯
-    DLBT_ENCRYPT_ALL                // 协议和数据均主动加密
-};
-DLBT_API void WINAPI DLBT_SetEncryptSetting (
-    DLBT_ENCRYPT_OPTION     encryptOption,      // 加密选项，加密哪种类型或者不加密
-    DLBT_ENCRYPT_LEVEL      encryptLevel        // 加密的程度，对数据还是协议加密？
-    );
-~~~
-
-
-
-
-
-
-
+It is very convenient. You can refer to the calling methods of the VC version, and the official SDK currently provides example programs for VC, Delphi, C#, VB, Java, Borland C++, Android, iOS, and other versions. Example programs for languages like Easy Language can also be requested from us.
